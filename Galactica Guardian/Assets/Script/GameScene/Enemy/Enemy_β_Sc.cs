@@ -10,7 +10,6 @@ public class Enemy_β_Sc : MonoBehaviour
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
-    float enemySideSpeed;   // エネミーの横移動速度.
     int enemyHp;            // エネミーの体力.
 
     Vector3 enemyPos;       // エネミーの現在座標.
@@ -27,9 +26,8 @@ public class Enemy_β_Sc : MonoBehaviour
     /// </summary>
     void InitEnemy()
     {
-        //attackTime = ;
+        attackTime = Com.ENEMY_FIRE_RATE_β;
         enemySpeed = Com.ENEMY_SPEED_β;
-        //enemySideSpeed = ;
         enemyHp = Com.ENEMY_HP_β;
     }
     #endregion

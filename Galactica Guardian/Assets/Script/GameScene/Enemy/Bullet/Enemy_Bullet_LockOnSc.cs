@@ -15,8 +15,8 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
     {
         ignoreRange = Com.ENEMY_IGNORE_RANGE; // ƒvƒŒƒCƒ„[‚ğ–³‹‚·‚é‹——£‚ğ‰Šú‰».
         SearchPlayer();
-        bulletSpeed = Com.ENEMY_BULLET_SPEED; // ’e‘¬‚ğ‰Šú‰».
-        bulletTime = Com.ENEMY_BULLET_DELETE; // ’e‚ªÁ‚¦‚é‚Ü‚Å‚ÌŠÔ‚ğ‰Šú‰».
+        bulletSpeed = Com.ENEMY_BULLET_SPEED / 2; // ’e‘¬‚ğ‰Šú‰».
+        bulletTime = Com.ENEMY_BULLET_DELETE * 2; // ’e‚ªÁ‚¦‚é‚Ü‚Å‚ÌŠÔ‚ğ‰Šú‰».
     }
 
     // Update is called once per frame

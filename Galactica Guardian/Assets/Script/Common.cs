@@ -209,6 +209,13 @@ namespace Common
         public const float ENEMY_SPEED_β = 2.6f;
 
         /// <summary>
+        /// エネミーβの攻撃間隔.
+        /// </summary>
+        public const float ENEMY_FIRE_RATE_β = 3.0f;
+
+
+
+        /// <summary>
         /// エネミーβの体力.
         /// </summary>
         public const int ENEMY_HP_β = 6;

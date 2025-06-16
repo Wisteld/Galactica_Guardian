@@ -84,7 +84,7 @@ public class Enemy_MissileSc : MonoBehaviour
         {
             float distance = Vector2.Distance(transform.position, target.transform.position); // ©•ª‚Æ“G‚Ì‹——£‚ğæ“¾.
 
-            if (target.transform.position.y > transform.position.y) // ©•ª‚æ‚è‰º‚É‚¢‚é“G‚ğ–³‹‚·‚é.
+            if (target.transform.position.y > transform.position.y) // ©•ª‚æ‚èã‚É‚¢‚é“G‚ğ–³‹‚·‚é.
                 continue;
 
             if (distance < minDistance) // ‚æ‚è‹ß‚¢“G‚ª‹‚½‚çXV.
