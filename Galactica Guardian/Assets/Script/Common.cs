@@ -165,6 +165,21 @@ namespace Common
         public const float ENEMY_IGNORE_RANGE = 100f;
 
         /// <summary>
+        /// エネミーのミサイル弾速.
+        /// </summary>
+        public const float ENEMY_MISSILE_SPEED = 5f;
+
+        /// <summary>
+        /// エネミーのミサイル旋回速度.
+        /// </summary>
+        public const float ENEMY_MISSILE_ROTATE_SPEED = 20f;
+
+        /// <summary>
+        /// エネミーのミサイル消滅までの時間.
+        /// </summary>
+        public const float ENEMY_MISSILE_DELETE_TIME = 2f;
+
+        /// <summary>
         /// 通常弾被弾ダメージ.
         /// </summary>
         public const int ENEMY_DAMAGE_BULLET = 1;

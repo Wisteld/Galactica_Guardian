@@ -19,9 +19,9 @@ public class Enemy_MissileSc : MonoBehaviour
     {
         FindClosestEnemy();
 
-        eMissileSpeed = Com.PLAYER_MISSILE_SPEED;
-        eMissileRotate = Com.PLAYER_MISSILE_ROTATE_SPEED;
-        eMissileTime = Com.PLAYER_MISSILE_DELETE_TIME;
+        eMissileSpeed = Com.ENEMY_MISSILE_SPEED;
+        eMissileRotate = Com.ENEMY_MISSILE_ROTATE_SPEED;
+        eMissileTime = Com.ENEMY_MISSILE_DELETE_TIME;
 
         rb = GetComponent<Rigidbody2D>(); // リジッドボディをセット.
     }
@@ -108,6 +108,18 @@ public class Enemy_MissileSc : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag(tags.PLAYER))
+        {
+            Explosion();
+        }
+        if (collision.CompareTag(tags.PLAYER_BULLET))
+        {
+            Explosion();
+        }
+        if (collision.CompareTag(tags.PLAYER_BULLET_LASER))
+        {
+            Explosion();
+        }
+        if (collision.CompareTag(tags.PLAYER_MISSILE))
         {
             Explosion();
         }
