@@ -13,11 +13,12 @@ public class Enemy_β_Sc : MonoBehaviour
     int enemyHp;            // エネミーの体力.
 
     Vector3 enemyPos;       // エネミーの現在座標.
-    Camera cam;             // メインカメラの範囲.
     float eSize;            // エネミーサイズ.
-    float sizeDistance;     // 壁との距離(サイズに対する倍率)
 
-    bool debugFlag;         // デバッグモード.
+    Vector2 min;
+    Vector2 max;
+
+    bool debugFlag = Com.DEBUG_MODE_ENEMY;         // デバッグモード.
     #endregion
 
     #region 初期化関数.
@@ -30,20 +31,79 @@ public class Enemy_β_Sc : MonoBehaviour
         enemySpeed = Com.ENEMY_SPEED_β;
         enemyHp = Com.ENEMY_HP_β;
     }
+
+    void InitEnemySize()
+    {
+        eSize = GetComponent<BoxCollider2D>().size.x / 2;
+        Vector2 min = Camera.main.ScreenToWorldPoint(Vector2.zero); // 画面の左下を取得.
+        Vector2 max = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)); // 画面の右上を取得.
+
+
+
+        if (debugFlag)
+        {
+            Debug.Log(max.y + "βmax");
+            Debug.Log(min.y + "βmin");
+        }
+    }
     #endregion
 
     void Start()
     {
-        
+        InitEnemy();
+        InitEnemySize();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        enemyPos = transform.position; // 現在位置を取得.
+
+        attackTime -= Time.deltaTime;
+
+        if (enemyPos.y > max.y - 2f)
+        {
+            transform.position -= new Vector3(0, enemySpeed * Time.deltaTime);
+
+            if (debugFlag)
+            {
+                Debug.Log(enemyPos.y + "β");
+            }
+        }
     }
 
     #region Update外関数.
+
+    void EnemyRange()
+    {
+        #region 画面端から出ないようにする処理.
+        if (enemyPos.x >= max.x + eSize) // 右端の判定.
+        {
+            
+            if (debugFlag)
+            {
+                Debug.Log("Enemy_Right");
+            }
+        }
+        if (enemyPos.x <= min.x - eSize) // 左端の判定.
+        {
+            
+            if (debugFlag)
+            {
+                Debug.Log("Enemy_Left");
+            }
+        }
+        // 画面外判定.
+        if (enemyPos.y <= min.y - eSize) // 下端の判定.
+        {
+            Destroy(gameObject);
+            if (debugFlag)
+            {
+                Debug.Log("Enemy_Lost");
+            }
+        }
+        #endregion
+    }
 
     /// <summary>
     /// ダメージ処理.
@@ -59,6 +119,9 @@ public class Enemy_β_Sc : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 被撃墜処理.
+    /// </summary>
     void EnemyDestroy()
     {
         Destroy(gameObject);
