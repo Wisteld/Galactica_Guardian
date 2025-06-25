@@ -13,6 +13,7 @@ public class Player_BarrierSc : MonoBehaviour
     int barrietLowHp;   // 低HPライン.
     Animator animator;  // アニメーター.
     PlayerSc parentSc;    // プレイヤー(親)のスクリプト.
+    SpriteRenderer sr;
     public Action<bool> onBarrierBreak;
 
     // bool lowHpFlag = false; // 低HPフラグ.
@@ -20,6 +21,7 @@ public class Player_BarrierSc : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
         SearchPlayer();
         animator = GetComponent<Animator>(); // アニメーターをセット.
         barrierHp = Com.PLAYER_BARRIER_HP;   // 耐久値を初期化.
@@ -43,6 +45,7 @@ public class Player_BarrierSc : MonoBehaviour
             transform.SetParent(player.transform);  // プレイヤーと親子関係(子)になる.
             transform.localPosition = Vector3.zero; // プレイヤーの中心に配置（必要に応じて調整）
             parentSc = GetComponentInParent<PlayerSc>();
+            parentSc.SetBarrierRender(sr);
             if (parentSc == null)
             {
                 Debug.LogWarning("PlayerSc not found!");

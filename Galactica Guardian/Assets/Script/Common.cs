@@ -280,5 +280,10 @@ namespace Common
         /// プレイヤーミサイルタグ.
         /// </summary>
         public const string PLAYER_MISSILE = "Player_Missile";
+
+        /// <summary>
+        /// プレイヤーバリアタグ.
+        /// </summary>
+        public const string PLAYER_BARRIER = "Player_Barrier";
     }
 }

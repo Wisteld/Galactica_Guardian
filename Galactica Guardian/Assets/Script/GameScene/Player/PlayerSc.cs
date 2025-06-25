@@ -21,7 +21,8 @@ public class PlayerSc : MonoBehaviour
     [SerializeField] Transform fire_point_right;    // 発射位置(右)
     [Header ("プレイヤー情報")]
     [SerializeField] BoxCollider2D player_collider; // 当たり判定.
-    SpriteRenderer player_render;  // プレイヤーの描画情報.
+    SpriteRenderer playerRender;   // プレイヤーの描画情報.
+    SpriteRenderer barrierRender;  // バリアの描画情報.
     #endregion
     #region 変数.
     Vector3 playerPos;    // プレイヤーの座標.
@@ -153,7 +154,7 @@ public class PlayerSc : MonoBehaviour
         playerHp = Com.PLAYER_HP;
         blink = Com.PLAYER_BLINK;
         invincibleTime = Com.PLAYER_INVINCIBLE_TIME;
-        player_render = GetComponent<SpriteRenderer>();
+        playerRender = GetComponent<SpriteRenderer>();
     }
 
     /// <summary>
@@ -189,7 +190,17 @@ public class PlayerSc : MonoBehaviour
         if (isHitFlag)
         {
             level = Mathf.PingPong(Time.time * blink, 1f); // 経過時間から01で数値を取得.
-            player_render.color = new Color(1f, 1f, 1f, level); // 点滅処理.
+            Color blinkColor = new Color(1f, 1f, 1f, level); // 点滅処理.
+            playerRender.color = blinkColor;
+            if (barrierFlag)
+            {
+                if (barrierRender == null)
+                {
+                    Debug.LogWarning("BarrierRender_None");
+                    return;
+                }                
+                barrierRender.color = blinkColor;
+            }
         }
 
         if (debugFlag) // デバッグフラグがONなら反応(デバッグ時以外はOFFにしておくこと)
@@ -233,6 +244,7 @@ public class PlayerSc : MonoBehaviour
     {
         // 移動処理.
         transform.position += _move * Time.deltaTime;
+        
         PlayerRange();
     }
 
@@ -447,7 +459,21 @@ public class PlayerSc : MonoBehaviour
             Debug.LogWarning("Barrier Prefab is not assigned!");
             return;
         }
+
         Instantiate(barrier_prefab,transform.position,transform.rotation);
+
+        /*foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
+        {
+            if (sr.CompareTag(tags.PLAYER_BARRIER))
+            {
+                barrierRender = sr;
+            }
+        }*/            
+    }
+
+    public void SetBarrierRender(SpriteRenderer sr)
+    {
+        barrierRender = sr;
     }
     #endregion
 
@@ -528,7 +554,19 @@ public class PlayerSc : MonoBehaviour
 
         isHitFlag = false; // 被弾フラグをオフに.
 
-        player_render.color = new Color(1f, 1f, 1f, 1f); // プレイヤーの見た目を元に戻す.
+        playerRender.color = new Color(1f, 1f, 1f, 1f); // プレイヤーの見た目を元に戻す.
+
+        if (barrierFlag)
+        {
+            if (barrierRender == null)
+            {
+                Debug.LogWarning("BarrierRender_None");
+            }
+            else
+            {
+                barrierRender.color = new Color(1f, 1f, 1f, 1f); // バリアの見た目を元に戻す.
+            }            
+        }
     }
 
     #endregion
