@@ -11,6 +11,7 @@ public class Enemy_β_Sc : MonoBehaviour
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
     int enemyHp;            // エネミーの体力.
+    int enemyAttackCount;   // 攻撃した回数.
 
     Vector3 enemyPos;       // エネミーの現在座標.
     float eSize;            // エネミーサイズ.
@@ -30,6 +31,7 @@ public class Enemy_β_Sc : MonoBehaviour
         attackTime = Com.ENEMY_FIRE_RATE_β;
         enemySpeed = Com.ENEMY_SPEED_β;
         enemyHp = Com.ENEMY_HP_β;
+        enemyAttackCount = 0;
     }
 
     void InitEnemySize()
@@ -59,9 +61,24 @@ public class Enemy_β_Sc : MonoBehaviour
     {
         enemyPos = transform.position; // 現在位置を取得.
 
-        attackTime -= Time.deltaTime;
+        if(enemyAttackCount < 3)
+        {
+            attackTime -= Time.deltaTime;
+        }
+        else
+        {
+            if (transform.position.x < 0)
+            {
+                transform.position += new Vector3(-enemySpeed * Time.deltaTime, enemySpeed * Time.deltaTime);
+            }
+            else
+            {
+                transform.position += new Vector3(enemySpeed * Time.deltaTime, enemySpeed * Time.deltaTime);
+            }
+            return;
+        }
 
-        if (enemyPos.y > max.y - 2f)
+        if (enemyPos.y > max.y + Com.ENEMY_RANGE_β)
         {
             transform.position -= new Vector3(0, enemySpeed * Time.deltaTime);
 
@@ -69,6 +86,12 @@ public class Enemy_β_Sc : MonoBehaviour
             {
                 Debug.Log(enemyPos.y + "β");
             }
+        }
+        else if (attackTime < 0)
+        {
+            attackTime = Com.ENEMY_FIRE_RATE_β;
+            Instantiate(missile_prefab, transform.position, transform.rotation);
+            enemyAttackCount++;
         }
     }
 
@@ -79,7 +102,7 @@ public class Enemy_β_Sc : MonoBehaviour
         #region 画面端から出ないようにする処理.
         if (enemyPos.x >= max.x + eSize) // 右端の判定.
         {
-            
+            Destroy(gameObject);
             if (debugFlag)
             {
                 Debug.Log("Enemy_Right");
@@ -87,7 +110,7 @@ public class Enemy_β_Sc : MonoBehaviour
         }
         if (enemyPos.x <= min.x - eSize) // 左端の判定.
         {
-            
+            Destroy(gameObject);
             if (debugFlag)
             {
                 Debug.Log("Enemy_Left");

@@ -213,12 +213,15 @@ namespace Common
         /// </summary>
         public const float ENEMY_FIRE_RATE_β = 3.0f;
 
-
+        /// <summary>
+        /// エネミーβの停止座標
+        /// </summary>
+        public const float ENEMY_RANGE_β = 2.5f;
 
         /// <summary>
         /// エネミーβの体力.
         /// </summary>
-        public const int ENEMY_HP_β = 6;
+        public const int ENEMY_HP_β = 3;
         #endregion
 
         #region その他.

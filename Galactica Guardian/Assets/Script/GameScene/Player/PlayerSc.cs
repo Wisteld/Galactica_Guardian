@@ -463,6 +463,10 @@ public class PlayerSc : MonoBehaviour
         Instantiate(barrier_prefab,transform.position,transform.rotation);        
     }
 
+    /// <summary>
+    /// バリアのSpriterenderを取得する.
+    /// </summary>
+    /// <param name="sr">SpriteRender</param>
     public void SetBarrierRender(SpriteRenderer sr)
     {
         barrierRender = sr;
@@ -506,7 +510,7 @@ public class PlayerSc : MonoBehaviour
     public void BarrierLost()
     {
         barrierFlag = false; // バリアが無くなった.
-        barrierRender = null;
+        barrierRender = null; // バリアのSpriterenderを破棄.
 
         if (debugFlag)
         {
