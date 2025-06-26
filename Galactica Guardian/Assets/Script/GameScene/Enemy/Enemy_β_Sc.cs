@@ -37,7 +37,7 @@ public class Enemy_β_Sc : MonoBehaviour
     void InitEnemySize()
     {
         eSize = GetComponent<BoxCollider2D>().size.x;
-         min = Camera.main.ScreenToWorldPoint(Vector2.zero); // 画面の左下を取得.
+        min = Camera.main.ScreenToWorldPoint(Vector2.zero); // 画面の左下を取得.
         max = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)); // 画面の右上を取得.
 
 
@@ -60,24 +60,31 @@ public class Enemy_β_Sc : MonoBehaviour
     void Update()
     {
         enemyPos = transform.position; // 現在位置を取得.
+
         EnemyRange();
+
         if(enemyAttackCount < 3)
         {
             attackTime -= Time.deltaTime;
         }
         else
         {
-            if (transform.position.x < 0)
-            {
-                transform.position += new Vector3(-enemySpeed * Time.deltaTime, enemySpeed * Time.deltaTime);
-            }
-            else
-            {
-                transform.position += new Vector3(enemySpeed * Time.deltaTime, enemySpeed * Time.deltaTime);
-            }
+            EnemyReturn();
             return;
         }
 
+        EnemyMove();
+        
+        EnemyFire();
+    }
+
+    #region Update内関数.
+
+    /// <summary>
+    /// 移動処理.
+    /// </summary>
+    void EnemyMove()
+    {
         if (enemyPos.y > max.y / 2)
         {
             transform.position -= new Vector3(0, enemySpeed * Time.deltaTime);
@@ -87,13 +94,37 @@ public class Enemy_β_Sc : MonoBehaviour
                 Debug.Log(enemyPos.y + "β");
             }
         }
-        else if (attackTime < 0)
+    }
+
+    /// <summary>
+    /// ミサイル発射処理.
+    /// </summary>
+    void EnemyFire()
+    {
+        if (attackTime < 0)
         {
             attackTime = Com.ENEMY_FIRE_RATE_β;
             Instantiate(missile_prefab, transform.position, transform.rotation);
             enemyAttackCount++;
         }
     }
+
+    /// <summary>
+    /// 斜め後方に離脱する(左右のより近い方向に離脱)
+    /// </summary>
+    void EnemyReturn()
+    {
+        if (transform.position.x < 0)
+        {
+            transform.position += new Vector3(-enemySpeed * Time.deltaTime, enemySpeed * Time.deltaTime);
+        }
+        else
+        {
+            transform.position += new Vector3(enemySpeed * Time.deltaTime, enemySpeed * Time.deltaTime);
+        }        
+    }
+
+    #endregion
 
     #region Update外関数.
 

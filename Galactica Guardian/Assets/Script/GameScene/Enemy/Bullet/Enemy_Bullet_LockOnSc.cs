@@ -10,6 +10,7 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
     float bulletTime;  // 弾が消えるまでの時間.
     float ignoreRange; // プレイヤーを無視する距離.
     Vector3 direction; // 発射方向.
+    Vector3 toPlayer;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +24,8 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
     void Update()
     {
         bulletTime -= Time.deltaTime;
-        transform.position -= direction * bulletSpeed * Time.deltaTime; // 弾の移動処理.
+        transform.position += direction * bulletSpeed * Time.deltaTime; // 弾の移動処理.
+        Debug.DrawLine(transform.position, transform.position + direction * 3f, Color.red, 2.0f);
 
         if (bulletTime < 0)
         {
@@ -36,21 +38,27 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
     /// </summary>
     void SearchPlayer()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player"); // プレイヤーを探す.
+        GameObject player = GameObject.FindGameObjectWithTag(tags.PLAYER); // プレイヤーを探す.
         
         if (player == null) // プレイヤーが見つからなかったら.
         {
+            Debug.LogWarning("Player Search Failed");
             direction = Vector2.down;
             return;
         }
 
-        if (playerTransform.position.y < playerTransform.position.y - ignoreRange) // プレイヤーが一定以上下に居たら.
-        {
-            direction = (playerTransform.position - transform.position).normalized; // プレイヤーの座標への方向ベクトルを取得.
-        }
-        else // 距離が近かったら.
+        playerTransform = player.transform;
+        toPlayer = playerTransform.position - transform.position;
+
+        float distance = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (distance < ignoreRange || toPlayer.y > 0f) // プレイヤーが上に居るか、距離が近かったら.
         {
             direction = Vector2.down;
+        }
+        else // プレイヤーが一定以上下に居たら.
+        {            
+            direction = (playerTransform.position - transform.position).normalized; // プレイヤーの座標への方向ベクトルを取得.
         }
     }
 

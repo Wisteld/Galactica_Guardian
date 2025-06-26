@@ -162,7 +162,7 @@ namespace Common
         /// <summary>
         /// 自機狙い弾の索敵外範囲.
         /// </summary>
-        public const float ENEMY_IGNORE_RANGE = 100f;
+        public const float ENEMY_IGNORE_RANGE = 1.5f;
 
         /// <summary>
         /// エネミーのミサイル弾速.

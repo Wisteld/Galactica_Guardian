@@ -79,7 +79,7 @@ public class Enemy_α_Sc : MonoBehaviour
         {
             enemySide = Random.Range(-1, 2); // ランダムに左右に移動するか決める.
             sideTime = Com.ENEMY_SIDE_TIME;  // カウントリセット.
-            sideFlag = true;
+            // sideFlag = true;
         }
 
         EnemyMove();
