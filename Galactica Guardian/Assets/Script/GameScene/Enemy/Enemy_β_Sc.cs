@@ -36,9 +36,9 @@ public class Enemy_β_Sc : MonoBehaviour
 
     void InitEnemySize()
     {
-        eSize = GetComponent<BoxCollider2D>().size.x / 2;
-        Vector2 min = Camera.main.ScreenToWorldPoint(Vector2.zero); // 画面の左下を取得.
-        Vector2 max = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)); // 画面の右上を取得.
+        eSize = GetComponent<BoxCollider2D>().size.x;
+         min = Camera.main.ScreenToWorldPoint(Vector2.zero); // 画面の左下を取得.
+        max = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)); // 画面の右上を取得.
 
 
 
@@ -60,7 +60,7 @@ public class Enemy_β_Sc : MonoBehaviour
     void Update()
     {
         enemyPos = transform.position; // 現在位置を取得.
-
+        EnemyRange();
         if(enemyAttackCount < 3)
         {
             attackTime -= Time.deltaTime;
@@ -78,7 +78,7 @@ public class Enemy_β_Sc : MonoBehaviour
             return;
         }
 
-        if (enemyPos.y > max.y + Com.ENEMY_RANGE_β)
+        if (enemyPos.y > max.y / 2)
         {
             transform.position -= new Vector3(0, enemySpeed * Time.deltaTime);
 
@@ -99,7 +99,7 @@ public class Enemy_β_Sc : MonoBehaviour
 
     void EnemyRange()
     {
-        #region 画面端から出ないようにする処理.
+        #region 画面端処理.
         if (enemyPos.x >= max.x + eSize) // 右端の判定.
         {
             Destroy(gameObject);

@@ -216,7 +216,7 @@ namespace Common
         /// <summary>
         /// エネミーβの停止座標
         /// </summary>
-        public const float ENEMY_RANGE_β = 2.5f;
+        public const float ENEMY_RANGE_β = 2f;
 
         /// <summary>
         /// エネミーβの体力.
