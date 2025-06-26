@@ -460,15 +460,7 @@ public class PlayerSc : MonoBehaviour
             return;
         }
 
-        Instantiate(barrier_prefab,transform.position,transform.rotation);
-
-        /*foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
-        {
-            if (sr.CompareTag(tags.PLAYER_BARRIER))
-            {
-                barrierRender = sr;
-            }
-        }*/            
+        Instantiate(barrier_prefab,transform.position,transform.rotation);        
     }
 
     public void SetBarrierRender(SpriteRenderer sr)
@@ -514,6 +506,7 @@ public class PlayerSc : MonoBehaviour
     public void BarrierLost()
     {
         barrierFlag = false; // ƒoƒŠƒA‚ª–³‚­‚È‚Á‚½.
+        barrierRender = null;
 
         if (debugFlag)
         {
