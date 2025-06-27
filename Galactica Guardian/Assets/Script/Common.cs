@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine.Experimental.Rendering;
 
 namespace Common
@@ -222,6 +223,56 @@ namespace Common
         /// エネミーβの体力.
         /// </summary>
         public const int ENEMY_HP_β = 3;
+        #endregion
+
+        #region Boss
+        /// <summary>
+        /// ボスエネミーの移動速度.
+        /// </summary>
+        public const float ENEMY_BOSS_SPEED = 3f;
+
+        /// <summary>
+        /// ボスエネミーの最長攻撃間隔.
+        /// </summary>
+        public const float ENEMY_BOSS_FIRE_RND_MAX = 2f;
+        
+        /// <summary>
+        /// ボスエネミーの最短攻撃間隔.
+        /// </summary>
+        public const float ENEMY_BOSS_FIRE_RND_MIN = 1f;
+
+        /// <summary>
+        /// ボスエネミーの体力.
+        /// </summary>
+        public const int ENEMY_BOSS_HP = 100;
+        #endregion
+
+        #region 初期生成数.
+        /// <summary>
+        /// エネミーの生成数.
+        /// </summary>
+        public const int ENEMY_MAX_COUNT = 8;
+
+        /// <summary>
+        /// エネミーαの生成数.
+        /// </summary>
+        public const int ENEMY_α_MAX_COUNT = 6;
+
+        /// <summary>
+        /// エネミーβの生成数.
+        /// </summary>
+        public const int ENEMY_β_MAX_COUNT = 4;
+        #endregion
+
+        #region
+        /// <summary>
+        /// エネミーの生成指定番号.
+        /// </summary>
+        public const int ENEMY_NORMAL = 0;
+
+        public const int ENEMY_α = 1;
+
+        public const int ENEMY_β = 2;
         #endregion
 
         #region その他.
