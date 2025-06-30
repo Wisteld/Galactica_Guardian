@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Common;
+using ObjectPool;
 
 public class Enemy_α_Sc : MonoBehaviour
 {
@@ -151,7 +152,7 @@ public class Enemy_α_Sc : MonoBehaviour
         // 画面外判定.
         if (enemyPos.y <= min.y - eSize) // 下端の判定.
         {
-            Destroy(gameObject);
+            EnemyDestroy();
             if (debugFlag)
             {
                 Debug.Log("Enemy_Lost");
@@ -180,7 +181,7 @@ public class Enemy_α_Sc : MonoBehaviour
 
     void EnemyDestroy()
     {
-        Destroy(gameObject);
+        EnemyPool.Instance.Collect(ENum.ENEMY_α, gameObject);
     }
 
     #endregion

@@ -15,7 +15,7 @@ namespace Common
         /// <summary>
         /// エネミー系デバッグモード.
         /// </summary>
-        public const bool DEBUG_MODE_ENEMY = true;
+        public const bool DEBUG_MODE_ENEMY = false;
 
         /// <summary>
         /// プレイヤー系デバッグモード.
@@ -247,34 +247,6 @@ namespace Common
         public const int ENEMY_BOSS_HP = 100;
         #endregion
 
-        #region 初期生成数.
-        /// <summary>
-        /// エネミーの生成数.
-        /// </summary>
-        public const int ENEMY_MAX_COUNT = 8;
-
-        /// <summary>
-        /// エネミーαの生成数.
-        /// </summary>
-        public const int ENEMY_α_MAX_COUNT = 6;
-
-        /// <summary>
-        /// エネミーβの生成数.
-        /// </summary>
-        public const int ENEMY_β_MAX_COUNT = 4;
-        #endregion
-
-        #region
-        /// <summary>
-        /// エネミーの生成指定番号.
-        /// </summary>
-        public const int ENEMY_NORMAL = 0;
-
-        public const int ENEMY_α = 1;
-
-        public const int ENEMY_β = 2;
-        #endregion
-
         #region その他.
         /// <summary>
         /// アイテムキャリアーの移動速度.
@@ -339,5 +311,38 @@ namespace Common
         /// プレイヤーバリアタグ.
         /// </summary>
         public const string PLAYER_BARRIER = "Player_Barrier";
+
+        public const string POP_ANCHOR = "PopAnchor";
+    }
+
+    class ENum
+    {
+        #region 生成ナンバー.
+        /// <summary>
+        /// エネミーの生成指定番号.
+        /// </summary>
+        public const int ENEMY_NORMAL = 0;
+
+        public const int ENEMY_α = 1;
+
+        public const int ENEMY_β = 2;
+        #endregion
+
+        #region 初期生成数.
+        /// <summary>
+        /// エネミーの生成数.
+        /// </summary>
+        public const int ENEMY_MAX_COUNT = 8;
+
+        /// <summary>
+        /// エネミーαの生成数.
+        /// </summary>
+        public const int ENEMY_α_MAX_COUNT = 6;
+
+        /// <summary>
+        /// エネミーβの生成数.
+        /// </summary>
+        public const int ENEMY_β_MAX_COUNT = 4;
+        #endregion
     }
 }

@@ -12,6 +12,8 @@ TagManager:
   - Player_Bullet_Laser
   - Player_Missile
   - PowerUp_Carrier
+  - Player_Barrier
+  - PopAnchor
   layers:
   - Default
   - TransparentFX

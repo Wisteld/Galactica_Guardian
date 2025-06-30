@@ -2,6 +2,7 @@ using Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ObjectPool;
 
 public class Enemy_β_Sc : MonoBehaviour
 {
@@ -61,8 +62,6 @@ public class Enemy_β_Sc : MonoBehaviour
     {
         enemyPos = transform.position; // 現在位置を取得.
 
-        EnemyRange();
-
         if(enemyAttackCount < 3)
         {
             attackTime -= Time.deltaTime;
@@ -93,6 +92,7 @@ public class Enemy_β_Sc : MonoBehaviour
             {
                 Debug.Log(enemyPos.y + "β");
             }
+            EnemyRange();
         }
     }
 
@@ -121,7 +121,8 @@ public class Enemy_β_Sc : MonoBehaviour
         else
         {
             transform.position += new Vector3(enemySpeed * Time.deltaTime, enemySpeed * Time.deltaTime);
-        }        
+        }
+        EnemyRange();
     }
 
     #endregion
@@ -133,7 +134,7 @@ public class Enemy_β_Sc : MonoBehaviour
         #region 画面端処理.
         if (enemyPos.x >= max.x + eSize) // 右端の判定.
         {
-            Destroy(gameObject);
+            EnemyDestroy();
             if (debugFlag)
             {
                 Debug.Log("Enemy_Right");
@@ -141,7 +142,7 @@ public class Enemy_β_Sc : MonoBehaviour
         }
         if (enemyPos.x <= min.x - eSize) // 左端の判定.
         {
-            Destroy(gameObject);
+            EnemyDestroy();
             if (debugFlag)
             {
                 Debug.Log("Enemy_Left");
@@ -150,7 +151,7 @@ public class Enemy_β_Sc : MonoBehaviour
         // 画面外判定.
         if (enemyPos.y <= min.y - eSize) // 下端の判定.
         {
-            Destroy(gameObject);
+            EnemyDestroy();
             if (debugFlag)
             {
                 Debug.Log("Enemy_Lost");
@@ -178,7 +179,7 @@ public class Enemy_β_Sc : MonoBehaviour
     /// </summary>
     void EnemyDestroy()
     {
-        Destroy(gameObject);
+        EnemyPool.Instance.Collect(ENum.ENEMY_β, gameObject);
     }
 
     #endregion

@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Common;
+using ObjectPool;
 using System.Drawing;
 
 public class EnemySc : MonoBehaviour
 {
     [Header ("弾のプレファブ")]
     [SerializeField] GameObject enemy_bullet;
+    EnemyPool enemy_pool;
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
@@ -42,6 +44,7 @@ public class EnemySc : MonoBehaviour
         enemySide = 0;
         rndFire = 0;
         sideFlag = false;
+        enemy_pool = new EnemyPool();
     }
     /// <summary>
     /// エネミーの大きさを取得.
@@ -152,7 +155,7 @@ public class EnemySc : MonoBehaviour
         // 画面外判定.
         if (enemyPos.y <= min.y - eSize) // 下端の判定.
         {
-            Destroy(gameObject);
+            EnemyDestroy();
             if (debugFlag)
             {
                 Debug.Log("Enemy_Lost");
@@ -181,7 +184,7 @@ public class EnemySc : MonoBehaviour
 
     void EnemyDestroy()
     {
-        Destroy(gameObject);
+        EnemyPool.Instance.Collect(ENum.ENEMY_NORMAL, gameObject);
     }
 
     #endregion
@@ -190,7 +193,7 @@ public class EnemySc : MonoBehaviour
     {
         if (collision.CompareTag(tags.PLAYER_BULLET))
         {
-            Destroy(collision.gameObject);
+            EnemyDestroy();
             EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
         }
 
