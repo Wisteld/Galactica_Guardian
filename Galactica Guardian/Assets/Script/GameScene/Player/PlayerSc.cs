@@ -166,8 +166,8 @@ public class PlayerSc : MonoBehaviour
     {
         playerSize = player_collider.size.x;
         cam = Camera.main;
-        min = Camera.main.ViewportToWorldPoint(Vector2.zero); // ‰æ–Ê‚Ì¶‰º‚ğæ“¾.
-        max = Camera.main.ViewportToWorldPoint(Vector2.one); // ‰æ–Ê‚Ì‰Eã‚ğæ“¾.
+        min = GameManagerSc.Instance.screenMin;
+        max = GameManagerSc.Instance.screenMax;
     }
 
     #endregion

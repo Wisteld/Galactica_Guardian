@@ -52,8 +52,8 @@ public class Enemy_α_Sc : MonoBehaviour
     {
         eSize = GetComponent<BoxCollider2D>().size.x / 2;
         sizeDistance = Com.ENEMY_DISTANCE;
-        min = Camera.main.ViewportToWorldPoint(Vector2.zero); // 画面の左下を取得.
-        max = Camera.main.ViewportToWorldPoint(Vector2.one); // 画面の右上を取得.
+        min = GameManagerSc.Instance.screenMin;
+        max = GameManagerSc.Instance.screenMax;
     }
     #endregion
 

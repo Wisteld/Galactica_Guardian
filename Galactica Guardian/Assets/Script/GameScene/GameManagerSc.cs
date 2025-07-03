@@ -12,6 +12,10 @@ public class GameManagerSc : MonoBehaviour
     [SerializeField] GameObject enemy_hme_prefab;
     [SerializeField] GameObject enemy_boss_prefab;
 
+    public static GameManagerSc Instance { get; private set; }
+    public Vector2 screenMin { get; private set; }
+    public Vector2 screenMax { get; private set; }
+
     Vector3[] popPoint;
 
     int anchorMax;
@@ -21,10 +25,8 @@ public class GameManagerSc : MonoBehaviour
     float enemyαTimer;
     float enemyβTimer;
 
-    private void Awake()
+    void InitCamera()
     {
-        EnemyPool.Instance.GenerateEnemy(enemy_prefab, enemyα_prefab, enemyβ_prefab, enemy_hme_prefab, enemy_boss_prefab);
-
         // 画面の高さに合わせてカメラサイズ調整（縦スクロールなので高さ優先）
         float targetWidth = 720f / 100f; // 1ユニット = 100px 換算
         float targetAspect = targetWidth / (1080f / 100f); // = 720/1080 = 0.6666...
@@ -58,8 +60,15 @@ public class GameManagerSc : MonoBehaviour
 
             cam.rect = rect;
         }
+
+        if (Instance == null) Instance = this;
+
+        // 一度だけ取得
+        screenMin = Camera.main.ViewportToWorldPoint(Vector2.zero);
+        screenMax = Camera.main.ViewportToWorldPoint(Vector2.one);
     }
-    void Start()
+
+    void InitPop()
     {
         GameObject[] anchorPoint = GameObject.FindGameObjectsWithTag(tags.POP_ANCHOR);
         anchorMax = anchorPoint.Length;
@@ -68,6 +77,18 @@ public class GameManagerSc : MonoBehaviour
         {
             popPoint[i] = anchorPoint[i].transform.position;
         }
+    }
+
+    #region UnityEvent.
+    private void Awake()
+    {
+        EnemyPool.Instance.GenerateEnemy(enemy_prefab, enemyα_prefab, enemyβ_prefab, enemy_hme_prefab, enemy_boss_prefab);
+
+        InitCamera();
+    }
+    void Start()
+    {
+        InitPop();
     }
 
     // Update is called once per frame
@@ -100,4 +121,5 @@ public class GameManagerSc : MonoBehaviour
         }
 
     }
+    #endregion
 }

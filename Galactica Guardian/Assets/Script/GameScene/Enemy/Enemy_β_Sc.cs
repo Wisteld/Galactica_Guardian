@@ -37,8 +37,8 @@ public class Enemy_β_Sc : MonoBehaviour
     void InitEnemySize()
     {
         eSize = GetComponent<BoxCollider2D>().size.x;
-        min = Camera.main.ViewportToWorldPoint(Vector2.zero); // 画面の左下を取得.
-        max = Camera.main.ViewportToWorldPoint(Vector2.one); // 画面の右上を取得.
+        min = GameManagerSc.Instance.screenMin;
+        max = GameManagerSc.Instance.screenMax;
     }
     #endregion
 

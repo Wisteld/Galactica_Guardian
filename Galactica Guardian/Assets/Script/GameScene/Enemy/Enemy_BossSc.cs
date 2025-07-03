@@ -71,8 +71,8 @@ public class Enemy_BossSc : MonoBehaviour
     {
         eSize = GetComponent<BoxCollider2D>().size.x / 2;
         sizeDistance = Com.ENEMY_DISTANCE;
-        min = Camera.main.ViewportToWorldPoint(Vector2.zero); // ‰æ–Ê‚Ì¶‰º‚ğæ“¾.
-        max = Camera.main.ViewportToWorldPoint(Vector2.one); // ‰æ–Ê‚Ì‰Eã‚ğæ“¾.
+        min = GameManagerSc.Instance.screenMin;
+        max = GameManagerSc.Instance.screenMax;
     }
     #endregion
     // Start is called before the first frame update
