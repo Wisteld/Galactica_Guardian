@@ -15,7 +15,6 @@ public class Enemy_HMESc : MonoBehaviour
     float enemySideSpeed;   // エネミーの横移動速度.
     float sideTime;         // 横移動するか抽選する間隔.
     int enemySide;          // エネミーの横移動の有無.
-    int rndFire;            // ランダムに二発目以降の弾を発射するか決める.
     int enemyHp;            // エネミーの体力.
 
     Vector3 enemyPos;       // エネミーの現在座標.
@@ -26,6 +25,7 @@ public class Enemy_HMESc : MonoBehaviour
     float sizeDistance;     // 壁との距離(サイズに対する倍率)
 
     bool sideFlag;          // 横移動したか.
+    bool bottomFlag;        // 画面の下まで移動したか.
     bool debugFlag;         // デバッグモード.
     #endregion
 
@@ -36,15 +36,15 @@ public class Enemy_HMESc : MonoBehaviour
     void InitEnemy()
     {
         // 変数を初期化.
-        enemySpeed = Com.ENEMY_SPEED_α;
-        enemySideSpeed = Com.ENEMY_SIDE_SPEED;
-        attackTime = Random.Range(Com.ENEMY_FIRE_RND_MIN, Com.ENEMY_FIRE_RND_MAX); // ランダムに初期値を設定.
+        enemySpeed = Com.ENEMY_SPEED_HME;
+        enemySideSpeed = Com.ENEMY_SIDE_SPEED_HME;
+        attackTime = Com.ENEMY_FIRE_RATE_HME;
         debugFlag = Com.DEBUG_MODE_ENEMY;
         sideTime = Com.ENEMY_SIDE_TIME;
         enemySide = 0;
-        rndFire = 0;
-        enemyHp = Com.ENEMY_HP_α;
+        enemyHp = Com.ENEMY_HME_HP;
         sideFlag = false;
+        bottomFlag = false;
     }
     /// <summary>
     /// エネミーの大きさを取得.
@@ -88,6 +88,17 @@ public class Enemy_HMESc : MonoBehaviour
             // sideFlag = true;
         }
 
+        if (transform.position.y < max.y - eSize　&& bottomFlag)
+        {
+            transform.position -= new Vector3(enemySide * enemySideSpeed * Time.deltaTime, -enemySpeed * Time.deltaTime);
+            EnemyRange();
+            return;
+        }
+        else if (bottomFlag)
+        {
+            bottomFlag = false;
+        }
+
         EnemyMove();
     }
 
@@ -114,20 +125,9 @@ public class Enemy_HMESc : MonoBehaviour
             Debug.LogWarning("Enemy Bullet prefab is not assigned!");
             return;
         }
-
-        if (rndFire == 0)
-        {
-            Instantiate(enemy_missile, transform.position, Quaternion.identity); // 弾を撃つ.
-        }
-
-        rndFire = Random.Range(0, 6); // 二発目以降、6/1で弾が出るようにする.
-        attackTime = Random.Range(Com.ENEMY_FIRE_RND_MIN, Com.ENEMY_FIRE_RND_MAX); // 再攻撃までにかかる時間をランダムに設定.
-
-        if (debugFlag)
-        {
-            Debug.Log("eAttackTime" + attackTime);
-            Debug.Log("rndFire" + rndFire);
-        }
+        Instantiate(enemy_bullet, transform.position, transform.rotation); // 弾を撃つ.
+        Instantiate(enemy_missile, transform.position, Quaternion.identity); // ミサイルを撃つ.
+        attackTime = Com.ENEMY_FIRE_RATE_HME;
     }
 
     void EnemyRange()
@@ -155,7 +155,7 @@ public class Enemy_HMESc : MonoBehaviour
         // 画面外判定.
         if (enemyPos.y <= min.y - eSize) // 下端の判定.
         {
-            transform.position = new Vector3(transform.position.x, max.y + eSize * 3);
+            bottomFlag = true;
             if (debugFlag)
             {
                 Debug.Log("Enemy_loop");

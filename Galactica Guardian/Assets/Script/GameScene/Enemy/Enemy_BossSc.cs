@@ -1,4 +1,5 @@
 using Common;
+using ObjectPool;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -38,7 +39,8 @@ public class Enemy_BossSc : MonoBehaviour
     Vector2 max;             // 画面範囲右上.
     Vector2 min;             // 画面範囲左下.
 
-    bool entryFlag;         // 登場演出中フラグ.
+    bool entryFlag;          // 登場演出中フラグ.
+    bool shotSwitch;         // 攻撃変化.
     bool debugFlag = Com.DEBUG_MODE_ENEMY; // デバッグモード.
     #endregion
 
@@ -60,6 +62,7 @@ public class Enemy_BossSc : MonoBehaviour
         enemySide = 1;
         enemyHp = Com.ENEMY_BOSS_HP;
         entryFlag = false;
+        shotSwitch = false;
     }
     /// <summary>
     /// エネミーの大きさを取得.
@@ -111,24 +114,38 @@ public class Enemy_BossSc : MonoBehaviour
             if (attackCount < attackRand)
             {
             #region 攻撃処理.
-            Instantiate(enemy_bullet, fire_point_center.position, Quaternion.identity);
-            Instantiate(enemy_bullet_lock, fire_point_left.position, Quaternion.identity);
-            Instantiate(enemy_bullet_lock, fire_point_right.position, Quaternion.identity);
-            Instantiate(enemy_missile, fire_point_left.position, Quaternion.identity);
-            Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);
+            if (shotSwitch)
+            {
+                Instantiate(enemy_bullet, fire_point_center.position, Quaternion.identity);
+                Instantiate(enemy_bullet_lock, fire_point_left.position, Quaternion.identity);
+                Instantiate(enemy_bullet_lock, fire_point_right.position, Quaternion.identity);
+                Instantiate(enemy_missile, fire_point_left.position, Quaternion.identity);
+                Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);  
+                shotSwitch = false;
+            }
+            else
+            {
+                    Instantiate(enemy_bullet_lock, fire_point_center.position, Quaternion.identity);
+                    Instantiate(enemy_bullet, fire_point_left.position, Quaternion.identity);
+                    Instantiate(enemy_bullet, fire_point_right.position, Quaternion.identity);
+                    Instantiate(enemy_missile, fire_point_left.position, Quaternion.identity);
+                    Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);
+                    shotSwitch = true;
+                }
             attackTime = Random.Range(Com.ENEMY_BOSS_FIRE_RND_MIN, Com.ENEMY_BOSS_FIRE_RND_MAX);
             #endregion
             }
             else
             {
                 attackTime = 0;
+                attackCount = 0;
                 attackRand = Random.Range(Com.ENEMY_BOSS_ATTACK_RND_MIN, Com.ENEMY_BOSS_ATTACK_RND_MAX);
                 #region 攻撃処理.
                 Instantiate(enemy_bullet, fire_point_center.position, Quaternion.identity);
                 Instantiate(enemy_bullet, fire_point_left.position, Quaternion.identity);
                 Instantiate(enemy_bullet, fire_point_right.position, Quaternion.identity);
-                Instantiate(enemy_missile, fire_point_left.position, Quaternion.identity);
-                Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);
+                Instantiate(enemy_bullet_lock, fire_point_left.position, Quaternion.identity);
+                Instantiate(enemy_bullet_lock, fire_point_right.position, Quaternion.identity);
                 attackTime = Random.Range(Com.ENEMY_BOSS_FIRE_RND_MIN, Com.ENEMY_BOSS_FIRE_RND_MAX);
                 #endregion
             }
@@ -227,11 +244,23 @@ public class Enemy_BossSc : MonoBehaviour
     #endregion
 
     #region Update外関数.
-
-
-    void EnemyDamage()
+    void EnemyDestroy()
     {
+        EnemyPool.Instance.Collect(ENum.ENEMY_BOSS, gameObject);
+    }
 
+    /// <summary>
+    /// ダメージ処理.
+    /// </summary>
+    /// <param name="damage">ダメージ数値</param>
+    void EnemyDamage(int damage)
+    {
+        enemyHp -= damage;
+
+        if (enemyHp <= 0)
+        {
+            EnemyDestroy();
+        }
     }
     #endregion
 
@@ -239,15 +268,17 @@ public class Enemy_BossSc : MonoBehaviour
     {
         if (collision.gameObject.CompareTag(tags.PLAYER_BULLET))
         {
-
+            Destroy(collision.gameObject);
+            EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
         }
         if (collision.gameObject.CompareTag(tags.PLAYER_BULLET_LASER))
         {
-
+            Destroy(collision.gameObject);
+            EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
         }
         if (collision.gameObject.CompareTag(tags.PLAYER_MISSILE))
         {
-
+            EnemyDamage(Com.ENEMY_DAMAGE_MISSILE);
         }
     }
 }

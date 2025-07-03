@@ -146,7 +146,13 @@ namespace ObjectPool
                 case ENum.ENEMY_β: // エネミーβなら.
                     enemyβ_queue.Enqueue(enemy); // エネミーβキューに格納.
                     break;
-                default:
+                case ENum.ENEMY_HME: // エネミーHMEなら.
+                    enemy_hme_queue.Enqueue(enemy); // エネミーHMEキューに収納.
+                    break;
+                case ENum.ENEMY_BOSS: // ボスエネミーなら.
+                    enemy_boss_queue.Enqueue(enemy); // ボスエネミーキューに収納.
+                    break;
+                default: // 想定外の数値なら.
                     Debug.LogWarning("Collect Number None");
                     break;
             }

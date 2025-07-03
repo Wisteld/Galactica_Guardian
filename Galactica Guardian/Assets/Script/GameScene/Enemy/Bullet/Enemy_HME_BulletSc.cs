@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_Bullet_LockOnSc : MonoBehaviour
+public class Enemy_HME_BulletSc : MonoBehaviour
 {
     Transform playerTransform; // プレイヤーの座標.
     float bulletSpeed; // 弾速.
@@ -16,7 +16,7 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
     {
         ignoreRange = Com.ENEMY_IGNORE_RANGE; // プレイヤーを無視する距離を初期化.
         SearchPlayer();
-        bulletSpeed = Com.ENEMY_BULLET_SPEED; // 弾速を初期化.
+        bulletSpeed = Com.ENEMY_HME_BULLET_SPEED; // 弾速を初期化.
         bulletTime = Com.ENEMY_BULLET_DELETE; // 弾が消えるまでの時間を初期化.
     }
 
@@ -39,7 +39,7 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
     void SearchPlayer()
     {
         GameObject player = GameObject.FindGameObjectWithTag(tags.PLAYER); // プレイヤーを探す.
-        
+
         if (player == null) // プレイヤーが見つからなかったら.
         {
             Debug.LogWarning("Player Search Failed");
@@ -57,7 +57,7 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
             direction = Vector2.down;
         }
         else // プレイヤーが一定以上下に居たら.
-        {            
+        {
             direction = (playerTransform.position - transform.position).normalized; // プレイヤーの座標への方向ベクトルを取得.
         }
     }
