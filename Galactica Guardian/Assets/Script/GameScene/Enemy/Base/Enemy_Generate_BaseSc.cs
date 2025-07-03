@@ -10,10 +10,14 @@ namespace ObjectPool
         Queue<GameObject> enemy_queue = new Queue<GameObject>();
         Queue<GameObject> enemyα_queue = new Queue<GameObject>();
         Queue<GameObject> enemyβ_queue = new Queue<GameObject>();
+        Queue<GameObject> enemy_hme_queue = new Queue<GameObject>();
+        Queue<GameObject> enemy_boss_queue = new Queue<GameObject>();
 
         int enemyMaxCount = ENum.ENEMY_MAX_COUNT;
         int enemyαMaxCount = ENum.ENEMY_α_MAX_COUNT;
         int enemyβMaxCount = ENum.ENEMY_β_MAX_COUNT;
+        int enemyHMEMaxCount = ENum.ENEMY_HME_MAX_COUNT;
+        int enemyBossMaxCount = ENum.ENEMY_BOSS_MAX_COUNT;
 
         Vector3 defPos = new Vector3(0f, 15f, 0);
 
@@ -31,7 +35,7 @@ namespace ObjectPool
             }
         }
 
-        public void GenerateEnemy(GameObject enemy_normal, GameObject enemy_α, GameObject enemy_β)
+        public void GenerateEnemy(GameObject enemy_normal, GameObject enemy_α, GameObject enemy_β, GameObject enemy_hme, GameObject enemy_boss)
         {
             for (int i = 0; i < enemyMaxCount; i++) // MaxCountの回数繰り返す.
             {
@@ -50,6 +54,18 @@ namespace ObjectPool
                 var enemy = Object.Instantiate(enemy_β, defPos, Quaternion.identity); // エネミー生成(エネミーβ).
                 enemy.SetActive(false); // 生成したエネミーを非表示に.
                 enemyβ_queue.Enqueue(enemy); // 生成したエネミーをキューに格納.
+            }
+            for (int i = 0; i < enemyHMEMaxCount; i++) // MaxCountの回数繰り返す.
+            {
+                var enemy = Object.Instantiate(enemy_hme, defPos, Quaternion.identity); // エネミー生成(エネミー高機動試験機).
+                enemy.SetActive(false); // 生成したエネミーを非表示に.
+                enemy_hme_queue.Enqueue(enemy); // 生成したエネミーをキューに格納.
+            }
+            for (int i = 0; i < enemyBossMaxCount; i++) // MaxCountの回数繰り返す.
+            {
+                var enemy = Object.Instantiate(enemy_boss, defPos, Quaternion.identity); // エネミー生成(エネミーボス).
+                enemy.SetActive(false); // 生成したエネミーを非表示に.
+                enemy_boss_queue.Enqueue(enemy); // 生成したエネミーをキューに格納.
             }
 
             Debug.Log($"Queue Count: Normal={enemy_queue.Count}, α={enemyα_queue.Count}, β={enemyβ_queue.Count}");

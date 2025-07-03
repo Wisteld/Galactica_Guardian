@@ -217,7 +217,7 @@ namespace Common
         /// <summary>
         /// エネミーβの停止座標
         /// </summary>
-        public const float ENEMY_RANGE_β = 2f;
+        // public const float ENEMY_RANGE_β = 2f;
 
         /// <summary>
         /// エネミーβの体力.
@@ -225,11 +225,43 @@ namespace Common
         public const int ENEMY_HP_β = 3;
         #endregion
 
-        #region Boss
+        #region エネミーHME(HighMobilityExperiment)
+        /// <summary>
+        /// エネミーHMEの移動速度.
+        /// </summary>
+        public const float ENEMY_SPEED_HME = 5.4f;
+
+        /// <summary>
+        /// エネミーHMEの横移動速度.
+        /// </summary>
+        public const float ENEMY_SIDE_SPEED_HME = 4.5f;
+
+        /// <summary>
+        /// エネミーHMEの攻撃間隔.
+        /// </summary>
+        public const float ENEMY_FIRE_RATE_HME = 0.7f;
+
+        /// <summary>
+        /// エネミーHMEの体力.
+        /// </summary>
+        public const int ENEMY_HME_HP = 24;
+        #endregion
+
+        #region ボスエネミー
         /// <summary>
         /// ボスエネミーの移動速度.
         /// </summary>
         public const float ENEMY_BOSS_SPEED = 3f;
+
+        /// <summary>
+        /// ボスエネミーの上下移動時間.
+        /// </summary>
+        public const float ENEMY_BOSS_UP_DOWN_TIME = 0.2f;
+
+        /// <summary>
+        /// ボスエネミーの上下移動停止時間.
+        /// </summary>
+        public const float ENEMY_BOSS_UP_DOWN_STOP_TIME = 2.5f;
 
         /// <summary>
         /// ボスエネミーの最長攻撃間隔.
@@ -240,6 +272,16 @@ namespace Common
         /// ボスエネミーの最短攻撃間隔.
         /// </summary>
         public const float ENEMY_BOSS_FIRE_RND_MIN = 1f;
+
+        /// <summary>
+        /// ボスエネミーの攻撃パターン変化までの最小攻撃回数.
+        /// </summary>
+        public const int ENEMY_BOSS_ATTACK_RND_MIN = 1;
+
+        /// <summary>
+        /// ボスエネミーの攻撃パターン変化までの最大攻撃回数.
+        /// </summary>
+        public const int ENEMY_BOSS_ATTACK_RND_MAX = 10;
 
         /// <summary>
         /// ボスエネミーの体力.
@@ -326,23 +368,37 @@ namespace Common
         public const int ENEMY_α = 1;
 
         public const int ENEMY_β = 2;
+
+        public const int ENEMY_HME = 3;
+
+        public const int ENEMY_BOSS = 4;
         #endregion
 
         #region 初期生成数.
         /// <summary>
         /// エネミーの生成数.
         /// </summary>
-        public const int ENEMY_MAX_COUNT = 8;
+        public const int ENEMY_MAX_COUNT = 5;
 
         /// <summary>
         /// エネミーαの生成数.
         /// </summary>
-        public const int ENEMY_α_MAX_COUNT = 6;
+        public const int ENEMY_α_MAX_COUNT = 4;
 
         /// <summary>
         /// エネミーβの生成数.
         /// </summary>
-        public const int ENEMY_β_MAX_COUNT = 4;
+        public const int ENEMY_β_MAX_COUNT = 6;
+
+        /// <summary>
+        /// エネミーHME(High-Mobility-Experiment)の生成数.
+        /// </summary>
+        public const int ENEMY_HME_MAX_COUNT = 1;
+
+        /// <summary>
+        /// エネミーボスの生成数.
+        /// </summary>
+        public const int ENEMY_BOSS_MAX_COUNT = 1;
         #endregion
     }
 }

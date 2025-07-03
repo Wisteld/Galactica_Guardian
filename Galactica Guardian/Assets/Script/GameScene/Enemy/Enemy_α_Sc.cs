@@ -19,6 +19,8 @@ public class Enemy_α_Sc : MonoBehaviour
 
     Vector3 enemyPos;       // エネミーの現在座標.
     Camera cam;             // メインカメラの範囲.
+    Vector2 min;            // 画面の左下.
+    Vector2 max;            // 画面の右上.
     float eSize;            // エネミーサイズ.
     float sizeDistance;     // 壁との距離(サイズに対する倍率)
 
@@ -50,6 +52,8 @@ public class Enemy_α_Sc : MonoBehaviour
     {
         eSize = GetComponent<BoxCollider2D>().size.x / 2;
         sizeDistance = Com.ENEMY_DISTANCE;
+        min = Camera.main.ViewportToWorldPoint(Vector2.zero); // 画面の左下を取得.
+        max = Camera.main.ViewportToWorldPoint(Vector2.one); // 画面の右上を取得.
     }
     #endregion
 
@@ -128,8 +132,6 @@ public class Enemy_α_Sc : MonoBehaviour
     void EnemyRange()
     {
         enemyPos = gameObject.transform.position; // 現在位置を取得.
-        Vector2 min = Camera.main.ScreenToWorldPoint(Vector2.zero); // 画面の左下を取得.
-        Vector2 max = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)); // 画面の右上を取得.
         #region 画面端から出ないようにする処理.
         if (enemyPos.x >= max.x - eSize * sizeDistance) // 右端の判定.
         {
@@ -181,6 +183,7 @@ public class Enemy_α_Sc : MonoBehaviour
 
     void EnemyDestroy()
     {
+        InitEnemy();
         EnemyPool.Instance.Collect(ENum.ENEMY_α, gameObject);
     }
 

@@ -45,6 +45,8 @@ public class PlayerSc : MonoBehaviour
     [SerializeField] float invincibleTime; // 無敵時間の長さ.
     float level;          // 被弾時の点滅保持.
     Camera cam;           // メインカメラの範囲.
+    Vector2 min;
+    Vector2 max;
     float playerSize;     // プレイヤーサイズ.
     #endregion
     #region フラグ.
@@ -164,6 +166,8 @@ public class PlayerSc : MonoBehaviour
     {
         playerSize = player_collider.size.x;
         cam = Camera.main;
+        min = Camera.main.ViewportToWorldPoint(Vector2.zero); // 画面の左下を取得.
+        max = Camera.main.ViewportToWorldPoint(Vector2.one); // 画面の右上を取得.
     }
 
     #endregion
@@ -254,8 +258,6 @@ public class PlayerSc : MonoBehaviour
     void PlayerRange()
     {
         playerPos = gameObject.transform.position; // 現在位置を取得.
-        Vector2 min = Camera.main.ScreenToWorldPoint(Vector2.zero); // 画面の左下を取得.
-        Vector2 max = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)); // 画面の右上を取得.
         #region 画面端から出ないようにする処理.
         if (playerPos.x >= max.x - playerSize)
         {

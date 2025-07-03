@@ -1,14 +1,14 @@
+using Common;
+using ObjectPool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Common;
-using ObjectPool;
-using System.Drawing;
 
-public class EnemySc : MonoBehaviour
+public class Enemy_HMESc : MonoBehaviour
 {
-    [Header ("弾のプレファブ")]
+    [Header("弾のPrefab")]
     [SerializeField] GameObject enemy_bullet;
+    [SerializeField] GameObject enemy_missile;
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
@@ -17,14 +17,14 @@ public class EnemySc : MonoBehaviour
     int enemySide;          // エネミーの横移動の有無.
     int rndFire;            // ランダムに二発目以降の弾を発射するか決める.
     int enemyHp;            // エネミーの体力.
+
     Vector3 enemyPos;       // エネミーの現在座標.
     Camera cam;             // メインカメラの範囲.
     Vector2 min;            // 画面の左下.
     Vector2 max;            // 画面の右上.
     float eSize;            // エネミーサイズ.
     float sizeDistance;     // 壁との距離(サイズに対する倍率)
-    #endregion
-    #region フラグ.
+
     bool sideFlag;          // 横移動したか.
     bool debugFlag;         // デバッグモード.
     #endregion
@@ -36,14 +36,14 @@ public class EnemySc : MonoBehaviour
     void InitEnemy()
     {
         // 変数を初期化.
-        enemySpeed = Com.ENEMY_SPEED;
+        enemySpeed = Com.ENEMY_SPEED_α;
         enemySideSpeed = Com.ENEMY_SIDE_SPEED;
         attackTime = Random.Range(Com.ENEMY_FIRE_RND_MIN, Com.ENEMY_FIRE_RND_MAX); // ランダムに初期値を設定.
         debugFlag = Com.DEBUG_MODE_ENEMY;
         sideTime = Com.ENEMY_SIDE_TIME;
-        enemyHp = Com.ENEMY_HP;
         enemySide = 0;
         rndFire = 0;
+        enemyHp = Com.ENEMY_HP_α;
         sideFlag = false;
     }
     /// <summary>
@@ -56,7 +56,6 @@ public class EnemySc : MonoBehaviour
         min = Camera.main.ViewportToWorldPoint(Vector2.zero); // 画面の左下を取得.
         max = Camera.main.ViewportToWorldPoint(Vector2.one); // 画面の右上を取得.
     }
-
     #endregion
 
     #region UnityEvent
@@ -67,6 +66,7 @@ public class EnemySc : MonoBehaviour
         InitEnemySize();
     }
 
+    // Update is called once per frame
     void Update()
     {
         attackTime -= Time.deltaTime; // 次に攻撃するまでのカウントダウン.
@@ -85,7 +85,7 @@ public class EnemySc : MonoBehaviour
         {
             enemySide = Random.Range(-1, 2); // ランダムに左右に移動するか決める.
             sideTime = Com.ENEMY_SIDE_TIME;  // カウントリセット.
-            sideFlag = true;
+            // sideFlag = true;
         }
 
         EnemyMove();
@@ -109,15 +109,15 @@ public class EnemySc : MonoBehaviour
     /// </summary>
     void EnemyFire()
     {
-        if (enemy_bullet == null) // Prefabがセットされていなかったら止める.
+        if (enemy_bullet == null || enemy_missile == null) // Prefabがセットされていなかったら止める.
         {
             Debug.LogWarning("Enemy Bullet prefab is not assigned!");
             return;
         }
-        
+
         if (rndFire == 0)
         {
-            Instantiate(enemy_bullet, transform.position, Quaternion.identity); // 弾を撃つ.
+            Instantiate(enemy_missile, transform.position, Quaternion.identity); // 弾を撃つ.
         }
 
         rndFire = Random.Range(0, 6); // 二発目以降、6/1で弾が出るようにする.
@@ -155,10 +155,10 @@ public class EnemySc : MonoBehaviour
         // 画面外判定.
         if (enemyPos.y <= min.y - eSize) // 下端の判定.
         {
-            EnemyDestroy();
+            transform.position = new Vector3(transform.position.x, max.y + eSize * 3);
             if (debugFlag)
             {
-                Debug.Log("Enemy_Lost");
+                Debug.Log("Enemy_loop");
             }
         }
         #endregion
@@ -185,7 +185,7 @@ public class EnemySc : MonoBehaviour
     void EnemyDestroy()
     {
         InitEnemy();
-        EnemyPool.Instance.Collect(ENum.ENEMY_NORMAL, gameObject);
+        EnemyPool.Instance.Collect(ENum.ENEMY_HME, gameObject);
     }
 
     #endregion
@@ -194,7 +194,7 @@ public class EnemySc : MonoBehaviour
     {
         if (collision.CompareTag(tags.PLAYER_BULLET))
         {
-            EnemyDestroy();
+            Destroy(collision.gameObject);
             EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
         }
 

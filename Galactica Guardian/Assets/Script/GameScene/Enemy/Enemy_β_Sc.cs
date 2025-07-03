@@ -16,7 +16,6 @@ public class Enemy_β_Sc : MonoBehaviour
 
     Vector3 enemyPos;       // エネミーの現在座標.
     float eSize;            // エネミーサイズ.
-
     Vector2 min;
     Vector2 max;
 
@@ -38,16 +37,8 @@ public class Enemy_β_Sc : MonoBehaviour
     void InitEnemySize()
     {
         eSize = GetComponent<BoxCollider2D>().size.x;
-        min = Camera.main.ScreenToWorldPoint(Vector2.zero); // 画面の左下を取得.
-        max = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)); // 画面の右上を取得.
-
-
-
-        if (debugFlag)
-        {
-            Debug.Log(max.y + "βmax");
-            Debug.Log(min.y + "βmin");
-        }
+        min = Camera.main.ViewportToWorldPoint(Vector2.zero); // 画面の左下を取得.
+        max = Camera.main.ViewportToWorldPoint(Vector2.one); // 画面の右上を取得.
     }
     #endregion
 
@@ -179,6 +170,7 @@ public class Enemy_β_Sc : MonoBehaviour
     /// </summary>
     void EnemyDestroy()
     {
+        InitEnemy();
         EnemyPool.Instance.Collect(ENum.ENEMY_β, gameObject);
     }
 

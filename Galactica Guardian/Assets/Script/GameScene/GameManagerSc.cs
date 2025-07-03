@@ -9,6 +9,8 @@ public class GameManagerSc : MonoBehaviour
     [SerializeField] GameObject enemy_prefab;
     [SerializeField] GameObject enemyα_prefab;
     [SerializeField] GameObject enemyβ_prefab;
+    [SerializeField] GameObject enemy_hme_prefab;
+    [SerializeField] GameObject enemy_boss_prefab;
 
     Vector3[] popPoint;
 
@@ -21,7 +23,41 @@ public class GameManagerSc : MonoBehaviour
 
     private void Awake()
     {
-        EnemyPool.Instance.GenerateEnemy(enemy_prefab, enemyα_prefab, enemyβ_prefab);
+        EnemyPool.Instance.GenerateEnemy(enemy_prefab, enemyα_prefab, enemyβ_prefab, enemy_hme_prefab, enemy_boss_prefab);
+
+        // 画面の高さに合わせてカメラサイズ調整（縦スクロールなので高さ優先）
+        float targetWidth = 720f / 100f; // 1ユニット = 100px 換算
+        float targetAspect = targetWidth / (1080f / 100f); // = 720/1080 = 0.6666...
+
+        float windowAspect = (float)Screen.width / (float)Screen.height;
+        float scaleHeight = windowAspect / targetAspect;
+
+        Camera cam = Camera.main;
+
+        if (scaleHeight < 1.0f)
+        {
+            Rect rect = cam.rect;
+
+            rect.width = 1.0f;
+            rect.height = scaleHeight;
+            rect.x = 0;
+            rect.y = (1.0f - scaleHeight) / 2.0f;
+
+            cam.rect = rect;
+        }
+        else
+        {
+            float scaleWidth = 1.0f / scaleHeight;
+
+            Rect rect = cam.rect;
+
+            rect.width = scaleWidth;
+            rect.height = 1.0f;
+            rect.x = (1.0f - scaleWidth) / 2.0f;
+            rect.y = 0;
+
+            cam.rect = rect;
+        }
     }
     void Start()
     {
@@ -37,9 +73,9 @@ public class GameManagerSc : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        enemyTimer -= Time.deltaTime;
-        enemyαTimer -= Time.deltaTime;
-        enemyβTimer -= Time.deltaTime;
+        //enemyTimer -= Time.deltaTime;
+        //enemyαTimer -= Time.deltaTime;
+        //enemyβTimer -= Time.deltaTime;
 
         if (enemyTimer < 0)
         {
