@@ -8,7 +8,12 @@ public class Enemy_HMESc : MonoBehaviour
 {
     [Header("弾のPrefab")]
     [SerializeField] GameObject enemy_bullet;
+    [SerializeField] GameObject enemy_bullet_lock;
     [SerializeField] GameObject enemy_missile;
+    [Header("弾の発射位置")]
+    [SerializeField] Transform fire_point_center;
+    [SerializeField] Transform fire_point_left;
+    [SerializeField] Transform fire_point_right;
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
@@ -18,7 +23,6 @@ public class Enemy_HMESc : MonoBehaviour
     int enemyHp;            // エネミーの体力.
 
     Vector3 enemyPos;       // エネミーの現在座標.
-    Camera cam;             // メインカメラの範囲.
     Vector2 min;            // 画面の左下.
     Vector2 max;            // 画面の右上.
     float eSize;            // エネミーサイズ.
@@ -76,7 +80,7 @@ public class Enemy_HMESc : MonoBehaviour
             sideTime -= Time.deltaTime; 　// 横移動の抽選をするまでのカウントダウン.
         }
 
-        if (attackTime <= 0) // カウントが0になったら.
+        if (attackTime <= 0 && transform.position.y > max.y / 2) // カウントが0かつ画面の上側に居れば.
         {
             EnemyFire();
         }
@@ -120,13 +124,16 @@ public class Enemy_HMESc : MonoBehaviour
     /// </summary>
     void EnemyFire()
     {
-        if (enemy_bullet == null || enemy_missile == null) // Prefabがセットされていなかったら止める.
+        if (enemy_bullet == null || enemy_bullet_lock == null || enemy_missile == null) // Prefabがセットされていなかったら止める.
         {
             Debug.LogWarning("Enemy Bullet prefab is not assigned!");
             return;
         }
-        Instantiate(enemy_bullet, transform.position, transform.rotation); // 弾を撃つ.
-        Instantiate(enemy_missile, transform.position, Quaternion.identity); // ミサイルを撃つ.
+        Instantiate(enemy_bullet_lock, fire_point_center.position, Quaternion.identity); // 弾を撃つ.
+        Instantiate(enemy_bullet, fire_point_left.position, Quaternion.identity);        // 弾を撃つ.
+        Instantiate(enemy_bullet, fire_point_right.position, Quaternion.identity);       // 弾を撃つ.
+        Instantiate(enemy_missile, fire_point_left.position, Quaternion.identity);       // ミサイルを撃つ.
+        Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);      // ミサイルを撃つ.
         attackTime = Com.ENEMY_FIRE_RATE_HME;
     }
 

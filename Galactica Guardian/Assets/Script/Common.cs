@@ -173,7 +173,7 @@ namespace Common
         /// <summary>
         /// エネミーのミサイル旋回速度.
         /// </summary>
-        public const float ENEMY_MISSILE_ROTATE_SPEED = 20f;
+        public const float ENEMY_MISSILE_ROTATE_SPEED = 25f;
 
         /// <summary>
         /// エネミーのミサイル消滅までの時間.
@@ -229,7 +229,7 @@ namespace Common
         /// <summary>
         /// エネミーHMEの移動速度.
         /// </summary>
-        public const float ENEMY_SPEED_HME = 4.6f;
+        public const float ENEMY_SPEED_HME = 5.4f;
 
         /// <summary>
         /// エネミーHMEの横移動速度.
@@ -239,7 +239,7 @@ namespace Common
         /// <summary>
         /// エネミーHMEの攻撃間隔.
         /// </summary>
-        public const float ENEMY_FIRE_RATE_HME = 3.5f;
+        public const float ENEMY_FIRE_RATE_HME = 1.5f;
 
         /// <summary>
         /// エネミーHMEの弾速.
@@ -252,9 +252,14 @@ namespace Common
         public const float ENEMY_HME_MISSILE_SPEED = 8f;
 
         /// <summary>
+        /// エネミーHMEのミサイル旋回速度.
+        /// </summary>
+        public const float ENEMY_HME_MISSILE_ROTATE_SPEED = 45f;
+
+        /// <summary>
         /// エネミーHMEの体力.
         /// </summary>
-        public const int ENEMY_HME_HP = 30;
+        public const int ENEMY_HME_HP = 60;
         #endregion
 
         #region ボスエネミー

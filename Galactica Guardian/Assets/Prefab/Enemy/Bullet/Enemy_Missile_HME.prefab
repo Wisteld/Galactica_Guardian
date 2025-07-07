@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2929935454162544104}
   m_Layer: 0
   m_Name: Enemy_Missile_HME
-  m_TagString: Untagged
+  m_TagString: Enemy_Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

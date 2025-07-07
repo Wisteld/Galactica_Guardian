@@ -20,7 +20,7 @@ public class Enemy_HME_MissileSc : MonoBehaviour
         FindClosestEnemy();
 
         eMissileSpeed = Com.ENEMY_HME_MISSILE_SPEED;
-        eMissileRotate = Com.ENEMY_MISSILE_ROTATE_SPEED;
+        eMissileRotate = Com.ENEMY_HME_MISSILE_ROTATE_SPEED;
         eMissileTime = Com.ENEMY_MISSILE_DELETE_TIME;
 
         rb = GetComponent<Rigidbody2D>(); // リジッドボディをセット.
