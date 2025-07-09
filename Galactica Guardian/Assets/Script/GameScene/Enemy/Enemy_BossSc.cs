@@ -244,11 +244,6 @@ public class Enemy_BossSc : MonoBehaviour
     #endregion
 
     #region Update外関数.
-    void EnemyDestroy()
-    {
-        EnemyPool.Instance.Collect(ENum.ENEMY_BOSS, gameObject);
-    }
-
     /// <summary>
     /// ダメージ処理.
     /// </summary>
@@ -261,6 +256,14 @@ public class Enemy_BossSc : MonoBehaviour
         {
             EnemyDestroy();
         }
+    }
+
+    /// <summary>
+    /// 被撃墜処理.
+    /// </summary>
+    void EnemyDestroy()
+    {
+        EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_BOSS, gameObject);
     }
     #endregion
 

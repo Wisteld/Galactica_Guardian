@@ -166,12 +166,12 @@ public class Enemy_β_Sc : MonoBehaviour
     }
 
     /// <summary>
-    /// 被撃墜処理.
+    /// 被撃墜・撤退処理.
     /// </summary>
     void EnemyDestroy()
     {
         InitEnemy();
-        EnemyPool.Instance.Collect(ENum.ENEMY_β, gameObject);
+        EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_β, gameObject);
     }
 
     #endregion

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Common;
+using E_Type = Common.ENum.E_Type;
 
 namespace ObjectPool
 {
@@ -12,12 +13,14 @@ namespace ObjectPool
         Queue<GameObject> enemyβ_queue = new Queue<GameObject>();
         Queue<GameObject> enemy_hme_queue = new Queue<GameObject>();
         Queue<GameObject> enemy_boss_queue = new Queue<GameObject>();
+        Queue<GameObject> carrier_queue = new Queue<GameObject>();
 
         int enemyMaxCount = ENum.ENEMY_MAX_COUNT;
         int enemyαMaxCount = ENum.ENEMY_α_MAX_COUNT;
         int enemyβMaxCount = ENum.ENEMY_β_MAX_COUNT;
         int enemyHMEMaxCount = ENum.ENEMY_HME_MAX_COUNT;
         int enemyBossMaxCount = ENum.ENEMY_BOSS_MAX_COUNT;
+        int carrierMaxCount = ENum.CARRIER_MAX_COUNT;
 
         Vector3 defPos = new Vector3(0f, 15f, 0);
 
@@ -35,7 +38,8 @@ namespace ObjectPool
             }
         }
 
-        public void GenerateEnemy(GameObject enemy_normal, GameObject enemy_α, GameObject enemy_β, GameObject enemy_hme, GameObject enemy_boss)
+        public void GenerateEnemy(GameObject enemy_normal, GameObject enemy_α, GameObject enemy_β,
+            GameObject enemy_hme, GameObject enemy_boss, GameObject carrier)
         {
             for (int i = 0; i < enemyMaxCount; i++) // MaxCountの回数繰り返す.
             {
@@ -67,6 +71,12 @@ namespace ObjectPool
                 enemy.SetActive(false); // 生成したエネミーを非表示に.
                 enemy_boss_queue.Enqueue(enemy); // 生成したエネミーをキューに格納.
             }
+            for (int i = 0; i < carrierMaxCount; i++)
+            {
+                var carri = Object.Instantiate(carrier, defPos, Quaternion.identity);
+                carri.SetActive(false);
+                carrier_queue.Enqueue(carri);
+            }
 
             Debug.Log($"Queue Count: Normal={enemy_queue.Count}, α={enemyα_queue.Count}, β={enemyβ_queue.Count}");
         }
@@ -77,42 +87,75 @@ namespace ObjectPool
         /// <param name="num">生成ナンバー.</param>
         /// <param name="point">生成座標.</param>
         /// <returns></returns>
-        public GameObject Generate(int num, Vector3 point)
+        public GameObject Generate(E_Type num, Vector3 point)
         {
             GameObject enemy = null;
 
             switch (num)
             {
-                case ENum.ENEMY_NORMAL: // 通常エネミーなら.
+                case E_Type.ENEMY_NORMAL: // 通常エネミーなら.
                     if (enemy_queue.Count > 0) // キューに待機しているかチェック.
                     {
                         enemy = enemy_queue.Dequeue(); // 待機状態のエネミーを取り出す.
                     }
                     else
                     {
-                        Debug.LogWarning("EnemyQueue_Empty");
+                        Debug.LogWarning("Enemy Queue_Empty");
                         return null;
                     }
                     break;
-                case ENum.ENEMY_α: // エネミーαなら.
+                case E_Type.ENEMY_α: // エネミーαなら.
                     if (enemyα_queue.Count > 0) // キューに待機しているかチェック.
                     {
                         enemy = enemyα_queue.Dequeue(); // 待機状態のエネミーαを取り出す.
                     }
                     else
                     {
-                        Debug.LogWarning("EnemyαQueue_Empty");
+                        Debug.LogWarning("Enemyα Queue_Empty");
                         return null;
                     }
                     break;
-                case ENum.ENEMY_β: // エネミーβなら.
+                case E_Type.ENEMY_β: // エネミーβなら.
                     if (enemyβ_queue.Count > 0) // キューに待機しているかチェック.
                     {
                         enemy = enemyβ_queue.Dequeue(); // 待機状態のエネミーβを取り出す.
                     }
                     else
                     {
-                        Debug.LogWarning("EnemyβQueue_Empty");
+                        Debug.LogWarning("Enemyβ Queue_Empty");
+                        return null;
+                    }
+                    break;
+                case E_Type.ENEMY_HME: // エネミーHMEなら.
+                    if (enemy_hme_queue.Count > 0) // キューに待機しているかチェック.
+                    {
+                        enemy = enemy_hme_queue.Dequeue(); // 待機状態のエネミーHMEを出す.
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Enemy_HME Queue_Empty");
+                        return null;
+                    }
+                    break;
+                case E_Type.ENEMY_BOSS: // ボスエネミーなら.
+                    if (enemy_boss_queue.Count > 0) // キューに待機しているかチェック.
+                    {
+                        enemy = enemy_boss_queue.Dequeue(); // 待機状態のボスを出す.
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Enemy_Boss Queue_Empty");
+                        return null;
+                    }
+                    break;
+                case E_Type.CARRIER: // キャリアーなら.
+                    if (carrier_queue.Count > 0) // キューに待機しているかチェック.
+                    {
+                        enemy = carrier_queue.Dequeue(); // 待機状態のキャリアーを呼び出す.
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Carrier Queue_Empty");
                         return null;
                     }
                     break;
@@ -130,27 +173,30 @@ namespace ObjectPool
         /// </summary>
         /// <param name="num">エネミーナンバー.</param>
         /// <param name="enemy">収納するエネミー.</param>
-        public void Collect(int num, GameObject enemy)
+        public void Collect(E_Type num, GameObject enemy)
         {
             enemy.transform.position = defPos; // 画面外の所定位置までワープさせる.
             enemy.SetActive(false); // 休眠状態に移行.
 
             switch (num)
             {
-                case ENum.ENEMY_NORMAL: // 通常のエネミーなら.
+                case E_Type.ENEMY_NORMAL: // 通常のエネミーなら.
                     enemy_queue.Enqueue(enemy); // 通常エネミーキューに格納.
                     break;
-                case ENum.ENEMY_α: // エネミーαなら.
+                case E_Type.ENEMY_α: // エネミーαなら.
                     enemyα_queue.Enqueue(enemy); // エネミーαキューに格納.
                     break;
-                case ENum.ENEMY_β: // エネミーβなら.
+                case E_Type.ENEMY_β: // エネミーβなら.
                     enemyβ_queue.Enqueue(enemy); // エネミーβキューに格納.
                     break;
-                case ENum.ENEMY_HME: // エネミーHMEなら.
-                    enemy_hme_queue.Enqueue(enemy); // エネミーHMEキューに収納.
+                case E_Type.ENEMY_HME: // エネミーHMEなら.
+                    enemy_hme_queue.Enqueue(enemy); // エネミーHMEキューに格納.
                     break;
-                case ENum.ENEMY_BOSS: // ボスエネミーなら.
-                    enemy_boss_queue.Enqueue(enemy); // ボスエネミーキューに収納.
+                case E_Type.ENEMY_BOSS: // ボスエネミーなら.
+                    enemy_boss_queue.Enqueue(enemy); // ボスエネミーキューに格納.
+                    break;
+                case E_Type.CARRIER: // キャリアーなら.
+                    carrier_queue.Enqueue(enemy); // キャリアーキューに格納
                     break;
                 default: // 想定外の数値なら.
                     Debug.LogWarning("Collect Number None");

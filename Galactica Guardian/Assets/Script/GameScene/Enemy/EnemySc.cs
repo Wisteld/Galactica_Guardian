@@ -182,10 +182,13 @@ public class EnemySc : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ”íŒ‚’ÄE“P‘Şˆ—.
+    /// </summary>
     void EnemyDestroy()
     {
         InitEnemy();
-        EnemyPool.Instance.Collect(ENum.ENEMY_NORMAL, gameObject);
+        EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_NORMAL, gameObject);
     }
 
     #endregion

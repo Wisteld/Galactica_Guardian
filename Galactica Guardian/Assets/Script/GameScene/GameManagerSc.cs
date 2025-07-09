@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using ObjectPool;
 using Common;
+using E_Type = Common.ENum.E_Type;
 public class GameManagerSc : MonoBehaviour
 {
     [Header("生成するエネミー")]
@@ -94,28 +95,29 @@ public class GameManagerSc : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //enemyTimer -= Time.deltaTime;
-        //enemyαTimer -= Time.deltaTime;
-        //enemyβTimer -= Time.deltaTime;
+        enemyTimer -= Time.deltaTime;
+        enemyαTimer -= Time.deltaTime;
+        enemyβTimer -= Time.deltaTime;
+
 
         if (enemyTimer < 0)
         {
             anchorNumber = Random.Range(0, anchorMax);
-            EnemyPool.Instance.Generate(ENum.ENEMY_NORMAL, popPoint[anchorNumber]);
+            EnemyPool.Instance.Generate(E_Type.ENEMY_NORMAL, popPoint[anchorNumber]);
             Debug.Log("生成！");
             enemyTimer = 5;
         }
         if (enemyαTimer < 0)
         {
             anchorNumber = Random.Range(0, anchorMax);
-            EnemyPool.Instance.Generate(ENum.ENEMY_α, popPoint[anchorNumber]);
+            EnemyPool.Instance.Generate(E_Type.ENEMY_α, popPoint[anchorNumber]);
             Debug.Log("生成！");
             enemyαTimer = 5;
         }
         if (enemyβTimer < 0)
         {
             anchorNumber = Random.Range(0, anchorMax);
-            EnemyPool.Instance.Generate(ENum.ENEMY_β, popPoint[anchorNumber]);
+            EnemyPool.Instance.Generate(E_Type.ENEMY_β, popPoint[anchorNumber]);
             Debug.Log("生成！");
             enemyβTimer = 5;
         }

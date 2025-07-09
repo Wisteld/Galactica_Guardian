@@ -189,10 +189,13 @@ public class Enemy_HMESc : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ”íŒ‚’Äˆ—.
+    /// </summary>
     void EnemyDestroy()
     {
         InitEnemy();
-        EnemyPool.Instance.Collect(ENum.ENEMY_HME, gameObject);
+        EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_HME, gameObject);
     }
 
     #endregion

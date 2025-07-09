@@ -4,7 +4,7 @@ using UnityEngine.Experimental.Rendering;
 
 namespace Common
 {
-    class Com
+    static class Com
     {
         #region デバッグモード.
         /// <summary>
@@ -201,6 +201,11 @@ namespace Common
         /// エネミーαの体力.
         /// </summary>
         public const int ENEMY_HP_α = 4;
+
+        /// <summary>
+        /// スピードアップドロップ率.
+        /// </summary>
+        public const float DROP_ITEM_α = 0.15f;
         #endregion
 
         #region エネミーβ
@@ -322,7 +327,7 @@ namespace Common
         #endregion
     }
 
-    class tags
+    static class tags
     {
         /// <summary>
         /// エネミータグ.
@@ -372,21 +377,21 @@ namespace Common
         public const string POP_ANCHOR = "PopAnchor";
     }
 
-    class ENum
+    public static class ENum
     {
         #region 生成ナンバー.
         /// <summary>
         /// エネミーの生成指定番号.
         /// </summary>
-        public const int ENEMY_NORMAL = 0;
-
-        public const int ENEMY_α = 1;
-
-        public const int ENEMY_β = 2;
-
-        public const int ENEMY_HME = 3;
-
-        public const int ENEMY_BOSS = 4;
+        public enum E_Type
+        {
+            ENEMY_NORMAL = 0,
+            ENEMY_α = 1,
+            ENEMY_β = 2,
+            ENEMY_HME = 3,
+            ENEMY_BOSS = 4,
+            CARRIER = 5,
+        }
         #endregion
 
         #region 初期生成数.
@@ -414,6 +419,11 @@ namespace Common
         /// エネミーボスの生成数.
         /// </summary>
         public const int ENEMY_BOSS_MAX_COUNT = 1;
+
+        /// <summary>
+        /// アイテムキャリアーの生成数.
+        /// </summary>
+        public const int CARRIER_MAX_COUNT = 3;
         #endregion
     }
 }

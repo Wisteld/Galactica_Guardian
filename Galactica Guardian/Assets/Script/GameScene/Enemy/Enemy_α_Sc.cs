@@ -8,6 +8,8 @@ public class Enemy_α_Sc : MonoBehaviour
 {
     [Header("弾のPrefab")]
     [SerializeField] GameObject enemy_bullet;
+    [Header("パワーアップアイテムのPrefab")]
+    [SerializeField] GameObject powerUpSpeedPrefab;
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
@@ -23,6 +25,7 @@ public class Enemy_α_Sc : MonoBehaviour
     Vector2 max;            // 画面の右上.
     float eSize;            // エネミーサイズ.
     float sizeDistance;     // 壁との距離(サイズに対する倍率)
+    float dropChance;       // スピードアップドロップ率.
 
     bool sideFlag;          // 横移動したか.
     bool debugFlag;         // デバッグモード.
@@ -43,6 +46,7 @@ public class Enemy_α_Sc : MonoBehaviour
         enemySide = 0;
         rndFire = 0;
         enemyHp = Com.ENEMY_HP_α;
+        dropChance = Com.DROP_ITEM_α;
         sideFlag = false;
     }
     /// <summary>
@@ -177,14 +181,30 @@ public class Enemy_α_Sc : MonoBehaviour
 
         if (enemyHp <= 0)
         {
-            EnemyDestroy();
+            TryDropItem();
+            EnemyDestroy();            
         }
     }
 
+    /// <summary>
+    /// 被撃墜・撤退処理.
+    /// </summary>
     void EnemyDestroy()
     {
         InitEnemy();
-        EnemyPool.Instance.Collect(ENum.ENEMY_α, gameObject);
+        EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_α, gameObject);
+    }
+
+    /// <summary>
+    /// アイテムドロップ処理（ランダム.）
+    /// </summary>
+    void TryDropItem()
+    {
+        float rand = Random.value; // 0.0〜1.0 の乱数
+        if (rand < dropChance)
+        {
+            Instantiate(powerUpSpeedPrefab, transform.position, Quaternion.identity); // スピードアップアイテム生成.
+        }
     }
 
     #endregion

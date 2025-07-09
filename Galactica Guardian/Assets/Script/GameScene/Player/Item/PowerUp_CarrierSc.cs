@@ -10,12 +10,10 @@ public class PowerUp_CarrierSc : MonoBehaviour
     [SerializeField] GameObject PowerUp_Speed;  // パワーアップ：スピード.
 
     float carrierSpeed; // 移動速度.
-    int random;         // 乱数.
 
     void Start()
     {
         carrierSpeed = Com.CARRIER_SPEED; // 速度を初期化.
-        random = Random.Range(0,10);      // 乱数を生成.
     }
 
     // Update is called once per frame
@@ -46,14 +44,7 @@ public class PowerUp_CarrierSc : MonoBehaviour
         }
         if (collision.CompareTag(tags.PLAYER_BULLET_LASER)) // プレイヤーのレーザー弾に当たったら.
         {
-            if (random > 2)
-            {
-                Instantiate(PowerUp_Weapon, transform.position, transform.rotation); // パワーアップ：ウェポン生成.
-            }
-            else
-            {
-                Instantiate(PowerUp_Speed, transform.position, transform.rotation); // パワーアップ：スピードアップ生成.
-            }
+            Instantiate(PowerUp_Weapon, transform.position, transform.rotation); // パワーアップ：ウェポン生成.
             Destroy();
         }
     }
