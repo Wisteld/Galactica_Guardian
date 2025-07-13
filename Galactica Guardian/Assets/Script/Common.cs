@@ -23,6 +23,13 @@ namespace Common
         public const bool DEBUG_MODE_PLAYER = true;
         #endregion
 
+        #region システム.
+        /// <summary>
+        /// SE再生用オーディオソースのリスト数.
+        /// </summary>
+        public const int SE_LIST_MAX = 10;
+        #endregion
+
         #region プレイヤー.
         /// <summary>
         /// プレイヤーの初期速度.
@@ -391,6 +398,21 @@ namespace Common
             ENEMY_HME = 3,
             ENEMY_BOSS = 4,
             CARRIER = 5,
+        }
+
+        public enum AnchorType
+        {
+            LEFTMOST,
+            LEFT4,
+            LEFT3,
+            LEFT2,
+            LEFT1,
+            CENTER,
+            RIGHT1,
+            RIGHT2,
+            RIGHT3,
+            RIGHT4,
+            RIGHTMOST
         }
         #endregion
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Enemy_BossSc : MonoBehaviour
+public class Enemy_BossSc : Enemy_BaseSc
 {
     [Header("’e‚ÌPrefab")]
     [SerializeField] GameObject enemy_bullet;
@@ -254,6 +254,7 @@ public class Enemy_BossSc : MonoBehaviour
 
         if (enemyHp <= 0)
         {
+            EnemyDeath();
             EnemyDestroy();
         }
     }

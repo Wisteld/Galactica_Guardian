@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 235280547}
   - component: {fileID: 235280550}
   - component: {fileID: 235280553}
+  - component: {fileID: 235280554}
   m_Layer: 0
   m_Name: GalacticaGuardian
   m_TagString: Player
@@ -330,6 +331,27 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &235280554
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235280546}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 358626cbeb611034c92741ca9b45446e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &280177772
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,7 +362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 280177773}
   m_Layer: 0
-  m_Name: PopAnchor6
+  m_Name: Anchor_CENTER
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -515,7 +537,7 @@ GameObject:
   m_Component:
   - component: {fileID: 648246212}
   m_Layer: 0
-  m_Name: PopAnchor5
+  m_Name: Anchor_LEFT1
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -621,7 +643,7 @@ GameObject:
   m_Component:
   - component: {fileID: 676712305}
   m_Layer: 0
-  m_Name: PopAnchor11
+  m_Name: Anchor_RIGHTMOST
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1151,7 +1173,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1442124530}
   m_Layer: 0
-  m_Name: PopAnchor10
+  m_Name: Anchor_RIGHT4
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1182,7 +1204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1475702632}
   m_Layer: 0
-  m_Name: PopAnchor
+  m_Name: Anchor_LEFTMOST
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1213,7 +1235,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1672258773}
   m_Layer: 0
-  m_Name: PopAnchor3
+  m_Name: Anchor_LEFT3
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1244,7 +1266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1749455288}
   m_Layer: 0
-  m_Name: PopAnchor4
+  m_Name: Anchor_LEFT2
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1352,7 +1374,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1786061954}
   m_Layer: 0
-  m_Name: PopAnchor2
+  m_Name: Anchor_LEFT4
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1383,7 +1405,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1795470846}
   m_Layer: 0
-  m_Name: PopAnchor8
+  m_Name: Anchor_RIGHT2
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1414,7 +1436,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1831655843}
   m_Layer: 0
-  m_Name: PopAnchor7
+  m_Name: Anchor_RIGHT1
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1445,7 +1467,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1912142803}
   m_Layer: 0
-  m_Name: PopAnchor9
+  m_Name: Anchor_RIGHT3
   m_TagString: PopAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1500,6 +1522,9 @@ MonoBehaviour:
   "enemy\u03B2_prefab": {fileID: 9145089880619094955, guid: 8e9f849f5a8ed5840b5ac96d6fee9491, type: 3}
   enemy_hme_prefab: {fileID: 8233209136779803211, guid: a126f1fa421702144979e5d9b84a55e7, type: 3}
   enemy_boss_prefab: {fileID: 8476366190287980446, guid: c1fa737df9af5784c9dfbb0bf8c8326c, type: 3}
+  item_carrier_prefab: {fileID: 7181497873083651259, guid: 4e6c2723b73a8a74b95672040644bd54, type: 3}
+  wave_data:
+  - {fileID: 11400000, guid: 891c490fa279c9141a5e846f6757b491, type: 2}
 --- !u!4 &2022597611
 Transform:
   m_ObjectHideFlags: 0
@@ -1627,6 +1652,10 @@ PrefabInstance:
     - target: {fileID: 8233209136779803211, guid: a126f1fa421702144979e5d9b84a55e7, type: 3}
       propertyPath: m_Name
       value: Enemy_HME
+      objectReference: {fileID: 0}
+    - target: {fileID: 8233209136779803211, guid: a126f1fa421702144979e5d9b84a55e7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9176115334279765936, guid: a126f1fa421702144979e5d9b84a55e7, type: 3}
       propertyPath: enemy_bullet

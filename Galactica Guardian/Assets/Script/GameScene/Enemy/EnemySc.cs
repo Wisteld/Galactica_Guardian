@@ -5,7 +5,7 @@ using Common;
 using ObjectPool;
 using System.Drawing;
 
-public class EnemySc : MonoBehaviour
+public class EnemySc : Enemy_BaseSc
 {
     [Header ("弾のプレファブ")]
     [SerializeField] GameObject enemy_bullet;
@@ -178,6 +178,7 @@ public class EnemySc : MonoBehaviour
 
         if (enemyHp <= 0)
         {
+            EnemyDeath();
             EnemyDestroy();
         }
     }
@@ -197,10 +198,9 @@ public class EnemySc : MonoBehaviour
     {
         if (collision.CompareTag(tags.PLAYER_BULLET))
         {
-            EnemyDestroy();
+            Destroy(collision.gameObject);
             EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
         }
-
         if (collision.CompareTag(tags.PLAYER_BULLET_LASER))
         {
             EnemyDamage(Com.ENEMY_DAMAGE_BULLET);

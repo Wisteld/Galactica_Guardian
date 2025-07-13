@@ -4,7 +4,7 @@ using UnityEngine;
 using Common;
 using ObjectPool;
 
-public class Enemy_α_Sc : MonoBehaviour
+public class Enemy_α_Sc : Enemy_BaseSc
 {
     [Header("弾のPrefab")]
     [SerializeField] GameObject enemy_bullet;
@@ -181,6 +181,7 @@ public class Enemy_α_Sc : MonoBehaviour
 
         if (enemyHp <= 0)
         {
+            EnemyDeath();
             TryDropItem();
             EnemyDestroy();            
         }

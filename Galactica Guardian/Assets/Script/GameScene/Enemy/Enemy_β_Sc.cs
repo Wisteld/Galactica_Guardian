@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ObjectPool;
 
-public class Enemy_β_Sc : MonoBehaviour
+public class Enemy_β_Sc : Enemy_BaseSc
 {
     [Header("誘導ミサイルのPrefab")]
     [SerializeField] GameObject missile_prefab;
@@ -161,6 +161,7 @@ public class Enemy_β_Sc : MonoBehaviour
 
         if (enemyHp <= 0)
         {
+            EnemyDeath();
             EnemyDestroy();
         }
     }

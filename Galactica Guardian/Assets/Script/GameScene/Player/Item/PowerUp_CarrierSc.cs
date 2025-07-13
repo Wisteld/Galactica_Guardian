@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Common;
+using ObjectPool;
+using E_Type = Common.ENum.E_Type;
 
-public class PowerUp_CarrierSc : MonoBehaviour
+public class PowerUp_CarrierSc : Enemy_BaseSc
 {
     [Header ("生成するPrefab")]
     [SerializeField] GameObject PowerUp_Weapon; // パワーアップ：ウェポン.
@@ -27,7 +29,8 @@ public class PowerUp_CarrierSc : MonoBehaviour
     /// </summary>
     void Destroy()
     {
-        Destroy(gameObject); // 自身を削除.
+        EnemyDeath();
+        EnemyPool.Instance.Collect(E_Type.CARRIER, gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

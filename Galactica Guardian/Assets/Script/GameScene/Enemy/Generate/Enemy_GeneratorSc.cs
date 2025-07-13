@@ -23,6 +23,7 @@ namespace ObjectPool
         int carrierMaxCount = ENum.CARRIER_MAX_COUNT;
 
         Vector3 defPos = new Vector3(0f, 15f, 0);
+        Transform parentTransform;
 
         // シングルトンインスタンス
         private static EnemyPool instance;
@@ -38,42 +39,58 @@ namespace ObjectPool
             }
         }
 
+        void GenerateParent()
+        {
+            GameObject parentObj = new GameObject("Enemys"); // 空のゲームオブジェクトEnemys生成.
+            parentTransform = parentObj.transform;           // 軽量なtransform型で生成したオブジェクトを取得.
+            parentTransform.position = Vector3.zero;         // 生成したオブジェクトの座標を0,0,0に指定.
+            parentTransform.rotation = Quaternion.identity;  // 生成したオブジェクトの回転を0,0,0に指定.
+            parentTransform.localScale = Vector3.one;        // 生成したオブジェクトのスケールを1,1,1,に指定.
+        }
+
         public void GenerateEnemy(GameObject enemy_normal, GameObject enemy_α, GameObject enemy_β,
             GameObject enemy_hme, GameObject enemy_boss, GameObject carrier)
         {
+            GenerateParent();
             for (int i = 0; i < enemyMaxCount; i++) // MaxCountの回数繰り返す.
             {
                 var enemy = Object.Instantiate(enemy_normal, defPos, Quaternion.identity); // エネミー生成.
+                enemy.transform.SetParent(parentTransform, true); // 空のゲームオブジェクトを親に.
                 enemy.SetActive(false); // 生成したエネミーを非表示に.
                 enemy_queue.Enqueue(enemy); // 生成したエネミーをキューに格納.
             }
             for (int i = 0; i < enemyαMaxCount; i++) // MaxCountの回数繰り返す.
             {
                 var enemy = Object.Instantiate(enemy_α, defPos, Quaternion.identity); // エネミー生成(エネミーα).
+                enemy.transform.SetParent(parentTransform, true); // 空のゲームオブジェクトを親に.
                 enemy.SetActive(false); // 生成したエネミーを非表示に.
                 enemyα_queue.Enqueue(enemy); // 生成したエネミーをキューに格納.
             }
             for (int i = 0; i < enemyβMaxCount; i++) // MaxCountの回数繰り返す.
             {
                 var enemy = Object.Instantiate(enemy_β, defPos, Quaternion.identity); // エネミー生成(エネミーβ).
+                enemy.transform.SetParent(parentTransform, true); // 空のゲームオブジェクトを親に.
                 enemy.SetActive(false); // 生成したエネミーを非表示に.
                 enemyβ_queue.Enqueue(enemy); // 生成したエネミーをキューに格納.
             }
             for (int i = 0; i < enemyHMEMaxCount; i++) // MaxCountの回数繰り返す.
             {
                 var enemy = Object.Instantiate(enemy_hme, defPos, Quaternion.identity); // エネミー生成(エネミー高機動試験機).
+                enemy.transform.SetParent(parentTransform, true); // 空のゲームオブジェクトを親に.
                 enemy.SetActive(false); // 生成したエネミーを非表示に.
                 enemy_hme_queue.Enqueue(enemy); // 生成したエネミーをキューに格納.
             }
             for (int i = 0; i < enemyBossMaxCount; i++) // MaxCountの回数繰り返す.
             {
                 var enemy = Object.Instantiate(enemy_boss, defPos, Quaternion.identity); // エネミー生成(エネミーボス).
+                enemy.transform.SetParent(parentTransform, true); // 空のゲームオブジェクトを親に.
                 enemy.SetActive(false); // 生成したエネミーを非表示に.
                 enemy_boss_queue.Enqueue(enemy); // 生成したエネミーをキューに格納.
             }
             for (int i = 0; i < carrierMaxCount; i++)
             {
                 var carri = Object.Instantiate(carrier, defPos, Quaternion.identity);
+                carri.transform.SetParent(parentTransform, true); // 空のゲームオブジェクトを親に.
                 carri.SetActive(false);
                 carrier_queue.Enqueue(carri);
             }
@@ -89,8 +106,7 @@ namespace ObjectPool
         /// <returns></returns>
         public GameObject Generate(E_Type num, Vector3 point)
         {
-            GameObject enemy = null;
-
+            GameObject enemy;
             switch (num)
             {
                 case E_Type.ENEMY_NORMAL: // 通常エネミーなら.

@@ -160,7 +160,7 @@ public class PlayerSc : MonoBehaviour
     }
 
     /// <summary>
-    /// 画面位置取得用変数を初期化..
+    /// 画面位置取得用変数を初期化.
     /// </summary>
     void InitCamPosition()
     {
