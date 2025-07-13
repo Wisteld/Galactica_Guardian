@@ -178,7 +178,6 @@ public class EnemySc : Enemy_BaseSc
 
         if (enemyHp <= 0)
         {
-            EnemyDeath();
             EnemyDestroy();
         }
     }
@@ -188,6 +187,7 @@ public class EnemySc : Enemy_BaseSc
     /// </summary>
     void EnemyDestroy()
     {
+        EnemyDeath();
         InitEnemy();
         EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_NORMAL, gameObject);
     }

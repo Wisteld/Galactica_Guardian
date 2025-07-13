@@ -106,7 +106,7 @@ namespace ObjectPool
         /// <returns></returns>
         public GameObject Generate(E_Type num, Vector3 point)
         {
-            GameObject enemy;
+            GameObject enemy = null;
             switch (num)
             {
                 case E_Type.ENEMY_NORMAL: // 通常エネミーなら.

@@ -448,4 +448,23 @@ namespace Common
         public const int CARRIER_MAX_COUNT = 3;
         #endregion
     }
+
+    public static class Effects
+    {
+        /// <summary>
+        /// エフェクト管理番号.
+        /// </summary>
+        public enum Effect_Type
+        {
+            EFFECT_EXPLOSION = 0,
+        }
+
+        #region アニメーションクリップ.
+        public const string EXPLOSION_CLIP_NAME = "Explosion";
+        #endregion
+
+        #region 初期生成数.
+        public const int EXPLOSION_MAX_COUNT = 8;
+        #endregion
+    }
 }

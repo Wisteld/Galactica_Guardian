@@ -254,7 +254,6 @@ public class Enemy_BossSc : Enemy_BaseSc
 
         if (enemyHp <= 0)
         {
-            EnemyDeath();
             EnemyDestroy();
         }
     }
@@ -264,6 +263,7 @@ public class Enemy_BossSc : Enemy_BaseSc
     /// </summary>
     void EnemyDestroy()
     {
+        EnemyDeath();
         EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_BOSS, gameObject);
     }
     #endregion

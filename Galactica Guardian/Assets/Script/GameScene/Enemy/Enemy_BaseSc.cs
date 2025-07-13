@@ -15,7 +15,7 @@ public class Enemy_BaseSc : MonoBehaviour
         
     }
 
-    public Action OnDeath; // 死亡通知（イベント）
+    public Action OnDeath; // 死亡通知（イベント）.
 
     /// <summary>
     /// 死亡時に呼ぶ。共通で通知だけ行う.
