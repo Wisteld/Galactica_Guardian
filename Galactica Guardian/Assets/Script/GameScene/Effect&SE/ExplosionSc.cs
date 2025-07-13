@@ -1,5 +1,7 @@
 using Common;
+using ObjectPool;
 using UnityEngine;
+using Effect_Type = Common.Effects.Effect_Type;
 
 public class ExplosionSc : MonoBehaviour
 {
@@ -20,6 +22,6 @@ public class ExplosionSc : MonoBehaviour
 
     public void ExplosionEnd()
     {
-
+        EffectPool.Instance.Collect(Effect_Type.EFFECT_EXPLOSION, gameObject);
     }
 }

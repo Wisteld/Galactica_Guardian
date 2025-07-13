@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 using ObjectPool;
+using static Common.Effects;
 
 public class Enemy_α_Sc : Enemy_BaseSc
 {
@@ -181,6 +182,7 @@ public class Enemy_α_Sc : Enemy_BaseSc
 
         if (enemyHp <= 0)
         {
+            EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
             TryDropItem();
             EnemyDestroy();            
         }

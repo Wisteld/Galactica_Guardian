@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 using ObjectPool;
+using Effect_Type = Common.Effects.Effect_Type;
 using System.Drawing;
 
 public class EnemySc : Enemy_BaseSc
@@ -178,6 +179,7 @@ public class EnemySc : Enemy_BaseSc
 
         if (enemyHp <= 0)
         {
+            EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
             EnemyDestroy();
         }
     }

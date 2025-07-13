@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ObjectPool;
+using static Common.Effects;
 
 public class Enemy_β_Sc : Enemy_BaseSc
 {
@@ -161,7 +162,7 @@ public class Enemy_β_Sc : Enemy_BaseSc
 
         if (enemyHp <= 0)
         {
-            EnemyDeath();
+            EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
             EnemyDestroy();
         }
     }
@@ -171,6 +172,7 @@ public class Enemy_β_Sc : Enemy_BaseSc
     /// </summary>
     void EnemyDestroy()
     {
+        EnemyDeath();
         InitEnemy();
         EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_β, gameObject);
     }

@@ -73,9 +73,21 @@ namespace ObjectPool
             return effect;
         }
 
-        public void Collect()
+        public void Collect(Effect_Type num, GameObject effect)
         {
+            effect.transform.position = defPos;
+            effect.SetActive(false);
+            switch (num)
+            {
+                case Effect_Type.EFFECT_EXPLOSION:
+                    explosion_queue.Enqueue(effect);
+                    break;
+                default:
+                    Debug.LogWarning("Collect Number None");
+                    break;
+            }
 
+            Debug.Log($"Queue Count Explosion={explosion_queue.Count}");
         }
     }
 }
