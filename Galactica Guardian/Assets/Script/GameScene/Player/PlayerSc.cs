@@ -4,6 +4,8 @@ using UnityEngine;
 using Common;
 using UnityEngine.InputSystem;
 using Newtonsoft.Json.Linq;
+using ObjectPool;
+using Effect_Type = Common.Effects.Effect_Type;
 
 public class PlayerSc : MonoBehaviour
 {
@@ -48,6 +50,7 @@ public class PlayerSc : MonoBehaviour
     Vector2 min;
     Vector2 max;
     float playerSize;     // プレイヤーサイズ.
+    Animator animator;
     #endregion
     #region フラグ.
     // パワーアップフラグ.
@@ -157,6 +160,7 @@ public class PlayerSc : MonoBehaviour
         blink = Com.PLAYER_BLINK;
         invincibleTime = Com.PLAYER_INVINCIBLE_TIME;
         playerRender = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -399,6 +403,10 @@ public class PlayerSc : MonoBehaviour
                 if (barrierFlag)
                 {
                     playerHp++; // 体力回復.
+                    if(playerHp > 1)
+                    {
+                        animator.SetBool("Pinch", false);
+                    }
                 }
                 else
                 {
@@ -492,6 +500,11 @@ public class PlayerSc : MonoBehaviour
 
         playerHp--; // PlayerのHPを減らす.
 
+        if (playerHp <= 1)
+        {
+            animator.SetBool("Pinch", true);
+        }
+
         if (playerHp <= 0) // HPが0になったら.
         {
             PlayerGameOver();
@@ -503,6 +516,7 @@ public class PlayerSc : MonoBehaviour
     /// </summary>
     void PlayerGameOver()
     {
+        EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
         Destroy(gameObject); // 自身を削除.
     }
 
