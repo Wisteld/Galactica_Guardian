@@ -87,38 +87,27 @@ namespace Common
         public const float PLAYER_MISSILE_RATE = 0.8f;
 
         /// <summary>
+        /// ラピッドミサイルの発射レート.
+        /// </summary>
+        public const float PLAYER_RAPID_MISSILE_RATE = 0.4f;
+
+        /// <summary>
         /// プレイヤーのバリアの耐久値.
         /// </summary>
         public const int PLAYER_BARRIER_HP = 12;
 
-        #region パワーアップナンバー.
-
         /// <summary>
-        /// パワーアップ01：レーザー.
+        /// プレイヤーパワーアップナンバー.
         /// </summary>
-        public const int PLAYER_POWER_UP_LASER = 1;
-
-        /// <summary>
-        /// パワーアップ02：ミサイル.
-        /// </summary>
-        public const int PLAYER_POWER_UP_MISSILE = 2;
-
-        /// <summary>
-        /// パワーアップ03：弾二発同時発射.
-        /// </summary>
-        public const int PLAYER_POWER_UP_TWINSHOT = 3;
-
-        /// <summary>
-        /// パワーアップ04：ミサイル二発同時発射.
-        /// </summary>
-        public const int PLAYER_POWER_UP_TWINMISSILE = 4;
-
-        /// <summary>
-        /// パワーアップ05：バリア展開.
-        /// </summary>
-        public const int PLAYER_POWER_UP_BARRIER = 5;
-        #endregion
-
+        public enum POWER_UP_TYPE
+        {
+            PLAYER_POWER_UP_NONE = 0,
+            PLAYER_POWER_UP_TWINSHOT = 1,
+            PLAYER_POWER_UP_MISSILE = 2,
+            PLAYER_POWER_UP_LASER = 3,
+            PLAYER_POWER_UP_HIGHRATEMISSILE = 4,
+            PLAYER_POWER_UP_BARRIER = 5,
+        }
         #endregion
 
         #region エネミー.
@@ -207,7 +196,7 @@ namespace Common
         /// <summary>
         /// エネミーαの体力.
         /// </summary>
-        public const int ENEMY_HP_α = 4;
+        public const int ENEMY_HP_α = 5;
 
         /// <summary>
         /// スピードアップドロップ率.
@@ -234,7 +223,7 @@ namespace Common
         /// <summary>
         /// エネミーβの体力.
         /// </summary>
-        public const int ENEMY_HP_β = 3;
+        public const int ENEMY_HP_β = 8;
         #endregion
 
         #region エネミーHME(HighMobilityExperiment)
@@ -271,7 +260,7 @@ namespace Common
         /// <summary>
         /// エネミーHMEの体力.
         /// </summary>
-        public const int ENEMY_HME_HP = 60;
+        public const int ENEMY_HME_HP = 200;
         #endregion
 
         #region ボスエネミー
@@ -313,7 +302,12 @@ namespace Common
         /// <summary>
         /// ボスエネミーの体力.
         /// </summary>
-        public const int ENEMY_BOSS_HP = 300;
+        public const int ENEMY_BOSS_HP = 500;
+
+        public enum UpDownState
+        {
+            Up, StopUp, Down, StopDown
+        }
         #endregion
 
         #region その他.

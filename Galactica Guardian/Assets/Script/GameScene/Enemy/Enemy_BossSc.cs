@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Common.Effects;
+using UpDownState = Common.Com.UpDownState;
 
 public class Enemy_BossSc : Enemy_BaseSc
 {
@@ -15,11 +17,12 @@ public class Enemy_BossSc : Enemy_BaseSc
     [SerializeField] Transform fire_point_center;
     [SerializeField] Transform fire_point_left;
     [SerializeField] Transform fire_point_right;
+    [Header("取り巻き用ウェーブ")]
+    [SerializeField] List<WaveData> bossSummonWaves;
+    List<GameObject> summonedEnemies = new List<GameObject>();
     #region 変数.
-    enum UpDownState
-    {
-        Up, StopUp, Down, StopDown
-    }
+    int summonWaveIndex = 0;
+    bool isSummoning = false;
     float attackTime;        // エネミーの攻撃間隔.
     int attackCount;         // 攻撃した回数.
     int attackRand;          // ランダムに攻撃を変化させる.
@@ -39,6 +42,7 @@ public class Enemy_BossSc : Enemy_BaseSc
     Vector2 max;             // 画面範囲右上.
     Vector2 min;             // 画面範囲左下.
 
+    bool isBossAlive = true;
     bool entryFlag;          // 登場演出中フラグ.
     bool shotSwitch;         // 攻撃変化.
     bool debugFlag = Com.DEBUG_MODE_ENEMY; // デバッグモード.
@@ -80,6 +84,7 @@ public class Enemy_BossSc : Enemy_BaseSc
     {
         InitEnemy();
         InitEnemySize();
+        StartCoroutine(BossSummonRoutine());
     }
 
     // Update is called once per frame
@@ -113,18 +118,18 @@ public class Enemy_BossSc : Enemy_BaseSc
             attackCount++;
             if (attackCount < attackRand)
             {
-            #region 攻撃処理.
-            if (shotSwitch)
-            {
-                Instantiate(enemy_bullet, fire_point_center.position, Quaternion.identity);
-                Instantiate(enemy_bullet_lock, fire_point_left.position, Quaternion.identity);
-                Instantiate(enemy_bullet_lock, fire_point_right.position, Quaternion.identity);
-                Instantiate(enemy_missile, fire_point_left.position, Quaternion.identity);
-                Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);  
-                shotSwitch = false;
-            }
-            else
-            {
+                #region 攻撃処理.
+                if (shotSwitch)
+                {
+                    Instantiate(enemy_bullet, fire_point_center.position, Quaternion.identity);
+                    Instantiate(enemy_bullet_lock, fire_point_left.position, Quaternion.identity);
+                    Instantiate(enemy_bullet_lock, fire_point_right.position, Quaternion.identity);
+                    Instantiate(enemy_missile, fire_point_left.position, Quaternion.identity);
+                    Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);
+                    shotSwitch = false;
+                }
+                else
+                {
                     Instantiate(enemy_bullet_lock, fire_point_center.position, Quaternion.identity);
                     Instantiate(enemy_bullet, fire_point_left.position, Quaternion.identity);
                     Instantiate(enemy_bullet, fire_point_right.position, Quaternion.identity);
@@ -132,8 +137,8 @@ public class Enemy_BossSc : Enemy_BaseSc
                     Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);
                     shotSwitch = true;
                 }
-            attackTime = Random.Range(Com.ENEMY_BOSS_FIRE_RND_MIN, Com.ENEMY_BOSS_FIRE_RND_MAX);
-            #endregion
+                attackTime = Random.Range(Com.ENEMY_BOSS_FIRE_RND_MIN, Com.ENEMY_BOSS_FIRE_RND_MAX);
+                #endregion
             }
             else
             {
@@ -264,6 +269,7 @@ public class Enemy_BossSc : Enemy_BaseSc
     void EnemyDestroy()
     {
         EnemyDeath();
+        OnBossDefeated();
         EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_BOSS, gameObject);
     }
     #endregion
@@ -284,5 +290,57 @@ public class Enemy_BossSc : Enemy_BaseSc
         {
             EnemyDamage(Com.ENEMY_DAMAGE_MISSILE);
         }
+    }
+
+    IEnumerator BossSummonRoutine()
+    {
+        int waveIndex = 0;
+        while (isBossAlive && waveIndex < bossSummonWaves.Count)
+        {
+            yield return new WaitForSeconds(5f); // 呼び出し間隔
+            StartCoroutine(SummonWave(bossSummonWaves[waveIndex]));
+            waveIndex++;
+        }
+    }
+
+    IEnumerator SummonWave(WaveData wave)
+    {
+        foreach (var spawn in wave.spawns)
+        {
+            yield return new WaitForSeconds(spawn.appearTime);
+
+            if (GameManagerSc.Instance.TryGetAnchor(spawn.spawnPosition, out Vector3 spawnPos))
+            {
+                GameObject enemy = EnemyPool.Instance.Generate(spawn.enemyType, spawnPos);
+                if (enemy != null)
+                {
+                    // ボス取り巻きとして登録
+                    summonedEnemies.Add(enemy);
+
+                    // 撃破時処理（必要ならボス通知用に）
+                    enemy.GetComponent<Enemy_BaseSc>().OnDeath = () =>
+                    {
+                        summonedEnemies.Remove(enemy); // リストから削除
+                    };
+                }
+            }
+        }
+    }
+
+    void OnBossDefeated()
+    {
+        isBossAlive = false;
+
+        // 取り巻きを全員リコール
+        foreach (var enemy in summonedEnemies)
+        {
+            if (enemy != null && enemy.activeInHierarchy)
+            {
+                EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, enemy.transform.position);
+                EnemyPool.Instance.Collect(enemy.GetComponent<Enemy_BaseSc>().EnemyType, enemy);
+            }
+        }
+
+        summonedEnemies.Clear(); // 念のため
     }
 }

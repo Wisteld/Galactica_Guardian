@@ -113,6 +113,7 @@ public class Enemy_MissileSc : MonoBehaviour
         }
         if (collision.CompareTag(tags.PLAYER_BULLET))
         {
+            Destroy(collision.gameObject);
             Explosion();
         }
         if (collision.CompareTag(tags.PLAYER_BULLET_LASER))

@@ -1,9 +1,10 @@
 using UnityEngine;
 using System;
+using Common;
 
 public class Enemy_BaseSc : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public ENum.E_Type EnemyType { get; protected set; }  // ¶¬‚É‘ã“ü‚³‚ê‚é
     void Start()
     {
         

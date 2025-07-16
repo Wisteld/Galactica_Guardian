@@ -9,6 +9,7 @@ public class Player_BarrierSc : MonoBehaviour
 {
     [Header ("当たり判定")]
     [SerializeField] BoxCollider2D barrier_collider; // 当たり判定.
+    [SerializeField] AudioClip clip_barrier_guard; // 弾を防いだ時の効果音.
     int barrierHp;      // 耐久値.
     int barrietLowHp;   // 低HPライン.
     Animator animator;  // アニメーター.
@@ -81,6 +82,7 @@ public class Player_BarrierSc : MonoBehaviour
         {
             Destroy(collision.gameObject);
             barrierHp--;
+            SoundManagerSc.Instance.PlaySE(clip_barrier_guard);
 
             if (barrierHp <= barrietLowHp) // バリアの耐久が低くなったら.
             {

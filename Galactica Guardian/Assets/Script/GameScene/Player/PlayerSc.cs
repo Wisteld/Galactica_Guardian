@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using Newtonsoft.Json.Linq;
 using ObjectPool;
 using Effect_Type = Common.Effects.Effect_Type;
+using POWER_UP_TYPE = Common.Com.POWER_UP_TYPE;
 
 public class PlayerSc : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class PlayerSc : MonoBehaviour
     [SerializeField] BoxCollider2D player_collider; // 当たり判定.
     SpriteRenderer playerRender;   // プレイヤーの描画情報.
     SpriteRenderer barrierRender;  // バリアの描画情報.
+    [Header ("効果音")]
+    [SerializeField] AudioClip clip_power_up;
+    [SerializeField] AudioClip clip_bullet;
+    [SerializeField] AudioClip clip_laser;
+    [SerializeField] AudioClip clip_missile;
     #endregion
     #region 変数.
     Vector3 playerPos;    // プレイヤーの座標.
@@ -57,9 +63,9 @@ public class PlayerSc : MonoBehaviour
     bool laserFlag = false;         // パワーアップ：レーザーフラグ.
     bool missileFlag = false;       // パワーアップ：ミサイルフラグ.
     bool twinFireFlag = false;      // パワーアップ：2発同時発射フラグ.
-    bool twinMissileFlag = false;   // パワーアップ：2連装ミサイルフラグ.
+    bool rapidMissileFlag = false;   // パワーアップ：2連装ミサイルフラグ.
     bool barrierFlag = false;       // パワーアップ：バリアフラグ.
-    int powerUpLevel;               // パワーアップ：現在のパワーアップレベル.
+    POWER_UP_TYPE powerUpLevel;               // パワーアップ：現在のパワーアップレベル.
 
     bool isHitFlag = false;
 
@@ -109,6 +115,11 @@ public class PlayerSc : MonoBehaviour
         if (value.isPressed)
         {
             PlayerFire();
+            if (missileTimer >= mFireRate && missileFlag)
+            {
+                PlayerMissileFire();
+                missileTimer = 0f;
+            }
             if (debugFlag)
             {
                 Debug.Log("Fire!!");
@@ -116,17 +127,18 @@ public class PlayerSc : MonoBehaviour
         }
     }
 
+    /*
     /// <summary>
     /// Bom(ミサイル)入力を受け取る.
     /// </summary>
     private void OnBom()
     {
         if (missileTimer >= mFireRate && missileFlag)
-        {
-            PlayerMissileFire();
-            missileTimer = 0f;
-        }
-    }
+            {
+                PlayerMissileFire();
+                missileTimer = 0f;
+            }
+    }*/
 
     #endregion
 
@@ -228,7 +240,7 @@ public class PlayerSc : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.N)) // ミサイルを二発同時発射に.
             {
-                GetTwinMissile();
+                GetRapidMissile();
             }
             if (Input.GetKeyDown(KeyCode.B)) // バリアを取得.
             {
@@ -314,10 +326,12 @@ public class PlayerSc : MonoBehaviour
         {
             if (!laserFlag) // レーザーのパワーアップを取得しているか確認.
             {
+                SoundManagerSc.Instance.PlaySE(clip_bullet);
                 Instantiate(bullet_prefab, fire_point_center.position, Quaternion.identity); // 無ければ通常弾.
             }
             else
             {
+                SoundManagerSc.Instance.PlaySE(clip_laser);
                 Instantiate(laser_prefab, fire_point_center.position, Quaternion.identity);  // 有ればレーザー弾.
             }
 
@@ -331,12 +345,14 @@ public class PlayerSc : MonoBehaviour
             // 2発同時発射する場合.
             if (!laserFlag) // レーザーのパワーアップを取得しているか確認.
             {
+                SoundManagerSc.Instance.PlaySE(clip_bullet);
                 // 無ければ通常弾.
                 Instantiate(bullet_prefab, fire_point_left.position, Quaternion.identity);
                 Instantiate(bullet_prefab, fire_point_right.position, Quaternion.identity);
             }
             else
             {
+                SoundManagerSc.Instance.PlaySE(clip_laser);
                 // 有ればレーザー弾.
                 Instantiate(laser_prefab, fire_point_left.position, Quaternion.identity);
                 Instantiate(laser_prefab, fire_point_right.position, Quaternion.identity);
@@ -355,15 +371,13 @@ public class PlayerSc : MonoBehaviour
     /// </summary>
     void PlayerMissileFire()
     {
-        if (!twinMissileFlag) // ミサイル2発同時発射のパワーアップがあるかチェック.
-        {
+        SoundManagerSc.Instance.PlaySE(clip_missile);
             Instantiate(missile_prefab, fire_point_center.position, fire_point_left.rotation);    // ミサイルを発射位置(中央)から射出.
-        }
-        else // 有れば二発発射.
+        /*else // 有れば二発発射.
         {
             Instantiate(missile_prefab, fire_point_left.position, fire_point_left.rotation);    // ミサイルを発射位置(左)から射出.
             Instantiate(missile_prefab, fire_point_right.position, fire_point_left.rotation);    // ミサイルを発射位置(右)から射出.
-        }
+        }*/
     }
 
     #endregion
@@ -375,27 +389,24 @@ public class PlayerSc : MonoBehaviour
     /// </summary>
     void PlayerPowerUp()
     {
+        SoundManagerSc.Instance.PlaySE(clip_power_up);
         powerUpLevel++;
 
         switch (powerUpLevel)
         {
-            case Com.PLAYER_POWER_UP_LASER:
-                GetLaser();
-                break;
-
-            case Com.PLAYER_POWER_UP_MISSILE:
-                GetMissile();
-                break;
-
-            case Com.PLAYER_POWER_UP_TWINSHOT:
+            case POWER_UP_TYPE.PLAYER_POWER_UP_TWINSHOT:
                 GetTwinShot();
                 break;
-
-            case Com.PLAYER_POWER_UP_TWINMISSILE:
-                GetTwinMissile();
+            case POWER_UP_TYPE.PLAYER_POWER_UP_MISSILE:
+                GetMissile();
                 break;
-
-            case Com.PLAYER_POWER_UP_BARRIER:
+            case POWER_UP_TYPE.PLAYER_POWER_UP_LASER:
+                GetLaser();
+                break;
+            case POWER_UP_TYPE.PLAYER_POWER_UP_HIGHRATEMISSILE:
+                GetRapidMissile();
+                break;
+            case POWER_UP_TYPE.PLAYER_POWER_UP_BARRIER:
                 GetBarrier();
                 break;
 
@@ -453,9 +464,10 @@ public class PlayerSc : MonoBehaviour
     /// <summary>
     /// パワーアップ：2連装ミサイル取得.
     /// </summary>
-    void GetTwinMissile()
+    void GetRapidMissile()
     {
-        twinMissileFlag = true;
+        rapidMissileFlag = true;
+        mFireRate = Com.PLAYER_RAPID_MISSILE_RATE;
     }
 
     /// <summary>

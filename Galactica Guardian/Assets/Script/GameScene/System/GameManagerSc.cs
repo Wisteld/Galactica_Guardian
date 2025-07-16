@@ -134,12 +134,12 @@ public class GameManagerSc : MonoBehaviour
         InitManager();
         StartCoroutine(WaveRoutine());
     }
-
-    void Update()
-    {
-
-    }
     #endregion
+
+    public bool TryGetAnchor(AnchorType type, out Vector3 pos)
+    {
+        return anchorPositions.TryGetValue(type, out pos);
+    }
 
     IEnumerator WaveRoutine()
     {
@@ -157,7 +157,7 @@ public class GameManagerSc : MonoBehaviour
 
                 if (currentWaveData.waveBGM != null)
                 {
-                    SoundManagerSc.Instance.PlayBGM(currentWaveData.waveBGM);
+                    SoundManagerSc.Instance.PlayBGM(currentWaveData.waveBGM, currentWaveData.isLoopBGM);
                 }
 
                 isWaveRunning = true;
@@ -168,11 +168,11 @@ public class GameManagerSc : MonoBehaviour
                     StartCoroutine(SpawnEnemyWithDelay(spawn));
                 }
 
-                yield return new WaitUntil(() => activeEnemyCount <= 0);
+                yield return new WaitUntil(() => activeEnemyCount <= 0); // 全てのエネミーが居なくなったら.
 
                 if (debugFlag)
                 {
-                    Debug.Log($"Wave");
+                    Debug.Log($"Wave{currentWaveIndex + 1}End");
                 }
 
                 yield return new WaitForSeconds(2f); // 次のWaveまでの待機

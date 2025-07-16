@@ -60,6 +60,10 @@ MonoBehaviour:
   fire_point_left: {fileID: 8959594435524065168}
   fire_point_right: {fileID: 7892134502185550420}
   player_collider: {fileID: 2939598997043723044}
+  clip_power_up: {fileID: 8300000, guid: 78447b5ad9c46694ab1da8cf660bfdf4, type: 3}
+  clip_bullet: {fileID: 8300000, guid: 548aa1fa11ee8614f91efffa8e3189b7, type: 3}
+  clip_laser: {fileID: 8300000, guid: f0b31caee53905b4787173a9c8d3ec38, type: 3}
+  clip_missile: {fileID: 8300000, guid: 1f172b2f9d04e854d87e76254c89613b, type: 3}
   speed: 0
   speedBase: 0
   speedUpRate: 0

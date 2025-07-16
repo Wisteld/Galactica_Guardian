@@ -49,6 +49,7 @@ public class Enemy_α_Sc : Enemy_BaseSc
         enemyHp = Com.ENEMY_HP_α;
         dropChance = Com.DROP_ITEM_α;
         sideFlag = false;
+        EnemyType = ENum.E_Type.ENEMY_α;
     }
     /// <summary>
     /// エネミーの大きさを取得.

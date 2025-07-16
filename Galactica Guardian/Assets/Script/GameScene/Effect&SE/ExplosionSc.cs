@@ -5,6 +5,7 @@ using Effect_Type = Common.Effects.Effect_Type;
 
 public class ExplosionSc : MonoBehaviour
 {
+    [SerializeField] AudioClip clip_explosion;
     Animator animator;
 
     private void Awake()
@@ -12,11 +13,12 @@ public class ExplosionSc : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    void OnEnable()
+    public void Init()
     {
         if (animator != null)
         {
             animator.Play(Effects.EXPLOSION_CLIP_NAME, 0, 0f);
+            SoundManagerSc.Instance.PlaySE(clip_explosion);
         }
     }
 

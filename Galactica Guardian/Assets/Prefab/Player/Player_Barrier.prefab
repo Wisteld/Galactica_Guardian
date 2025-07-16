@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barrier_collider: {fileID: 8586892131027406924}
+  clip_barrier_guard: {fileID: 8300000, guid: efb9fff7aee226d49a1a36ebd3da142e, type: 3}
 --- !u!50 &6008323290822480531
 Rigidbody2D:
   serializedVersion: 4

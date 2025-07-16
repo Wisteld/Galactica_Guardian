@@ -46,6 +46,7 @@ public class EnemySc : Enemy_BaseSc
         enemySide = 0;
         rndFire = 0;
         sideFlag = false;
+        EnemyType = ENum.E_Type.ENEMY_NORMAL;
     }
     /// <summary>
     /// エネミーの大きさを取得.
@@ -64,7 +65,6 @@ public class EnemySc : Enemy_BaseSc
     void Start()
     {
         InitEnemy();
-
         InitEnemySize();
     }
 

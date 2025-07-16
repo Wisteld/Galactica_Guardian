@@ -23,6 +23,7 @@ public class WaveData
     public string waveName;
     public List<EnemySpawnData> spawns = new List<EnemySpawnData>();
     public AudioClip waveBGM;
+    public bool isLoopBGM;
     public bool isBossWave;
     public bool isHMEWave;
 }

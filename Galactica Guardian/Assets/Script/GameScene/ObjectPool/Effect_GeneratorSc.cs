@@ -59,7 +59,8 @@ namespace ObjectPool
                 case Effect_Type.EFFECT_EXPLOSION:
                     if (explosion_queue.Count > 0)
                     {
-                        effect = explosion_queue.Dequeue();
+                        effect = explosion_queue.Dequeue(); // 指定されたエフェクトを取り出す.
+                        effect.GetComponent<ExplosionSc>()?.Init(); // 初期化関数を呼び出しておく.
                     }
                     else
                     {

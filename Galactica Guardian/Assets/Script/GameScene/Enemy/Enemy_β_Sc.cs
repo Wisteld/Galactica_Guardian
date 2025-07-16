@@ -33,6 +33,7 @@ public class Enemy_β_Sc : Enemy_BaseSc
         enemySpeed = Com.ENEMY_SPEED_β;
         enemyHp = Com.ENEMY_HP_β;
         enemyAttackCount = 0;
+        EnemyType = ENum.E_Type.ENEMY_β;
     }
 
     void InitEnemySize()
