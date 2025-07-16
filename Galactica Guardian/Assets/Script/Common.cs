@@ -177,6 +177,11 @@ namespace Common
         public const float ENEMY_MISSILE_DELETE_TIME = 2f;
 
         /// <summary>
+        /// エネミーのミサイル耐久値.
+        /// </summary>
+        public const int ENEMY_MISSILE_HP = 3;
+
+        /// <summary>
         /// 通常弾被弾ダメージ.
         /// </summary>
         public const int ENEMY_DAMAGE_BULLET = 1;
@@ -213,7 +218,7 @@ namespace Common
         /// <summary>
         /// エネミーβの攻撃間隔.
         /// </summary>
-        public const float ENEMY_FIRE_RATE_β = 3.0f;
+        public const float ENEMY_FIRE_RATE_β = 1.5f;
 
         /// <summary>
         /// エネミーβの停止座標

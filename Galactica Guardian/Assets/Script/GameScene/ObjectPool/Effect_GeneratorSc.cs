@@ -39,12 +39,19 @@ namespace ObjectPool
             parentTransform.localScale = Vector3.one;        // 生成したオブジェクトのスケールを1,1,1,に指定.
         }
 
-        public void GenerateEffect(GameObject explosion)
+        public void GenerateEffect(GameObject explosion, GameObject explosion_min)
         {
             GenerateParent();
             for (int i = 0; i < explosionMaxCount; i++)
             {
                 var effect = Object.Instantiate(explosion, defPos, Quaternion.identity);
+                effect.transform.parent = parentTransform;
+                effect.SetActive(false);
+                explosion_queue.Enqueue(effect);
+            }
+            for (int i = 0; i < explosionMaxCount; i++)
+            {
+                var effect = Object.Instantiate(explosion_min, defPos, Quaternion.identity);
                 effect.transform.parent = parentTransform;
                 effect.SetActive(false);
                 explosion_queue.Enqueue(effect);

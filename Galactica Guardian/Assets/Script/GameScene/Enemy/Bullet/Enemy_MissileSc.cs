@@ -9,6 +9,8 @@ public class Enemy_MissileSc : MonoBehaviour
     float eMissileRotate;
     float eMissileTime;
 
+    int eMissileHP;
+
     Rigidbody2D rb;
     Transform target;
 
@@ -22,6 +24,7 @@ public class Enemy_MissileSc : MonoBehaviour
         eMissileSpeed = Com.ENEMY_MISSILE_SPEED;
         eMissileRotate = Com.ENEMY_MISSILE_ROTATE_SPEED;
         eMissileTime = Com.ENEMY_MISSILE_DELETE_TIME;
+        eMissileHP = Com.ENEMY_MISSILE_HP;
 
         rb = GetComponent<Rigidbody2D>(); // リジッドボディをセット.
     }
@@ -105,6 +108,15 @@ public class Enemy_MissileSc : MonoBehaviour
         Destroy(gameObject);
     }
 
+    void Damage()
+    {
+        eMissileHP--;
+        if (eMissileHP <= 0)
+        {
+            Explosion();
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag(tags.PLAYER))
@@ -114,15 +126,15 @@ public class Enemy_MissileSc : MonoBehaviour
         if (collision.CompareTag(tags.PLAYER_BULLET))
         {
             Destroy(collision.gameObject);
-            Explosion();
+            Damage();
         }
         if (collision.CompareTag(tags.PLAYER_BULLET_LASER))
         {
-            Explosion();
+            Damage();
         }
         if (collision.CompareTag(tags.PLAYER_MISSILE))
         {
-            Explosion();
+            Damage();
         }
     }
 }

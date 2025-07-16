@@ -30,7 +30,7 @@ MonoBehaviour:
     - appearTime: 11
       spawnPosition: 5
       enemyType: 5
-    waveBGM: {fileID: 8300000, guid: 29988e58de8b15142bf349196969a2e3, type: 3}
+    waveBGM: {fileID: 8300000, guid: 048ee6ab381eb964684c3e2e42e5f725, type: 3}
     isLoopBGM: 1
     isBossWave: 0
     isHMEWave: 0
@@ -85,7 +85,7 @@ MonoBehaviour:
     isLoopBGM: 0
     isBossWave: 0
     isHMEWave: 0
-  - waveName: Wave_3
+  - waveName: Wave_4
     spawns:
     - appearTime: 1
       spawnPosition: 7
@@ -115,7 +115,7 @@ MonoBehaviour:
     isLoopBGM: 0
     isBossWave: 0
     isHMEWave: 0
-  - waveName: Wave_
+  - waveName: Wave_Boss
     spawns:
     - appearTime: 0
       spawnPosition: 5
@@ -123,7 +123,7 @@ MonoBehaviour:
     - appearTime: 6
       spawnPosition: 5
       enemyType: 4
-    waveBGM: {fileID: 0}
-    isLoopBGM: 0
-    isBossWave: 0
+    waveBGM: {fileID: 8300000, guid: 29988e58de8b15142bf349196969a2e3, type: 3}
+    isLoopBGM: 1
+    isBossWave: 1
     isHMEWave: 0

@@ -318,7 +318,7 @@ public class Enemy_BossSc : Enemy_BaseSc
                     summonedEnemies.Add(enemy);
 
                     // 撃破時処理（必要ならボス通知用に）
-                    enemy.GetComponent<Enemy_BaseSc>().OnDeath = () =>
+                    //enemy.GetComponent<Enemy_BaseSc>().OnDeath = () =>
                     {
                         summonedEnemies.Remove(enemy); // リストから削除
                     };

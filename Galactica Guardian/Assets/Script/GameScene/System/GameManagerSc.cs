@@ -23,6 +23,7 @@ public class GameManagerSc : MonoBehaviour
     [SerializeField] List<WaveSetData> wave_data;
     [Header("生成するエフェクト")]
     [SerializeField] GameObject explosion_prefab;
+    [SerializeField] GameObject explosion_min_prefab;
     #endregion
     #region Instance・変数.
     public static GameManagerSc Instance { get; private set; }
@@ -124,7 +125,7 @@ public class GameManagerSc : MonoBehaviour
     {
         EnemyPool.Instance.GenerateEnemy(enemy_prefab, enemyα_prefab, enemyβ_prefab,
             enemy_hme_prefab, enemy_boss_prefab, item_carrier_prefab); // エネミーオブジェクトプール準備.
-        EffectPool.Instance.GenerateEffect(explosion_prefab); // エフェクトオブジェクトプール準備.
+        EffectPool.Instance.GenerateEffect(explosion_prefab, explosion_min_prefab); // エフェクトオブジェクトプール準備.
 
         InitCamera();
     }
