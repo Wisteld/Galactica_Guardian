@@ -8,22 +8,36 @@ public class ExplosionSc : MonoBehaviour
     [SerializeField] AudioClip clip_explosion;
     Animator animator;
 
+    string animname;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
-    public void Init()
+    /// <summary>
+    /// 生成時に呼び出して初期化.
+    /// </summary>
+    /// <param name="animationname">初期化するアニメーションクリップ名.</param>
+    public void Init(string animationname)
     {
+        animname = animationname;
         if (animator != null)
         {
-            animator.Play(Effects.EXPLOSION_CLIP_NAME, 0, 0f);
+            animator.Play(animname, 0, 0f);
             SoundManagerSc.Instance.PlaySE(clip_explosion);
         }
     }
 
     public void ExplosionEnd()
     {
-        EffectPool.Instance.Collect(Effect_Type.EFFECT_EXPLOSION, gameObject);
+        if (animname == Effects.EXPLOSION_CLIP_NAME)
+        {
+            EffectPool.Instance.Collect(Effect_Type.EFFECT_EXPLOSION, gameObject);
+        }
+        else if (animname == Effects.EXPLOSION_MIN_CLIP_NAME)
+        {
+            EffectPool.Instance.Collect(Effect_Type.EFFECT_EXPLOSION_MIN, gameObject);
+        }
     }
 }

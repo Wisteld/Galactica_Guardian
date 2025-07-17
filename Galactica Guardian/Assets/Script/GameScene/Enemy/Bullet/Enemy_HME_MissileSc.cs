@@ -1,4 +1,5 @@
 using Common;
+using ObjectPool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -102,6 +103,7 @@ public class Enemy_HME_MissileSc : MonoBehaviour
     /// </summary>
     void Explosion()
     {
+        EffectPool.Instance.Generate(Effects.Effect_Type.EFFECT_EXPLOSION_MIN, transform.position);
         Destroy(gameObject);
     }
 

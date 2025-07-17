@@ -27,7 +27,7 @@ namespace Common
         /// <summary>
         /// SE再生用オーディオソースのリスト数.
         /// </summary>
-        public const int SE_LIST_MAX = 10;
+        public const int SE_LIST_MAX = 40;
         #endregion
 
         #region プレイヤー.
@@ -456,14 +456,26 @@ namespace Common
         public enum Effect_Type
         {
             EFFECT_EXPLOSION = 0,
+
+            EFFECT_EXPLOSION_MIN = 1,
         }
 
         #region アニメーションクリップ.
         public const string EXPLOSION_CLIP_NAME = "Explosion";
+
+        public const string EXPLOSION_MIN_CLIP_NAME = "Explosion_Min";
         #endregion
 
         #region 初期生成数.
-        public const int EXPLOSION_MAX_COUNT = 8;
+        /// <summary>
+        /// 爆発エフェクト初期生成数.
+        /// </summary>
+        public const int EXPLOSION_MAX_COUNT = 10;
+
+        /// <summary>
+        /// 小爆発エフェクト初期生成数.
+        /// </summary>
+        public const int EXPLOSION_MIN_MAX_COUNT = 20;
         #endregion
     }
 }
