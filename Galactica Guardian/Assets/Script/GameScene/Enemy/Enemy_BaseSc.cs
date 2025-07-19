@@ -23,6 +23,8 @@ public class Enemy_BaseSc : MonoBehaviour
     /// </summary>
     protected void EnemyDeath()
     {
+        Debug.Log($"{gameObject.name} is dying. Sending OnDeath event.");
         OnDeath?.Invoke(); // €–S’Ê’mƒR[ƒ‹.
+        OnDeath = null; // ”O‚Ì‚½‚ßnull‚Å–³Œø‰».
     }
 }

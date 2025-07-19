@@ -28,9 +28,12 @@ public class PlayerSc : MonoBehaviour
     SpriteRenderer barrierRender;  // バリアの描画情報.
     [Header ("効果音")]
     [SerializeField] AudioClip clip_power_up;
+    [SerializeField] AudioClip clip_power_up_b;
     [SerializeField] AudioClip clip_bullet;
     [SerializeField] AudioClip clip_laser;
     [SerializeField] AudioClip clip_missile;
+    [SerializeField] AudioClip clip_hit;
+    [SerializeField] AudioClip clip_hit_b;
     #endregion
     #region 変数.
     Vector3 playerPos;    // プレイヤーの座標.
@@ -498,7 +501,8 @@ public class PlayerSc : MonoBehaviour
     /// <summary>
     /// プレイヤーの被弾時処理.
     /// </summary>
-    void PlayerDamage()
+    /// <param name="isbullet">弾に当たったか.</param>
+    void PlayerDamage(bool isbullet)
     {
         if (isHitFlag) // 被弾無敵時間中なら.
         {
@@ -511,6 +515,14 @@ public class PlayerSc : MonoBehaviour
         }
 
         playerHp--; // PlayerのHPを減らす.
+        if(isbullet)
+        {
+            SoundManagerSc.Instance.PlaySE(clip_hit_b);
+        }
+        else
+        {
+            SoundManagerSc.Instance.PlaySE(clip_hit);
+        }
 
         if (playerHp <= 1)
         {
@@ -552,12 +564,12 @@ public class PlayerSc : MonoBehaviour
     {
         if (collision.CompareTag(tags.ENEMY)) // 敵と接触したら.
         {
-            PlayerDamage();
+            PlayerDamage(false);
         }
         if(collision.CompareTag(tags.ENEMY_BULLET) && !barrierFlag) // バリアが無い状態で弾に接触したら.
         {
             Destroy(collision.gameObject); // 弾を削除.
-            PlayerDamage();           
+            PlayerDamage(true);
         }
         if (collision.CompareTag(tags.POWERUP_WEAPON)) // パワーアップ：ウェポンを取得.
         {
@@ -567,6 +579,7 @@ public class PlayerSc : MonoBehaviour
         if (collision.CompareTag(tags.POWERUP_SPEED)) // パワーアップ：スピードを取得.
         {
             Destroy(collision.gameObject); // パワーアップアイテムを削除.
+            SoundManagerSc.Instance.PlaySE(clip_power_up_b);
             GetSpeedUp();
         }
     }

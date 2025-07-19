@@ -133,7 +133,10 @@ public class GameManagerSc : MonoBehaviour
     {
         InitPop();
         InitManager();
-        StartCoroutine(WaveRoutine());
+        if (!isWaveRunning)
+        {
+            StartCoroutine(WaveRoutine());
+        }
     }
     #endregion
 
@@ -180,6 +183,11 @@ public class GameManagerSc : MonoBehaviour
                 currentWaveIndex++;
             }
         }
+
+        // 全Wave終了後.
+        Debug.Log("全Wave終了!");
+        yield return new WaitForSeconds(1.5f);
+        SceneLoader.ChangeScene(Scenes.RESULT);
     }
 
     IEnumerator SpawnEnemyWithDelay(EnemySpawnData spawnData)

@@ -335,6 +335,7 @@ namespace Common
 
     static class tags
     {
+        #region ゲームオブジェクトタグ.
         /// <summary>
         /// エネミータグ.
         /// </summary>
@@ -380,7 +381,11 @@ namespace Common
         /// </summary>
         public const string PLAYER_BARRIER = "Player_Barrier";
 
+        /// <summary>
+        /// エネミー生成位置指定タグ.
+        /// </summary>
         public const string POP_ANCHOR = "PopAnchor";
+        #endregion
     }
 
     public static class ENum
@@ -476,6 +481,19 @@ namespace Common
         /// 小爆発エフェクト初期生成数.
         /// </summary>
         public const int EXPLOSION_MIN_MAX_COUNT = 20;
+        #endregion
+    }
+
+    public class Scenes
+    {
+        #region 遷移先のシーン名.
+        public const string TITLE = "TitleScene";
+
+        public const string GAME = "GameScene";
+
+        public const string RESULT = "ResultScene";
+
+        public const string GAMEOVER = "GameOverScene";
         #endregion
     }
 }
