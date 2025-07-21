@@ -187,6 +187,7 @@ public class GameManagerSc : MonoBehaviour
         // 全Wave終了後.
         Debug.Log("全Wave終了!");
         yield return new WaitForSeconds(1.5f);
+        SoundManagerSc.Instance.StopBGM();
         SceneLoader.ChangeScene(Scenes.RESULT);
     }
 

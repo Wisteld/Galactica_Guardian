@@ -541,6 +541,8 @@ public class PlayerSc : MonoBehaviour
     void PlayerGameOver()
     {
         EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
+        SoundManagerSc.Instance.StopBGM();
+        SceneLoader.ChangeScene(Scenes.GAMEOVER);
         Destroy(gameObject); // ©g‚ğíœ.
     }
 

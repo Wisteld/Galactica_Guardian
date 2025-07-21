@@ -1200,7 +1200,7 @@ MonoBehaviour:
   enemy_boss_prefab: {fileID: 8476366190287980446, guid: c1fa737df9af5784c9dfbb0bf8c8326c, type: 3}
   item_carrier_prefab: {fileID: 7181497873083651259, guid: 4e6c2723b73a8a74b95672040644bd54, type: 3}
   wave_data:
-  - {fileID: 11400000, guid: 99caa98bf6359ac41a78f07e3bc7387b, type: 2}
+  - {fileID: 11400000, guid: f3cb3aea928543c43b10f41748499a24, type: 2}
   explosion_prefab: {fileID: 32292347923459064, guid: a98aa51c1828ded498adedb1928ce2e5, type: 3}
   explosion_min_prefab: {fileID: 486075015359955375, guid: b8e2cd28d91b2354e978cd735b1011c9, type: 3}
 --- !u!4 &2022597611
