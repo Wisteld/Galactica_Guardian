@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Common;
+using ObjectPool;
 
 public class Enemy_BulletSc : MonoBehaviour
 {
@@ -22,7 +23,12 @@ public class Enemy_BulletSc : MonoBehaviour
 
         if (bulletTime < 0)
         {
-            Destroy(gameObject);
+            Delete();
         }
+    }
+
+    void Delete()
+    {
+        BulletPool.Instance.Collect(gameObject, Bullets.B_Type.ENEMY_BULLET);
     }
 }

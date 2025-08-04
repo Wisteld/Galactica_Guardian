@@ -38,11 +38,14 @@ public class Enemy_BossSc : Enemy_BaseSc
     Camera cam;              // メインカメラの範囲.
     float eSize;             // エネミーサイズ.
     float sizeDistance;      // 壁との距離(サイズに対する倍率)
+    Vector3 effectPos;       // 小爆発エフェクトの発生座標.
+
+    Coroutine summonCoroutine;
 
     Vector2 max;             // 画面範囲右上.
     Vector2 min;             // 画面範囲左下.
 
-    bool isBossAlive = true;
+    bool isBossAlive = true; // ボスが生存しているかどうか.
     bool entryFlag;          // 登場演出中フラグ.
     bool shotSwitch;         // 攻撃変化.
     bool debugFlag = Com.DEBUG_MODE_ENEMY; // デバッグモード.
@@ -84,7 +87,7 @@ public class Enemy_BossSc : Enemy_BaseSc
     {
         InitEnemy();
         InitEnemySize();
-        StartCoroutine(BossSummonRoutine());
+        summonCoroutine = StartCoroutine(BossSummonRoutine());
     }
 
     // Update is called once per frame
@@ -92,17 +95,20 @@ public class Enemy_BossSc : Enemy_BaseSc
     {
         enemyPos = transform.position;
 
-        if (enemyPos.y > max.y / 2 + max.y / 4 && !entryFlag)
+        if (isBossAlive)
         {
-            transform.position += Vector3.down * Com.ENEMY_BOSS_SPEED * Time.deltaTime;
-            return;
+            if (enemyPos.y > max.y / 2 + max.y / 4 && !entryFlag)
+            {
+                transform.position += Vector3.down * Com.ENEMY_BOSS_SPEED * Time.deltaTime;
+                return;
+            }
+            else
+            {
+                entryFlag = true;
+            }
+            EnemyMove();
+            EnemyFire();
         }
-        else
-        {
-            entryFlag = true;
-        }
-        EnemyMove();
-        EnemyFire();
     }
 
     #region Update内関数.
@@ -257,7 +263,7 @@ public class Enemy_BossSc : Enemy_BaseSc
     {
         enemyHp -= damage;
 
-        if (enemyHp <= 0)
+        if (enemyHp <= 0 && isBossAlive)
         {
             EnemyDestroy();
         }
@@ -270,29 +276,28 @@ public class Enemy_BossSc : Enemy_BaseSc
     {
         EnemyDeath();
         OnBossDefeated();
-        EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_BOSS, gameObject);
+        StartCoroutine(BossDestroyEffect());
     }
     #endregion
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag(tags.PLAYER_BULLET))
+        if (collision.gameObject.CompareTag(Tags.PLAYER_BULLET))
         {
-            Destroy(collision.gameObject);
+            BulletPool.Instance.Collect(collision.gameObject, Bullets.B_Type.PLAYER_BULLET);
             EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
         }
-        if (collision.gameObject.CompareTag(tags.PLAYER_BULLET_LASER))
+        if (collision.gameObject.CompareTag(Tags.PLAYER_BULLET_LASER))
         {
-            Destroy(collision.gameObject);
             EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
         }
-        if (collision.gameObject.CompareTag(tags.PLAYER_MISSILE))
+        if (collision.gameObject.CompareTag(Tags.PLAYER_MISSILE))
         {
             EnemyDamage(Com.ENEMY_DAMAGE_MISSILE);
         }
     }
 
-    IEnumerator BossSummonRoutine()
+    private IEnumerator BossSummonRoutine()
     {
         int waveIndex = 0;
         while (isBossAlive && waveIndex < bossSummonWaves.Count)
@@ -303,11 +308,13 @@ public class Enemy_BossSc : Enemy_BaseSc
         }
     }
 
-    IEnumerator SummonWave(WaveData wave)
+    private IEnumerator SummonWave(WaveData wave)
     {
         foreach (var spawn in wave.spawns)
         {
+            if (!isBossAlive) yield break; // ボスが生存しているかチェック.
             yield return new WaitForSeconds(spawn.appearTime);
+            if (!isBossAlive) yield break; // 念のためもう一度チェック.
 
             if (GameManagerSc.Instance.TryGetAnchor(spawn.spawnPosition, out Vector3 spawnPos))
             {
@@ -318,7 +325,7 @@ public class Enemy_BossSc : Enemy_BaseSc
                     summonedEnemies.Add(enemy);
 
                     // 撃破時処理（必要ならボス通知用に）
-                    //enemy.GetComponent<Enemy_BaseSc>().OnDeath = () =>
+                    enemy.GetComponent<Enemy_BaseSc>().OnDeath = () =>
                     {
                         summonedEnemies.Remove(enemy); // リストから削除
                     };
@@ -327,9 +334,65 @@ public class Enemy_BossSc : Enemy_BaseSc
         }
     }
 
+    private IEnumerator BossDestroyEffect()
+    {
+        #region 撃墜演出.
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        RandEffect();
+        RandEffect();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
+        #endregion
+        EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
+        EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_BOSS, gameObject);
+    }
+
+    void RandEffect()
+    {
+        effectPos.x = transform.position.x + Random.Range(-1.25f, 1.25f);
+        effectPos.y = transform.position.y + Random.Range(-1.25f, 1.25f);
+        EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION_MIN, effectPos);
+    }
+
     void OnBossDefeated()
     {
         isBossAlive = false;
+
+        if (summonCoroutine != null)
+        {
+            StopCoroutine(summonCoroutine);
+            summonCoroutine = null;
+        }
 
         // 取り巻きを全員リコール
         foreach (var enemy in summonedEnemies)

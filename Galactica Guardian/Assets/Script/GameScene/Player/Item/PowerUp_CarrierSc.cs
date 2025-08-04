@@ -98,17 +98,17 @@ public class PowerUp_CarrierSc : Enemy_BaseSc
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (isDestroyed) return;
-        if (collision.CompareTag(tags.PLAYER)) // プレイヤーに衝突したら.
+        if (collision.CompareTag(Tags.PLAYER)) // プレイヤーに衝突したら.
         {
             Instantiate(PowerUp_Speed, transform.position, transform.rotation); // パワーアップ：スピードアップ生成.
             Destroy();
         }
-        if (collision.CompareTag(tags.PLAYER_BULLET)) // プレイヤーの通常弾に当たったら.
+        if (collision.CompareTag(Tags.PLAYER_BULLET)) // プレイヤーの通常弾に当たったら.
         {
             Instantiate(PowerUp_Weapon, transform.position, transform.rotation); // パワーアップ：ウェポン生成.
             Destroy();
         }
-        if (collision.CompareTag(tags.PLAYER_BULLET_LASER)) // プレイヤーのレーザー弾に当たったら.
+        if (collision.CompareTag(Tags.PLAYER_BULLET_LASER)) // プレイヤーのレーザー弾に当たったら.
         {
             Instantiate(PowerUp_Weapon, transform.position, transform.rotation); // パワーアップ：ウェポン生成.
             Destroy();

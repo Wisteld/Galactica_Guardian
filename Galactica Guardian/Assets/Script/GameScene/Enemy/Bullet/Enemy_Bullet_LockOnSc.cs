@@ -1,4 +1,5 @@
 using Common;
+using ObjectPool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
     Vector3 direction; // 発射方向.
     Vector3 toPlayer;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         ignoreRange = Com.ENEMY_IGNORE_RANGE; // プレイヤーを無視する距離を初期化.
         SearchPlayer();
@@ -38,7 +39,7 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
     /// </summary>
     void SearchPlayer()
     {
-        GameObject player = GameObject.FindGameObjectWithTag(tags.PLAYER); // プレイヤーを探す.
+        GameObject player = GameObject.FindGameObjectWithTag(Tags.PLAYER); // プレイヤーを探す.
         
         if (player == null) // プレイヤーが見つからなかったら.
         {
@@ -67,6 +68,6 @@ public class Enemy_Bullet_LockOnSc : MonoBehaviour
     /// </summary>
     void Delete()
     {
-        Destroy(gameObject);
+        BulletPool.Instance.Collect(gameObject, Bullets.B_Type.ENEMY_BULLET_LOCK);
     }
 }

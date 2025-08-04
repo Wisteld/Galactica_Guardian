@@ -12,18 +12,25 @@ using System.Collections;
 public class GameManagerSc : MonoBehaviour
 {
     #region SerializeField.
-    [Header ("生成するエネミー")]
+    [Header("生成するエネミー")]
     [SerializeField] GameObject enemy_prefab;
     [SerializeField] GameObject enemyα_prefab;
     [SerializeField] GameObject enemyβ_prefab;
     [SerializeField] GameObject enemy_hme_prefab;
     [SerializeField] GameObject enemy_boss_prefab;
     [SerializeField] GameObject item_carrier_prefab;
-    [Header ("エネミー生成データ")]
+    [Header("エネミー生成データ")]
     [SerializeField] List<WaveSetData> wave_data;
     [Header("生成するエフェクト")]
     [SerializeField] GameObject explosion_prefab;
     [SerializeField] GameObject explosion_min_prefab;
+    [Header("生成する弾")]
+    [SerializeField] GameObject player_bullet_prefab;
+    [SerializeField] GameObject player_laser_prefab;
+    [SerializeField] GameObject player_missile_prefab;
+    [SerializeField] GameObject enemy_bullet_prefab;
+    [SerializeField] GameObject enemy_bullet_lock_prefab;
+    [SerializeField] GameObject enemy_missile_prefab;
     #endregion
     #region Instance・変数.
     public static GameManagerSc Instance { get; private set; }
@@ -93,7 +100,7 @@ public class GameManagerSc : MonoBehaviour
     /// </summary>
     void InitPop()
     {
-        GameObject[] anchorObjects = GameObject.FindGameObjectsWithTag(tags.POP_ANCHOR); // tag指定でAnchorを配列取得.
+        GameObject[] anchorObjects = GameObject.FindGameObjectsWithTag(Tags.POP_ANCHOR); // tag指定でAnchorを配列取得.
         foreach (var obj in anchorObjects)
         {
             string name = obj.name.Replace("Anchor_", ""); // Anchor_部分を削除してstring型変数nameに入れる.
@@ -118,6 +125,16 @@ public class GameManagerSc : MonoBehaviour
         score = 0;
         enemyKillCount = 0;
     }
+
+    /// <summary>
+    /// ObjectPoolのInstanceをClearする.
+    /// </summary>
+    void InstanceClear()
+    {
+        EnemyPool.Instance.ClearInstance();
+        EffectPool.Instance.ClearInstance();
+        BulletPool.Instance.ClearInstance();
+    }
     #endregion
 
     #region UnityEvent.
@@ -126,6 +143,9 @@ public class GameManagerSc : MonoBehaviour
         EnemyPool.Instance.GenerateEnemy(enemy_prefab, enemyα_prefab, enemyβ_prefab,
             enemy_hme_prefab, enemy_boss_prefab, item_carrier_prefab); // エネミーオブジェクトプール準備.
         EffectPool.Instance.GenerateEffect(explosion_prefab, explosion_min_prefab); // エフェクトオブジェクトプール準備.
+
+        BulletPool.Instance.GenerateBullet(player_bullet_prefab, player_laser_prefab, player_missile_prefab,
+            enemy_bullet_prefab, enemy_bullet_lock_prefab, enemy_missile_prefab); // 各種弾オブジェクトプール準備.
 
         InitCamera();
     }
@@ -137,6 +157,12 @@ public class GameManagerSc : MonoBehaviour
         {
             StartCoroutine(WaveRoutine());
         }
+    }
+
+    private void OnDestroy()
+    {
+        // Sceneを再度読み込んだ際にObjectPoolが再生成出来るようInstanceをリセットしておく.
+        InstanceClear();
     }
     #endregion
 
@@ -186,7 +212,7 @@ public class GameManagerSc : MonoBehaviour
 
         // 全Wave終了後.
         Debug.Log("全Wave終了!");
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_TIME);
         SoundManagerSc.Instance.StopBGM();
         SceneLoader.ChangeScene(Scenes.RESULT);
     }

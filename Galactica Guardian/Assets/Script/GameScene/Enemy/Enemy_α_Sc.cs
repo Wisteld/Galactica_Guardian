@@ -215,18 +215,18 @@ public class Enemy_α_Sc : Enemy_BaseSc
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag(tags.PLAYER_BULLET))
+        if (collision.CompareTag(Tags.PLAYER_BULLET))
         {
-            Destroy(collision.gameObject);
+            BulletPool.Instance.Collect(collision.gameObject, Bullets.B_Type.PLAYER_BULLET);
             EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
         }
 
-        if (collision.CompareTag(tags.PLAYER_BULLET_LASER))
+        if (collision.CompareTag(Tags.PLAYER_BULLET_LASER))
         {
             EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
         }
 
-        if (collision.CompareTag(tags.PLAYER_MISSILE))
+        if (collision.CompareTag(Tags.PLAYER_MISSILE))
         {
             EnemyDamage(Com.ENEMY_DAMAGE_MISSILE);
         }

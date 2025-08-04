@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Common;
+using ObjectPool;
 
 public class Player_BulletSc : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class Player_BulletSc : MonoBehaviour
     float deleteTime;
     float deleteCount;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         deleteTime = 0;
         bulletSpeed = Com.PLAYER_BULLET_SPEED;
@@ -24,7 +25,7 @@ public class Player_BulletSc : MonoBehaviour
 
         if (deleteTime > deleteCount) // ”­ËŒãˆê’èŠÔŒo‰ß‚µ‚½‚ç.
         {
-            Destroy(gameObject); // ©g‚ğíœ.
+            BulletPool.Instance.Collect(gameObject, Bullets.B_Type.PLAYER_BULLET); // ©g‚ğíœ.
         }
     }
 }

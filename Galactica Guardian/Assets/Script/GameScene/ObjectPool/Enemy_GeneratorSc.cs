@@ -39,6 +39,11 @@ namespace ObjectPool
             }
         }
 
+        public void ClearInstance()
+        {
+            instance = null;
+        }
+
         void GenerateParent()
         {
             GameObject parentObj = new GameObject("Enemys"); // 空のゲームオブジェクトEnemys生成.
@@ -48,6 +53,15 @@ namespace ObjectPool
             parentTransform.localScale = Vector3.one;        // 生成したオブジェクトのスケールを1,1,1,に指定.
         }
 
+        /// <summary>
+        /// ObjectPool生成.
+        /// </summary>
+        /// <param name="enemy_normal">通常敵.</param>
+        /// <param name="enemy_α">高機動敵.</param>
+        /// <param name="enemy_β">ミサイル敵.</param>
+        /// <param name="enemy_hme">裏ボス.</param>
+        /// <param name="enemy_boss">ボス.</param>
+        /// <param name="carrier">パワーアップキャリア.</param>
         public void GenerateEnemy(GameObject enemy_normal, GameObject enemy_α, GameObject enemy_β,
             GameObject enemy_hme, GameObject enemy_boss, GameObject carrier)
         {
@@ -176,7 +190,7 @@ namespace ObjectPool
                     }
                     break;
                 default:
-                    Debug.LogWarning("Generate Number None");
+                    Debug.LogWarning("Enemy Generate Number None");
                     return null;
             }
             enemy.SetActive (true);
@@ -215,7 +229,7 @@ namespace ObjectPool
                     carrier_queue.Enqueue(enemy); // キャリアーキューに格納
                     break;
                 default: // 想定外の数値なら.
-                    Debug.LogWarning("Collect Number None");
+                    Debug.LogWarning("Enemy Collect Number None");
                     break;
             }
 

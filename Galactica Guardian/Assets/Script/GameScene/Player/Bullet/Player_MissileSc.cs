@@ -15,8 +15,11 @@ public class Player_MissileSc : MonoBehaviour
 
     bool debugFlag = Com.DEBUG_MODE_PLAYER;
 
-    #region Unityイベント.
-    void Start()
+    #region 初期化関数.
+    /// <summary>
+    /// 初期化.
+    /// </summary>
+    void Init()
     {
         FindClosestEnemy();
 
@@ -24,7 +27,18 @@ public class Player_MissileSc : MonoBehaviour
         pMissileRotate = Com.PLAYER_MISSILE_ROTATE_SPEED;
         pMissileTime = Com.PLAYER_MISSILE_DELETE_TIME;
 
+    }
+    #endregion
+
+    #region Unityイベント.
+    void Start()
+    {
         rb = GetComponent<Rigidbody2D>(); // リジッドボディをセット.
+    }
+
+    private void OnEnable()
+    {
+        Init();
     }
 
     // Update is called once per frame
@@ -73,7 +87,7 @@ public class Player_MissileSc : MonoBehaviour
     void FindClosestEnemy()
     {
         GameObject[] enemys = null;
-        enemys = GameObject.FindGameObjectsWithTag(tags.ENEMY); // tagが"Enemy"の敵を全て取得(配列).
+        enemys = GameObject.FindGameObjectsWithTag(Tags.ENEMY); // tagが"Enemy"の敵を全て取得(配列).
         if (enemys == null)
         {
             return;
@@ -104,12 +118,12 @@ public class Player_MissileSc : MonoBehaviour
     void Explosion()
     {
         EffectPool.Instance.Generate(Effects.Effect_Type.EFFECT_EXPLOSION_MIN, transform.position);
-        Destroy(gameObject);
+        BulletPool.Instance.Collect(gameObject, Bullets.B_Type.PLAYER_MISSILE);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag(tags.ENEMY))
+        if (collision.CompareTag(Tags.ENEMY))
         {
             Explosion();
         }

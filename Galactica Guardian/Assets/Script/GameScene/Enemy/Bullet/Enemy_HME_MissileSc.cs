@@ -73,7 +73,7 @@ public class Enemy_HME_MissileSc : MonoBehaviour
     void FindClosestEnemy()
     {
         GameObject[] targets = null;
-        targets = GameObject.FindGameObjectsWithTag(tags.PLAYER); // tag‚ª"Player"‚Ì“G‚ð‘S‚ÄŽæ“¾(”z—ñ).
+        targets = GameObject.FindGameObjectsWithTag(Tags.PLAYER); // tag‚ª"Player"‚Ì“G‚ð‘S‚ÄŽæ“¾(”z—ñ).
         if (targets == null)
         {
             return;
@@ -109,20 +109,20 @@ public class Enemy_HME_MissileSc : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag(tags.PLAYER))
+        if (collision.CompareTag(Tags.PLAYER))
         {
             Explosion();
         }
-        if (collision.CompareTag(tags.PLAYER_BULLET))
+        if (collision.CompareTag(Tags.PLAYER_BULLET))
         {
             Destroy(collision.gameObject);
             Explosion();
         }
-        if (collision.CompareTag(tags.PLAYER_BULLET_LASER))
+        if (collision.CompareTag(Tags.PLAYER_BULLET_LASER))
         {
             Explosion();
         }
-        if (collision.CompareTag(tags.PLAYER_MISSILE))
+        if (collision.CompareTag(Tags.PLAYER_MISSILE))
         {
             Explosion();
         }

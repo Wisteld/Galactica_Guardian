@@ -38,7 +38,7 @@ public class Enemy_HME_BulletSc : MonoBehaviour
     /// </summary>
     void SearchPlayer()
     {
-        GameObject player = GameObject.FindGameObjectWithTag(tags.PLAYER); // プレイヤーを探す.
+        GameObject player = GameObject.FindGameObjectWithTag(Tags.PLAYER); // プレイヤーを探す.
 
         if (player == null) // プレイヤーが見つからなかったら.
         {

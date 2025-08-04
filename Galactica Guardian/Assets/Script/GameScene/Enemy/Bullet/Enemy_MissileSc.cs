@@ -18,7 +18,7 @@ public class Enemy_MissileSc : MonoBehaviour
     bool debugFlag = Com.DEBUG_MODE_ENEMY;
 
     #region Unityイベント.
-    void Start()
+    void OnEnable()
     {
         FindClosestEnemy();
 
@@ -37,7 +37,7 @@ public class Enemy_MissileSc : MonoBehaviour
 
         if (eMissileTime <= 0)
         {
-            Destroy(gameObject);
+            BulletPool.Instance.Collect(gameObject, Bullets.B_Type.ENEMY_MISSILE);
             if (debugFlag)
             {
                 Debug.Log("E_Missile_Destroy");
@@ -76,7 +76,7 @@ public class Enemy_MissileSc : MonoBehaviour
     void FindClosestEnemy()
     {
         GameObject[] targets = null;
-        targets = GameObject.FindGameObjectsWithTag(tags.PLAYER); // tagが"Player"の敵を全て取得(配列).
+        targets = GameObject.FindGameObjectsWithTag(Tags.PLAYER); // tagが"Player"の敵を全て取得(配列).
         if (targets == null)
         {
             return;
@@ -107,7 +107,7 @@ public class Enemy_MissileSc : MonoBehaviour
     void Explosion()
     {
         EffectPool.Instance.Generate(Effects.Effect_Type.EFFECT_EXPLOSION_MIN, transform.position);
-        Destroy(gameObject);
+        BulletPool.Instance.Collect(gameObject, Bullets.B_Type.ENEMY_MISSILE);
     }
 
     void Damage()
@@ -121,20 +121,20 @@ public class Enemy_MissileSc : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag(tags.PLAYER))
+        if (collision.CompareTag(Tags.PLAYER))
         {
             Explosion();
         }
-        if (collision.CompareTag(tags.PLAYER_BULLET))
+        if (collision.CompareTag(Tags.PLAYER_BULLET))
         {
             Destroy(collision.gameObject);
             Damage();
         }
-        if (collision.CompareTag(tags.PLAYER_BULLET_LASER))
+        if (collision.CompareTag(Tags.PLAYER_BULLET_LASER))
         {
             Damage();
         }
-        if (collision.CompareTag(tags.PLAYER_MISSILE))
+        if (collision.CompareTag(Tags.PLAYER_MISSILE))
         {
             Damage();
         }

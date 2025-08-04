@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: WaveData_Test
+  m_Name: AAA
   m_EditorClassIdentifier: Assembly-CSharp::WaveSetData
   waves:
   - waveName: 
@@ -25,18 +25,12 @@ MonoBehaviour:
       spawnPosition: 3
       enemyType: 0
     - appearTime: 6
-      spawnPosition: 10
-      enemyType: 0
-    - appearTime: 8
-      spawnPosition: 5
-      enemyType: 0
-    - appearTime: 10
-      spawnPosition: 1
-      enemyType: 0
-    - appearTime: 12
       spawnPosition: 8
       enemyType: 0
-    - appearTime: 12
+    - appearTime: 8
+      spawnPosition: 1
+      enemyType: 0
+    - appearTime: 10
       spawnPosition: 5
       enemyType: 5
     waveBGM: {fileID: 8300000, guid: 048ee6ab381eb964684c3e2e42e5f725, type: 3}
@@ -46,27 +40,21 @@ MonoBehaviour:
   - waveName: 
     spawns:
     - appearTime: 0
-      spawnPosition: 3
-      enemyType: 1
-    - appearTime: 2
-      spawnPosition: 8
+      spawnPosition: 2
       enemyType: 0
-    - appearTime: 4
-      spawnPosition: 3
-      enemyType: 1
-    - appearTime: 6
+    - appearTime: 2
       spawnPosition: 7
       enemyType: 1
-    - appearTime: 8
-      spawnPosition: 5
-      enemyType: 0
-    - appearTime: 10
-      spawnPosition: 1
-      enemyType: 0
-    - appearTime: 12
+    - appearTime: 4
+      spawnPosition: 2
+      enemyType: 1
+    - appearTime: 6
       spawnPosition: 8
       enemyType: 1
-    - appearTime: 12
+    - appearTime: 8
+      spawnPosition: 1
+      enemyType: 0
+    - appearTime: 10
       spawnPosition: 5
       enemyType: 5
     waveBGM: {fileID: 0}
@@ -76,27 +64,21 @@ MonoBehaviour:
   - waveName: 
     spawns:
     - appearTime: 0
-      spawnPosition: 3
-      enemyType: 1
-    - appearTime: 2
-      spawnPosition: 8
+      spawnPosition: 2
       enemyType: 2
-    - appearTime: 4
-      spawnPosition: 3
-      enemyType: 1
-    - appearTime: 6
+    - appearTime: 2
       spawnPosition: 7
       enemyType: 1
-    - appearTime: 8
-      spawnPosition: 5
+    - appearTime: 4
+      spawnPosition: 2
       enemyType: 2
-    - appearTime: 10
-      spawnPosition: 1
-      enemyType: 2
-    - appearTime: 12
+    - appearTime: 6
       spawnPosition: 8
       enemyType: 1
-    - appearTime: 12
+    - appearTime: 8
+      spawnPosition: 1
+      enemyType: 0
+    - appearTime: 10
       spawnPosition: 5
       enemyType: 5
     waveBGM: {fileID: 0}
@@ -112,21 +94,24 @@ MonoBehaviour:
       spawnPosition: 8
       enemyType: 2
     - appearTime: 3
-      spawnPosition: 3
+      spawnPosition: 5
       enemyType: 1
     - appearTime: 4
-      spawnPosition: 7
+      spawnPosition: 5
       enemyType: 1
     - appearTime: 6
-      spawnPosition: 5
+      spawnPosition: 2
       enemyType: 2
     - appearTime: 8
-      spawnPosition: 1
+      spawnPosition: 7
       enemyType: 1
-    - appearTime: 9
+    - appearTime: 10
+      spawnPosition: 2
+      enemyType: 1
+    - appearTime: 12
       spawnPosition: 8
-      enemyType: 1
-    - appearTime: 11
+      enemyType: 2
+    - appearTime: 14
       spawnPosition: 5
       enemyType: 5
     waveBGM: {fileID: 0}
@@ -136,27 +121,30 @@ MonoBehaviour:
   - waveName: 
     spawns:
     - appearTime: 0
-      spawnPosition: 6
+      spawnPosition: 2
       enemyType: 1
     - appearTime: 0
       spawnPosition: 8
       enemyType: 2
     - appearTime: 3
-      spawnPosition: 3
-      enemyType: 0
-    - appearTime: 4
-      spawnPosition: 3
-      enemyType: 1
-    - appearTime: 6
       spawnPosition: 5
       enemyType: 2
-    - appearTime: 8
+    - appearTime: 4
       spawnPosition: 5
       enemyType: 1
-    - appearTime: 9
+    - appearTime: 6
+      spawnPosition: 2
+      enemyType: 2
+    - appearTime: 8
+      spawnPosition: 7
+      enemyType: 2
+    - appearTime: 10
+      spawnPosition: 2
+      enemyType: 1
+    - appearTime: 12
       spawnPosition: 8
-      enemyType: 0
-    - appearTime: 11
+      enemyType: 1
+    - appearTime: 14
       spawnPosition: 5
       enemyType: 5
     waveBGM: {fileID: 0}

@@ -179,7 +179,7 @@ namespace Common
         /// <summary>
         /// エネミーのミサイル耐久値.
         /// </summary>
-        public const int ENEMY_MISSILE_HP = 3;
+        public const int ENEMY_MISSILE_HP = 2;
 
         /// <summary>
         /// 通常弾被弾ダメージ.
@@ -307,7 +307,7 @@ namespace Common
         /// <summary>
         /// ボスエネミーの体力.
         /// </summary>
-        public const int ENEMY_BOSS_HP = 500;
+        public const int ENEMY_BOSS_HP = 400;
 
         public enum UpDownState
         {
@@ -333,7 +333,7 @@ namespace Common
         #endregion
     }
 
-    static class tags
+    static class Tags
     {
         #region ゲームオブジェクトタグ.
         /// <summary>
@@ -385,6 +385,48 @@ namespace Common
         /// エネミー生成位置指定タグ.
         /// </summary>
         public const string POP_ANCHOR = "PopAnchor";
+        #endregion
+    }
+
+    public static class Bullets
+    {
+        #region 生成ナンバー.
+        public enum B_Type
+        {
+            PLAYER_BULLET = 0,
+            PLAYER_LASER = 1,
+            PLAYER_MISSILE = 2,
+            ENEMY_BULLET = 3,
+            ENEMY_BULLET_LOCK = 4,
+            ENEMY_MISSILE = 5,
+        }
+        #endregion
+
+        #region 初期生成数.
+        /// <summary>
+        /// プレイヤー通常弾初期生成数.
+        /// </summary>
+        public const int PLAYER_BULLET_MAX_COUNT = 40;
+        /// <summary>
+        /// プレイヤーレーザー弾初期生成数.
+        /// </summary>
+        public const int PLAYER_LASER_MAX_COUNT = 40;
+        /// <summary>
+        /// プレイヤーミサイル初期生成数.
+        /// </summary>
+        public const int PLAYER_MISSILE_MAX_COUNT = 8;
+        /// <summary>
+        /// エネミー通常弾初期生成数.
+        /// </summary>
+        public const int ENEMY_BULLET_MAX_COUNT = 15;
+        /// <summary>
+        /// エネミーロックオン弾初期生成数.
+        /// </summary>
+        public const int ENEMY_BULLET_LOCK_MAX_COUNT = 15;
+        /// <summary>
+        /// エネミーミサイル初期生成数.
+        /// </summary>
+        public const int ENEMY_MISSILE_MAX_COUNT = 10;
         #endregion
     }
 
@@ -475,12 +517,12 @@ namespace Common
         /// <summary>
         /// 爆発エフェクト初期生成数.
         /// </summary>
-        public const int EXPLOSION_MAX_COUNT = 10;
+        public const int EXPLOSION_MAX_COUNT = 15;
 
         /// <summary>
         /// 小爆発エフェクト初期生成数.
         /// </summary>
-        public const int EXPLOSION_MIN_MAX_COUNT = 20;
+        public const int EXPLOSION_MIN_MAX_COUNT = 45;
         #endregion
     }
 
@@ -494,6 +536,15 @@ namespace Common
         public const string RESULT = "ResultScene";
 
         public const string GAMEOVER = "GameOverScene";
+        #endregion
+
+        #region 遷移時間.
+        /// <summary>
+        /// ボス撃破後シーン遷移までの演出時間.
+        /// </summary>
+        public const float BOSS_DESTROY_TIME = 2f;
+
+        public const float BOSS_DESTROY_WAIT = 0.3f;
         #endregion
     }
 }

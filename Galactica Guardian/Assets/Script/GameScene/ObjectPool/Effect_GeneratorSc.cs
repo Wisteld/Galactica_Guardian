@@ -32,6 +32,11 @@ namespace ObjectPool
             }
         }
 
+        public void ClearInstance()
+        {
+            instance = null;
+        }
+
         void GenerateParent()
         {
             GameObject parentObj = new GameObject("Effects"); // 空のゲームオブジェクトEnemys生成.
@@ -78,7 +83,7 @@ namespace ObjectPool
                     }
                     break;
                 case Effect_Type.EFFECT_EXPLOSION_MIN:
-                    if (explosion_queue.Count > 0)
+                    if (explosion_min_queue.Count > 0)
                     {
                         effect = explosion_min_queue.Dequeue(); // 指定されたエフェクトを取り出す.
                         effect.GetComponent<ExplosionSc>()?.Init(Effects.EXPLOSION_MIN_CLIP_NAME); // 初期化関数を呼び出しておく.
@@ -89,6 +94,9 @@ namespace ObjectPool
                         return null;
                     }
                     break;
+                default:
+                    Debug.LogWarning("Effect Generate Number None");
+                    return null;
             }
             effect.SetActive(true);
             effect.transform.position = point;
@@ -108,7 +116,7 @@ namespace ObjectPool
                     explosion_min_queue.Enqueue(effect);
                     break;
                 default:
-                    Debug.LogWarning("Collect Number None");
+                    Debug.LogWarning("Effect Collect Number None");
                     break;
             }
 

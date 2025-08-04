@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using ObjectPool;
 using Effect_Type = Common.Effects.Effect_Type;
 using POWER_UP_TYPE = Common.Com.POWER_UP_TYPE;
+using B_Type = Common.Bullets.B_Type;
 
 public class PlayerSc : MonoBehaviour
 {
@@ -14,9 +15,6 @@ public class PlayerSc : MonoBehaviour
     #region SerializeField(インスペクターにセットする)
     [SerializeField] private GalacticaGuardian inputActions; // inputSystem利用の準備.
     [Header ("生成するPrefab")]
-    [SerializeField] GameObject bullet_prefab;      // 通常弾.
-    [SerializeField] GameObject laser_prefab;       // レーザー弾.
-    [SerializeField] GameObject missile_prefab;     // ミサイル.
     [SerializeField] GameObject barrier_prefab;     // バリア.
     [Header ("攻撃発射位置")]
     [SerializeField] Transform fire_point_center;   // 発射位置(中央)
@@ -54,6 +52,7 @@ public class PlayerSc : MonoBehaviour
     [Header ("被弾時の無敵処理(初期値は変更不可)")]
     [SerializeField] float blink;          // 点滅間隔(数値が大きい程短い).
     [SerializeField] float invincibleTime; // 無敵時間の長さ.
+    Color blinkColor;
     float level;          // 被弾時の点滅保持.
     Camera cam;           // メインカメラの範囲.
     Vector2 min;
@@ -71,6 +70,7 @@ public class PlayerSc : MonoBehaviour
     POWER_UP_TYPE powerUpLevel;               // パワーアップ：現在のパワーアップレベル.
 
     bool isHitFlag = false;
+    bool gameoverFlag = false;
 
     bool debugFlag = Com.DEBUG_MODE_PLAYER; // デバッグモード.
     #endregion
@@ -213,7 +213,7 @@ public class PlayerSc : MonoBehaviour
         if (isHitFlag)
         {
             level = Mathf.PingPong(Time.time * blink, 1f); // 経過時間から01で数値を取得.
-            Color blinkColor = new Color(1f, 1f, 1f, level); // 点滅処理.
+            blinkColor = new Color(1f, 1f, 1f, level); // 点滅処理.
             playerRender.color = blinkColor;
             if (barrierFlag)
             {
@@ -318,24 +318,18 @@ public class PlayerSc : MonoBehaviour
     /// </summary>
     void PlayerFire()
     {
-        // Prefabがセットされているか確認.
-        if (bullet_prefab == null || laser_prefab == null)
-        {
-            Debug.LogWarning("Player Bullet prefab is not assigned!");
-            return;
-        }
         #region 攻撃処理分岐.
         if (!twinFireFlag) // 2発同時発射のパワーアップを取得しているか確認.
         {
             if (!laserFlag) // レーザーのパワーアップを取得しているか確認.
             {
                 SoundManagerSc.Instance.PlaySE(clip_bullet);
-                Instantiate(bullet_prefab, fire_point_center.position, Quaternion.identity); // 無ければ通常弾.
+                BulletPool.Instance.Generate(B_Type.PLAYER_BULLET, fire_point_center.position); // 無ければ通常弾.
             }
             else
             {
                 SoundManagerSc.Instance.PlaySE(clip_laser);
-                Instantiate(laser_prefab, fire_point_center.position, Quaternion.identity);  // 有ればレーザー弾.
+                BulletPool.Instance.Generate(B_Type.PLAYER_LASER, fire_point_center.position);  // 有ればレーザー弾.
             }
 
             if (debugFlag)
@@ -350,15 +344,15 @@ public class PlayerSc : MonoBehaviour
             {
                 SoundManagerSc.Instance.PlaySE(clip_bullet);
                 // 無ければ通常弾.
-                Instantiate(bullet_prefab, fire_point_left.position, Quaternion.identity);
-                Instantiate(bullet_prefab, fire_point_right.position, Quaternion.identity);
+                BulletPool.Instance.Generate(B_Type.PLAYER_BULLET, fire_point_left.position);
+                BulletPool.Instance.Generate(B_Type.PLAYER_BULLET, fire_point_right.position);
             }
             else
             {
                 SoundManagerSc.Instance.PlaySE(clip_laser);
                 // 有ればレーザー弾.
-                Instantiate(laser_prefab, fire_point_left.position, Quaternion.identity);
-                Instantiate(laser_prefab, fire_point_right.position, Quaternion.identity);
+                BulletPool.Instance.Generate(B_Type.PLAYER_LASER, fire_point_left.position);
+                BulletPool.Instance.Generate(B_Type.PLAYER_LASER, fire_point_right.position);
             }
             
             if (debugFlag)
@@ -375,12 +369,7 @@ public class PlayerSc : MonoBehaviour
     void PlayerMissileFire()
     {
         SoundManagerSc.Instance.PlaySE(clip_missile);
-            Instantiate(missile_prefab, fire_point_center.position, fire_point_left.rotation);    // ミサイルを発射位置(中央)から射出.
-        /*else // 有れば二発発射.
-        {
-            Instantiate(missile_prefab, fire_point_left.position, fire_point_left.rotation);    // ミサイルを発射位置(左)から射出.
-            Instantiate(missile_prefab, fire_point_right.position, fire_point_left.rotation);    // ミサイルを発射位置(右)から射出.
-        }*/
+        BulletPool.Instance.Generate(B_Type.PLAYER_MISSILE, fire_point_center.position);    // ミサイルを発射位置(中央)から射出.
     }
 
     #endregion
@@ -532,6 +521,7 @@ public class PlayerSc : MonoBehaviour
         if (playerHp <= 0) // HPが0になったら.
         {
             PlayerGameOver();
+            isHitFlag = false;
         }
     }
 
@@ -541,9 +531,12 @@ public class PlayerSc : MonoBehaviour
     void PlayerGameOver()
     {
         EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
+        gameoverFlag = true;
         SoundManagerSc.Instance.StopBGM();
-        SceneLoader.ChangeScene(Scenes.GAMEOVER);
-        Destroy(gameObject); // 自身を削除.
+        StartCoroutine(GameOver());
+        blinkColor = new Color(1f, 1f, 1f, 0f);
+        playerRender.color = blinkColor;
+        if (barrierFlag) barrierRender.color = blinkColor;
     }
 
     /// <summary>
@@ -564,25 +557,28 @@ public class PlayerSc : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag(tags.ENEMY)) // 敵と接触したら.
+        if (!gameoverFlag)
         {
-            PlayerDamage(false);
-        }
-        if(collision.CompareTag(tags.ENEMY_BULLET) && !barrierFlag) // バリアが無い状態で弾に接触したら.
-        {
-            Destroy(collision.gameObject); // 弾を削除.
-            PlayerDamage(true);
-        }
-        if (collision.CompareTag(tags.POWERUP_WEAPON)) // パワーアップ：ウェポンを取得.
-        {
-            Destroy(collision.gameObject); // パワーアップアイテムを削除.
-            PlayerPowerUp();
-        }
-        if (collision.CompareTag(tags.POWERUP_SPEED)) // パワーアップ：スピードを取得.
-        {
-            Destroy(collision.gameObject); // パワーアップアイテムを削除.
-            SoundManagerSc.Instance.PlaySE(clip_power_up_b);
-            GetSpeedUp();
+            if (collision.CompareTag(Tags.ENEMY)) // 敵と接触したら.
+            {
+                PlayerDamage(false);
+            }
+            if (collision.CompareTag(Tags.ENEMY_BULLET) && !barrierFlag) // バリアが無い状態で弾に接触したら.
+            {
+                Destroy(collision.gameObject); // 弾を削除.
+                PlayerDamage(true);
+            }
+            if (collision.CompareTag(Tags.POWERUP_WEAPON)) // パワーアップ：ウェポンを取得.
+            {
+                Destroy(collision.gameObject); // パワーアップアイテムを削除.
+                PlayerPowerUp();
+            }
+            if (collision.CompareTag(Tags.POWERUP_SPEED)) // パワーアップ：スピードを取得.
+            {
+                Destroy(collision.gameObject); // パワーアップアイテムを削除.
+                SoundManagerSc.Instance.PlaySE(clip_power_up_b);
+                GetSpeedUp();
+            }
         }
     }
 
@@ -607,6 +603,14 @@ public class PlayerSc : MonoBehaviour
                 barrierRender.color = new Color(1f, 1f, 1f, 1f); // バリアの見た目を元に戻す.
             }            
         }
+    }
+
+    private IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(1f);
+        playerRender.color = blinkColor;
+        if (barrierFlag) barrierRender.color = blinkColor;
+        SceneLoader.ChangeScene(Scenes.GAMEOVER);
     }
 
     #endregion
