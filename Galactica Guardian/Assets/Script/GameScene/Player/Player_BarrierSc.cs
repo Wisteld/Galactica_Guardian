@@ -80,7 +80,7 @@ public class Player_BarrierSc : MonoBehaviour
     {
         if (collision.CompareTag("Enemy_Bullet"))
         {
-            Destroy(collision.gameObject);
+            collision.gameObject.transform.position = new Vector3(0f, -15f);
             barrierHp--;
             SoundManagerSc.Instance.PlaySE(clip_barrier_guard);
 

@@ -74,6 +74,7 @@ namespace ObjectPool
                     if (explosion_queue.Count > 0)
                     {
                         effect = explosion_queue.Dequeue(); // 指定されたエフェクトを取り出す.
+                        effect.SetActive(true);
                         effect.GetComponent<ExplosionSc>()?.Init(Effects.EXPLOSION_CLIP_NAME); // 初期化関数を呼び出しておく.
                     }
                     else
@@ -86,6 +87,7 @@ namespace ObjectPool
                     if (explosion_min_queue.Count > 0)
                     {
                         effect = explosion_min_queue.Dequeue(); // 指定されたエフェクトを取り出す.
+                        effect.SetActive(true);
                         effect.GetComponent<ExplosionSc>()?.Init(Effects.EXPLOSION_MIN_CLIP_NAME); // 初期化関数を呼び出しておく.
                     }
                     else
@@ -98,7 +100,6 @@ namespace ObjectPool
                     Debug.LogWarning("Effect Generate Number None");
                     return null;
             }
-            effect.SetActive(true);
             effect.transform.position = point;
             return effect;
         }

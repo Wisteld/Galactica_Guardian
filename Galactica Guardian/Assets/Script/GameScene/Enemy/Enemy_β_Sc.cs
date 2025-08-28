@@ -9,6 +9,8 @@ public class Enemy_β_Sc : Enemy_BaseSc
 {
     [Header("誘導ミサイルのPrefab")]
     [SerializeField] GameObject missile_prefab;
+    [Header("パワーアップ：ウェポン")]
+    [SerializeField] GameObject powerUpWeaponPrefab;
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
@@ -19,6 +21,7 @@ public class Enemy_β_Sc : Enemy_BaseSc
     float eSize;            // エネミーサイズ.
     Vector2 min;
     Vector2 max;
+    float dropChance;
 
     bool debugFlag = Com.DEBUG_MODE_ENEMY;         // デバッグモード.
     #endregion
@@ -34,6 +37,7 @@ public class Enemy_β_Sc : Enemy_BaseSc
         enemyHp = Com.ENEMY_HP_β;
         enemyAttackCount = 0;
         EnemyType = ENum.E_Type.ENEMY_β;
+        dropChance = Com.DROP_ITEM_β;
     }
 
     void InitEnemySize()
@@ -97,7 +101,7 @@ public class Enemy_β_Sc : Enemy_BaseSc
         if (attackTime < 0)
         {
             attackTime = Com.ENEMY_FIRE_RATE_β;
-            Instantiate(missile_prefab, transform.position, transform.rotation);
+            BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_MISSILE, transform.position);
             enemyAttackCount++;
         }
     }
@@ -164,6 +168,8 @@ public class Enemy_β_Sc : Enemy_BaseSc
         if (enemyHp <= 0)
         {
             EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
+            ScoreManagerSc.Instance.UpdateScore(Score.SCORE_ENEMY_β);
+            TryDropItem();
             EnemyDestroy();
         }
     }
@@ -178,6 +184,17 @@ public class Enemy_β_Sc : Enemy_BaseSc
         EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_β, gameObject);
     }
 
+    /// <summary>
+    /// アイテムドロップ処理（ランダム.）
+    /// </summary>
+    void TryDropItem()
+    {
+        float rand = Random.value; // 0.0〜1.0 の乱数
+        if (rand < dropChance)
+        {
+            Instantiate(powerUpWeaponPrefab, transform.position, Quaternion.identity); // ウェポン強化アイテム生成.
+        }
+    }
     #endregion
 
     private void OnTriggerEnter2D(Collider2D collision)

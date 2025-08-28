@@ -52,18 +52,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0361ff346029ddf409e9e51d7c38a3f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet_prefab: {fileID: 2812146053555228381, guid: 8a757db134bb19b41901dd61b6c3c617, type: 3}
-  laser_prefab: {fileID: 623639106729863950, guid: 4b47de4da43f7cd41942e44169c46619, type: 3}
-  missile_prefab: {fileID: 8052892326231445070, guid: a394d085a1df7e74c8c49205a55caf87, type: 3}
   barrier_prefab: {fileID: 8078697046969337777, guid: ace48fb557f28a7489b18910af8bf538, type: 3}
   fire_point_center: {fileID: 5665753465696054154}
   fire_point_left: {fileID: 8959594435524065168}
   fire_point_right: {fileID: 7892134502185550420}
   player_collider: {fileID: 2939598997043723044}
   clip_power_up: {fileID: 8300000, guid: 78447b5ad9c46694ab1da8cf660bfdf4, type: 3}
+  clip_power_up_b: {fileID: 8300000, guid: c145da75e371a6a43b2ab4e6cc63d230, type: 3}
   clip_bullet: {fileID: 8300000, guid: 548aa1fa11ee8614f91efffa8e3189b7, type: 3}
   clip_laser: {fileID: 8300000, guid: f0b31caee53905b4787173a9c8d3ec38, type: 3}
-  clip_missile: {fileID: 8300000, guid: 1f172b2f9d04e854d87e76254c89613b, type: 3}
+  clip_missile: {fileID: 8300000, guid: 1dd30bb3f089f9145bd2949c242651e0, type: 3}
+  clip_hit: {fileID: 8300000, guid: 5d80722b93211af4f82af83ff7e99dba, type: 3}
+  clip_hit_b: {fileID: 8300000, guid: 8c0d2feda29461841a6db38f87b43fe8, type: 3}
   speed: 0
   speedBase: 0
   speedUpRate: 0

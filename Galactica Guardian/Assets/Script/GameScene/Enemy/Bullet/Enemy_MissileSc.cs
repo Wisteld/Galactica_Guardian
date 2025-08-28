@@ -18,16 +18,24 @@ public class Enemy_MissileSc : MonoBehaviour
     bool debugFlag = Com.DEBUG_MODE_ENEMY;
 
     #region Unityイベント.
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>(); // リジッドボディをセット.
+    }
+
     void OnEnable()
     {
+        if (rb == null) // もしリジッドボディがセットされていなければ.
+        {
+            rb = GetComponent<Rigidbody2D>(); // リジッドボディをセット.
+        }
+
         FindClosestEnemy();
 
         eMissileSpeed = Com.ENEMY_MISSILE_SPEED;
         eMissileRotate = Com.ENEMY_MISSILE_ROTATE_SPEED;
         eMissileTime = Com.ENEMY_MISSILE_DELETE_TIME;
         eMissileHP = Com.ENEMY_MISSILE_HP;
-
-        rb = GetComponent<Rigidbody2D>(); // リジッドボディをセット.
     }
 
     // Update is called once per frame
@@ -127,7 +135,7 @@ public class Enemy_MissileSc : MonoBehaviour
         }
         if (collision.CompareTag(Tags.PLAYER_BULLET))
         {
-            Destroy(collision.gameObject);
+            BulletPool.Instance.Collect(collision.gameObject, Bullets.B_Type.PLAYER_BULLET);
             Damage();
         }
         if (collision.CompareTag(Tags.PLAYER_BULLET_LASER))

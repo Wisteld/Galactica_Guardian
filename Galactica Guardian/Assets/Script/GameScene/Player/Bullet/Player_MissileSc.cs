@@ -6,13 +6,19 @@ using ObjectPool;
 
 public class Player_MissileSc : MonoBehaviour
 {
+    [SerializeField] AudioClip boost_clip;
+    [SerializeField] AudioClip lock_clip;
+
     float pMissileSpeed;
+    float pMissileBoost;
     float pMissileRotate;
     float pMissileTime;
+    float pMissileLockTime;
 
     Rigidbody2D rb;
     Transform target;
 
+    bool lockOnFlag;
     bool debugFlag = Com.DEBUG_MODE_PLAYER;
 
     #region 初期化関数.
@@ -21,12 +27,13 @@ public class Player_MissileSc : MonoBehaviour
     /// </summary>
     void Init()
     {
-        FindClosestEnemy();
-
         pMissileSpeed = Com.PLAYER_MISSILE_SPEED;
+        pMissileBoost = Com.PLAYER_MISSILE_BOOST;
         pMissileRotate = Com.PLAYER_MISSILE_ROTATE_SPEED;
         pMissileTime = Com.PLAYER_MISSILE_DELETE_TIME;
-
+        pMissileLockTime = Com.PLAYER_MISSILE_LOCK_TIME;
+        target = null;
+        lockOnFlag = false;
     }
     #endregion
 
@@ -45,10 +52,18 @@ public class Player_MissileSc : MonoBehaviour
     void Update()
     {
         pMissileTime -= Time.deltaTime; // 発射されてからの時間を計測.
+        pMissileLockTime -= Time.deltaTime; // ロックオンするまでのカウントダウン.
+
+        if (!lockOnFlag && pMissileLockTime < 0)
+        {
+            FindClosestEnemy();
+            lockOnFlag = true;
+            StartCoroutine(BoostMissile());
+        }
 
         if (pMissileTime <= 0)
         {
-            Destroy(gameObject);
+            BulletPool.Instance.Collect(gameObject, Bullets.B_Type.PLAYER_MISSILE);
             if (debugFlag)
             {
                 Debug.Log("P_Missile_Destroy");
@@ -109,7 +124,12 @@ public class Player_MissileSc : MonoBehaviour
             }
         }
 
-        target = closestEnemy; // 最も近かった敵をターゲットに指定.
+        if (closestEnemy != null)
+        {
+            target = closestEnemy; // 最も近かった敵をターゲットに指定.
+            if (lock_clip != null) { SoundManagerSc.Instance.PlaySE(lock_clip); }
+            else if (debugFlag) { Debug.LogWarning("Lock Clip None"); }
+        }
     }
 
     /// <summary>
@@ -127,5 +147,38 @@ public class Player_MissileSc : MonoBehaviour
         {
             Explosion();
         }
+    }
+
+    IEnumerator BoostMissile()
+    {
+        yield return 5f;
+        pMissileSpeed = pMissileBoost; // ミサイルを加速.
+        if (boost_clip != null){ SoundManagerSc.Instance.PlaySE(boost_clip); }
+        else if(debugFlag) { Debug.LogWarning("Boost Clip None"); }
+        if (target != null)
+        {
+            StartCoroutine(RotationMissile());
+        }
+    }
+
+    IEnumerator RotationMissile()
+    {
+        float time = 0f;
+        float duration = 0.1f;
+
+        Quaternion startRot = transform.rotation;
+
+        Vector2 dir = (target.position - transform.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+        Quaternion targetRot = Quaternion.Euler(0, 0, angle);
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            transform.rotation = Quaternion.Lerp(startRot, targetRot, time / duration);
+            yield return null;
+        }
+
+        transform.rotation = targetRot;
     }
 }

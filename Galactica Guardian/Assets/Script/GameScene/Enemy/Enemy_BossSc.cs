@@ -121,26 +121,40 @@ public class Enemy_BossSc : Enemy_BaseSc
         attackTime -= Time.deltaTime;
         if (attackTime < 0)
         {
+            if (enemyHp < Com.ENEMY_BOSS_HP / 4)
+            {
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, fire_point_center.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, fire_point_left.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, fire_point_right.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET_LOCK, fire_point_left.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET_LOCK, fire_point_right.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_MISSILE, fire_point_center.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_MISSILE, fire_point_left.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_MISSILE, fire_point_right.position);
+                attackTime = Random.Range(Com.ENEMY_BOSS_FIRE_RND_MIN, Com.ENEMY_BOSS_FIRE_RND_MAX);
+                if (debugFlag) { Debug.Log("Boss_Attack_Pattern:Emergency"); }
+                return;
+            }
             attackCount++;
             if (attackCount < attackRand)
             {
                 #region UŒ‚ˆ—.
                 if (shotSwitch)
                 {
-                    Instantiate(enemy_bullet, fire_point_center.position, Quaternion.identity);
-                    Instantiate(enemy_bullet_lock, fire_point_left.position, Quaternion.identity);
-                    Instantiate(enemy_bullet_lock, fire_point_right.position, Quaternion.identity);
-                    Instantiate(enemy_missile, fire_point_left.position, Quaternion.identity);
-                    Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, fire_point_center.position);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET_LOCK, fire_point_left.position);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET_LOCK, fire_point_right.position);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_MISSILE, fire_point_left.position);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_MISSILE, fire_point_right.position);
                     shotSwitch = false;
                 }
                 else
                 {
-                    Instantiate(enemy_bullet_lock, fire_point_center.position, Quaternion.identity);
-                    Instantiate(enemy_bullet, fire_point_left.position, Quaternion.identity);
-                    Instantiate(enemy_bullet, fire_point_right.position, Quaternion.identity);
-                    Instantiate(enemy_missile, fire_point_left.position, Quaternion.identity);
-                    Instantiate(enemy_missile, fire_point_right.position, Quaternion.identity);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET_LOCK, fire_point_center.position);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, fire_point_left.position);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, fire_point_right.position);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_MISSILE, fire_point_left.position);
+                    BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_MISSILE, fire_point_right.position);
                     shotSwitch = true;
                 }
                 attackTime = Random.Range(Com.ENEMY_BOSS_FIRE_RND_MIN, Com.ENEMY_BOSS_FIRE_RND_MAX);
@@ -148,15 +162,14 @@ public class Enemy_BossSc : Enemy_BaseSc
             }
             else
             {
-                attackTime = 0;
                 attackCount = 0;
                 attackRand = Random.Range(Com.ENEMY_BOSS_ATTACK_RND_MIN, Com.ENEMY_BOSS_ATTACK_RND_MAX);
                 #region UŒ‚ˆ—.
-                Instantiate(enemy_bullet, fire_point_center.position, Quaternion.identity);
-                Instantiate(enemy_bullet, fire_point_left.position, Quaternion.identity);
-                Instantiate(enemy_bullet, fire_point_right.position, Quaternion.identity);
-                Instantiate(enemy_bullet_lock, fire_point_left.position, Quaternion.identity);
-                Instantiate(enemy_bullet_lock, fire_point_right.position, Quaternion.identity);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, fire_point_center.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, fire_point_left.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, fire_point_right.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET_LOCK, fire_point_left.position);
+                BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET_LOCK, fire_point_right.position);
                 attackTime = Random.Range(Com.ENEMY_BOSS_FIRE_RND_MIN, Com.ENEMY_BOSS_FIRE_RND_MAX);
                 #endregion
             }
@@ -241,15 +254,7 @@ public class Enemy_BossSc : Enemy_BaseSc
                 Debug.Log("Enemy_Left");
             }
         }
-        // ‰æ–ÊŠO”»’è.
-        if (enemyPos.y <= min.y - eSize) // ‰º’[‚Ì”»’è.
-        {
-            Destroy(gameObject);
-            if (debugFlag)
-            {
-                Debug.Log("Enemy_Lost");
-            }
-        }
+
         #endregion
     }
     #endregion
@@ -265,6 +270,7 @@ public class Enemy_BossSc : Enemy_BaseSc
 
         if (enemyHp <= 0 && isBossAlive)
         {
+            ScoreManagerSc.Instance.UpdateScore(Score.SCORE_ENEMY_BOSS);
             EnemyDestroy();
         }
     }

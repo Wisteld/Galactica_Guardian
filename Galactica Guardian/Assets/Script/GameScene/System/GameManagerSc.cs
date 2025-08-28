@@ -205,7 +205,7 @@ public class GameManagerSc : MonoBehaviour
                     Debug.Log($"Wave{currentWaveIndex + 1}End");
                 }
 
-                yield return new WaitForSeconds(2f); // ŽŸ‚ÌWave‚Ü‚Å‚Ì‘Ò‹@
+                yield return new WaitForSeconds(4f); // ŽŸ‚ÌWave‚Ü‚Å‚Ì‘Ò‹@
                 currentWaveIndex++;
             }
         }

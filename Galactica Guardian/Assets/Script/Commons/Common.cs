@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using UnityEditor;
+using UnityEngine.EventSystems;
 using UnityEngine.Experimental.Rendering;
 
 namespace Common
@@ -39,7 +40,7 @@ namespace Common
         /// <summary>
         /// プレイヤーの速度上昇倍率.
         /// </summary>
-        public const float PLAYER_SPEED_RATE = 0.5f;
+        public const float PLAYER_SPEED_RATE = 0.7f;
 
         /// <summary>
         /// プレイヤーの初期体力.
@@ -69,7 +70,12 @@ namespace Common
         /// <summary>
         /// プレイヤーのミサイルの弾速.
         /// </summary>
-        public const float PLAYER_MISSILE_SPEED = 7.0f;
+        public const float PLAYER_MISSILE_SPEED = 4.8f;
+
+        /// <summary>
+        /// プレイヤーのミサイルが加速した時の弾速.
+        /// </summary>
+        public const float PLAYER_MISSILE_BOOST = 10f;
 
         /// <summary>
         /// プレイヤーのミサイルの旋回速度.
@@ -80,6 +86,9 @@ namespace Common
         /// プレイヤーのミサイルが消えるまでの時間.
         /// </summary>
         public const float PLAYER_MISSILE_DELETE_TIME = 1.5f;
+
+
+        public const float PLAYER_MISSILE_LOCK_TIME = 0.5f;
 
         /// <summary>
         /// ミサイルの発射レート.
@@ -206,7 +215,12 @@ namespace Common
         /// <summary>
         /// スピードアップドロップ率.
         /// </summary>
-        public const float DROP_ITEM_α = 0.15f;
+        public const float DROP_ITEM_α = 0.45f;
+
+        /// <summary>
+        /// パワーアップドロップ率.
+        /// </summary>
+        public const float DROP_ITEM_β = 0.1f;
         #endregion
 
         #region エネミーβ
@@ -418,15 +432,15 @@ namespace Common
         /// <summary>
         /// エネミー通常弾初期生成数.
         /// </summary>
-        public const int ENEMY_BULLET_MAX_COUNT = 15;
+        public const int ENEMY_BULLET_MAX_COUNT = 25;
         /// <summary>
         /// エネミーロックオン弾初期生成数.
         /// </summary>
-        public const int ENEMY_BULLET_LOCK_MAX_COUNT = 15;
+        public const int ENEMY_BULLET_LOCK_MAX_COUNT = 25;
         /// <summary>
         /// エネミーミサイル初期生成数.
         /// </summary>
-        public const int ENEMY_MISSILE_MAX_COUNT = 10;
+        public const int ENEMY_MISSILE_MAX_COUNT = 20;
         #endregion
     }
 
@@ -524,6 +538,39 @@ namespace Common
         /// </summary>
         public const int EXPLOSION_MIN_MAX_COUNT = 45;
         #endregion
+    }
+
+    public class Score
+    {
+        /// <summary>
+        /// ステージ番号.
+        /// </summary>
+        public enum Snum
+        {
+            STAGE_1 = 0,
+
+            STAGE_2 = 1,
+
+            STAGE_3 = 2,
+
+            STAGE_MAX = 3,
+        }
+
+        public const int DEFAULT_HIGHSCORE = 10000;
+
+        // public const int DEFAULT_MIDDLESCORE = 5000;
+
+        // public const int DEFAULT_LOWSCORE = 2000;
+
+        public const int SCORE_ENEMY = 100;
+
+        public const int SCORE_ENEMY_α = 200;
+
+        public const int SCORE_ENEMY_β = 250;
+
+        public const int SCORE_ENEMY_HME = 3000;
+
+        public const int SCORE_ENEMY_BOSS = 2000;
     }
 
     public class Scenes

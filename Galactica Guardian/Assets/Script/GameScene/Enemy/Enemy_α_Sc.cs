@@ -9,7 +9,7 @@ public class Enemy_α_Sc : Enemy_BaseSc
 {
     [Header("弾のPrefab")]
     [SerializeField] GameObject enemy_bullet;
-    [Header("パワーアップアイテムのPrefab")]
+    [Header("パワーアップ：スピード")]
     [SerializeField] GameObject powerUpSpeedPrefab;
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
@@ -122,7 +122,7 @@ public class Enemy_α_Sc : Enemy_BaseSc
 
         if (rndFire == 0)
         {
-            Instantiate(enemy_bullet, transform.position, Quaternion.identity); // 弾を撃つ.
+            BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET_LOCK, transform.position); // 弾を撃つ.
         }
 
         rndFire = Random.Range(0, 6); // 二発目以降、6/1で弾が出るようにする.
@@ -184,6 +184,7 @@ public class Enemy_α_Sc : Enemy_BaseSc
         if (enemyHp <= 0)
         {
             EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
+            ScoreManagerSc.Instance.UpdateScore(Score.SCORE_ENEMY_α);
             TryDropItem();
             EnemyDestroy();            
         }

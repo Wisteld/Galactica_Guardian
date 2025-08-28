@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missile_prefab: {fileID: 2035501468947866097, guid: e2cace49d24bef44f91778cd5dd3d08f, type: 3}
+  powerUpWeaponPrefab: {fileID: 90808591106602978, guid: c2d4e5f956ec7cc4f891ad5510cf9a40, type: 3}
 --- !u!50 &67666602798347515
 Rigidbody2D:
   serializedVersion: 4

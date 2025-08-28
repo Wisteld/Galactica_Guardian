@@ -182,15 +182,26 @@ namespace ObjectPool
                     Debug.LogWarning("Bullet Generate Number None");
                     return null;
             }
-            bullet.SetActive(true);
+            if (bullet == null)
+            {
+                Debug.LogWarning($"Bullet Generate Null :B_Type{num}");
+                return null;
+            }
             bullet.transform.position = point;
+            bullet.SetActive(true);
             return bullet;
         }
 
         public void Collect(GameObject bullet, B_Type num)
         {
-            bullet.SetActive(false);
+            if (bullet == null)
+            {
+                Debug.LogWarning($"Bullet Collect Null :B_Type{num}");
+                return;
+            }
             bullet.transform.position = defPos;
+            bullet.transform.rotation = Quaternion.identity;
+            bullet.SetActive(false);
 
             switch (num)
             {
@@ -198,19 +209,19 @@ namespace ObjectPool
                     bullet_queue.Enqueue(bullet);
                     break;
                 case B_Type.PLAYER_LASER:
-                    bullet_queue.Enqueue(bullet);
+                    laser_queue.Enqueue(bullet);
                     break;
                 case B_Type.PLAYER_MISSILE:
-                    bullet_queue.Enqueue(bullet);
+                    missile_queue.Enqueue(bullet);
                     break;
                 case B_Type.ENEMY_BULLET:
-                    bullet_queue.Enqueue(bullet);
+                    enemy_bullet_queue.Enqueue(bullet);
                     break;
                 case B_Type.ENEMY_BULLET_LOCK:
-                    bullet_queue.Enqueue(bullet);
+                    enemy_bullet_lock_queue.Enqueue(bullet);
                     break;
                 case B_Type.ENEMY_MISSILE:
-                    bullet_queue.Enqueue(bullet);
+                    enemy_missile_queue.Enqueue(bullet);
                     break;
                 default: // ëzíËäOÇÃêîílÇ»ÇÁ.
                     Debug.LogWarning("Bullet Collect Number None");

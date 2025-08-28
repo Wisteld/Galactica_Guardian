@@ -118,7 +118,7 @@ public class EnemySc : Enemy_BaseSc
         
         if (rndFire == 0)
         {
-            Instantiate(enemy_bullet, transform.position, Quaternion.identity); // ’e‚ğŒ‚‚Â.
+            BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_BULLET, transform.position); // ’e‚ğŒ‚‚Â.
         }
 
         rndFire = Random.Range(0, 6); // “ñ”­–ÚˆÈ~A6/1‚Å’e‚ªo‚é‚æ‚¤‚É‚·‚é.
@@ -180,6 +180,7 @@ public class EnemySc : Enemy_BaseSc
         if (enemyHp <= 0)
         {
             EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
+            ScoreManagerSc.Instance.UpdateScore(Score.SCORE_ENEMY);
             EnemyDestroy();
         }
     }

@@ -25,7 +25,7 @@ namespace ObjectPool
         Vector3 defPos = new Vector3(0f, 15f, 0);
         Transform parentTransform;
 
-        // シングルトンインスタンス
+        // シングルトンインスタンス.
         private static EnemyPool instance;
         public static EnemyPool Instance
         {

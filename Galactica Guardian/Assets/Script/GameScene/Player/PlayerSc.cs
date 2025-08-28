@@ -8,6 +8,7 @@ using ObjectPool;
 using Effect_Type = Common.Effects.Effect_Type;
 using POWER_UP_TYPE = Common.Com.POWER_UP_TYPE;
 using B_Type = Common.Bullets.B_Type;
+using Unity.VisualScripting;
 
 public class PlayerSc : MonoBehaviour
 {
@@ -83,30 +84,33 @@ public class PlayerSc : MonoBehaviour
     /// <param name="value"></param>
     private void OnMove(InputValue value)
     {
-        var axis = value.Get<Vector2>(); // PlayerInput‚Ì“ü—Í‚ðŽó‚¯Žæ‚é.
-        #region “ü—Í‚Ì‹Ïˆê‰»ˆ—.
-        if (axis.x >= 0.01)
+        if (!gameoverFlag)
         {
-            axis.x = 1;
+            var axis = value.Get<Vector2>(); // PlayerInput‚Ì“ü—Í‚ðŽó‚¯Žæ‚é.
+            #region “ü—Í‚Ì‹Ïˆê‰»ˆ—.
+            if (axis.x >= 0.01)
+            {
+                axis.x = 1;
+            }
+            if (axis.x <= -0.01)
+            {
+                axis.x = -1;
+            }
+            if (axis.y >= 0.01)
+            {
+                axis.y = 1;
+            }
+            if (axis.y <= -0.01)
+            {
+                axis.y = -1;
+            }
+            if (debugFlag)
+            {
+                Debug.Log("axis" + axis);
+            }
+            #endregion
+            _move = new Vector3(axis.x * speed, axis.y * speed); // ˆÚ“®‘¬“x‚ðŒvŽZ.
         }
-        if (axis.x <= -0.01)
-        {
-            axis.x = -1;
-        }
-        if (axis.y >= 0.01)
-        {
-            axis.y = 1;
-        }
-        if (axis.y <= -0.01)
-        {
-            axis.y = -1;
-        }
-        if (debugFlag)
-        {
-            Debug.Log("axis" +axis);
-        }
-        #endregion
-        _move = new Vector3(axis.x * speed, axis.y * speed); // ˆÚ“®‘¬“x‚ðŒvŽZ.
     }
 
     /// <summary>
@@ -115,17 +119,20 @@ public class PlayerSc : MonoBehaviour
     /// /// <param name="value"></param>
     private void OnFire(InputValue value)
     {
-        if (value.isPressed)
+        if (!gameoverFlag)
         {
-            PlayerFire();
-            if (missileTimer >= mFireRate && missileFlag)
+            if (value.isPressed)
             {
-                PlayerMissileFire();
-                missileTimer = 0f;
-            }
-            if (debugFlag)
-            {
-                Debug.Log("Fire!!");
+                PlayerFire();
+                if (missileTimer >= mFireRate && missileFlag)
+                {
+                    PlayerMissileFire();
+                    missileTimer = 0f;
+                }
+                if (debugFlag)
+                {
+                    Debug.Log("Fire!!");
+                }
             }
         }
     }

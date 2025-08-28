@@ -121,6 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 678cf8b0e032e3545869afbfee75e93b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boost_clip: {fileID: 8300000, guid: 1f172b2f9d04e854d87e76254c89613b, type: 3}
+  lock_clip: {fileID: 8300000, guid: 99c8c77002c16a4459db9e490a8e3b0e, type: 3}
 --- !u!70 &6086924531948288868
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
