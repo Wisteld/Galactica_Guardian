@@ -185,6 +185,7 @@ public class Enemy_α_Sc : Enemy_BaseSc
         {
             EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
             ScoreManagerSc.Instance.UpdateScore(Score.SCORE_ENEMY_α);
+            ScoreManagerSc.Instance.UpdateKillScore();
             TryDropItem();
             EnemyDestroy();            
         }

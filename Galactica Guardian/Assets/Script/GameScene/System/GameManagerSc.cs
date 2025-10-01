@@ -20,7 +20,10 @@ public class GameManagerSc : MonoBehaviour
     [SerializeField] GameObject enemy_boss_prefab;
     [SerializeField] GameObject item_carrier_prefab;
     [Header("エネミー生成データ")]
-    [SerializeField] List<WaveSetData> wave_data;
+    [SerializeField] List<WaveData> wave_data;
+    [Tooltip("裏ボスBGM")]
+    [SerializeField] AudioClip secretBossBGM;
+    // [SerializeField] private string waveSetPath = "WaveData_S1";
     [Header("生成するエフェクト")]
     [SerializeField] GameObject explosion_prefab;
     [SerializeField] GameObject explosion_min_prefab;
@@ -40,11 +43,12 @@ public class GameManagerSc : MonoBehaviour
     Dictionary<AnchorType, Vector3> anchorPositions = new Dictionary<AnchorType, Vector3>();
 
     int currentWaveIndex;
-    int score;
-    int enemyKillCount;
     int activeEnemyCount;
 
+    int popEnemyCount;
+
     bool isWaveRunning = false;
+    bool isKillBonus = false;
     bool debugFlag = Com.DEBUG_MODE_SYSTEM;
     #endregion
 
@@ -122,8 +126,18 @@ public class GameManagerSc : MonoBehaviour
     void InitManager()
     {
         currentWaveIndex = 0;
-        score = 0;
-        enemyKillCount = 0;
+    }
+
+    void InitSetWaves()
+    {
+        if (wave_data == null)
+        {
+            // wave_data = new List<WaveSetData> { Resources.Load<WaveSetData>(waveSetPath) };
+            if (wave_data == null)
+            {
+                Debug.LogError("WaveSetData が Resources から読み込めませんでした！");
+            }
+        }
     }
 
     /// <summary>
@@ -148,6 +162,7 @@ public class GameManagerSc : MonoBehaviour
             enemy_bullet_prefab, enemy_bullet_lock_prefab, enemy_missile_prefab); // 各種弾オブジェクトプール準備.
 
         InitCamera();
+        InitSetWaves();
     }
     void Start()
     {
@@ -166,6 +181,14 @@ public class GameManagerSc : MonoBehaviour
     }
     #endregion
 
+    bool CheckKillRate(float threshold = Score.SCORE_BONUS_KILL_PERCENT)
+    {
+        if (popEnemyCount == 0) return false;
+        float rate = (float)ScoreManagerSc.Instance.GetNowKillScore()/popEnemyCount;
+        Debug.Log($"KillRate={rate}({(float)ScoreManagerSc.Instance.GetNowKillScore() / popEnemyCount}");
+        return rate >= threshold;
+    }
+
     public bool TryGetAnchor(AnchorType type, out Vector3 pos)
     {
         return anchorPositions.TryGetValue(type, out pos);
@@ -173,17 +196,20 @@ public class GameManagerSc : MonoBehaviour
 
     IEnumerator WaveRoutine()
     {
-        for (int setIndex = 0; setIndex < wave_data.Count; setIndex++)
-        {
-            WaveSetData currentWaveSet = wave_data[setIndex];
+        //for (int setIndex = 0; setIndex < wave_data.Count; setIndex++)
+        //{
+        //    WaveSetData currentWaveSet = wave_data[setIndex];
 
-            for (int waveIndex = 0; waveIndex < currentWaveSet.waves.Count; waveIndex++)
+            for (int waveIndex = 0; waveIndex < wave_data.Count; waveIndex++)
             {
-                WaveData currentWaveData = currentWaveSet.waves[waveIndex];
+                WaveData currentWaveData = wave_data[waveIndex];
                 if (debugFlag)
                 {
                     Debug.Log($"開始: Wave {currentWaveIndex + 1} / {wave_data.Count}");
                 }
+
+                if (currentWaveData.isBossWave)
+                { if (CheckKillRate()) { isKillBonus = true; } }
 
                 if (currentWaveData.waveBGM != null)
                 {
@@ -205,13 +231,30 @@ public class GameManagerSc : MonoBehaviour
                     Debug.Log($"Wave{currentWaveIndex + 1}End");
                 }
 
-                yield return new WaitForSeconds(4f); // 次のWaveまでの待機
+            yield return new WaitForSeconds(4f); // 次のWaveまでの待機
                 currentWaveIndex++;
+
+            if (currentWaveData.isBossWave)
+            {
+                if (isKillBonus)
+                {
+                    ScoreManagerSc.Instance.UpdateScore(Score.SCORE_BONUS_B);
+                }
+                if (ScoreManagerSc.Instance.GetNowScore() >= Com.ENEMY_HME_POPBORDER) // ←条件スコア
+                {
+                    Debug.Log("条件達成！裏ボス戦へ突入！");
+                    anchorPositions.TryGetValue(AnchorType.CENTER, out Vector3 spawnPos);
+                    EnemyPool.Instance.Generate(E_Type.CARRIER, spawnPos);
+                    yield return StartCoroutine(SpawnSecretBoss());
+                    yield break; // 裏ボス後はここでWaveRoutine終了
+                }
             }
         }
+        //}
 
         // 全Wave終了後.
         Debug.Log("全Wave終了!");
+        ScoreManagerSc.Instance.GetPlayerBonus();
         yield return new WaitForSeconds(Scenes.BOSS_DESTROY_TIME);
         SoundManagerSc.Instance.StopBGM();
         SceneLoader.ChangeScene(Scenes.RESULT);
@@ -224,6 +267,11 @@ public class GameManagerSc : MonoBehaviour
         if (anchorPositions.TryGetValue(spawnData.spawnPosition, out Vector3 spawnPos))
         {
             GameObject enemy = EnemyPool.Instance.Generate(spawnData.enemyType, spawnPos);
+
+            if (spawnData.enemyType != E_Type.CARRIER) // Carrier以外のエネミーをカウントしておく.
+            {
+                popEnemyCount++;
+            }
 
             if (enemy != null)
             {
@@ -242,5 +290,46 @@ public class GameManagerSc : MonoBehaviour
         {
             Debug.LogWarning($"アンカー位置が不明: {spawnData.spawnPosition}");
         }
+    }
+
+    IEnumerator SpawnSecretBoss()
+    {
+        // BGM切替（裏ボス専用曲があれば）
+        SoundManagerSc.Instance.PlayBGM(secretBossBGM, true);
+
+        // ちょっと演出
+        yield return new WaitForSeconds(2f);
+
+        // 出現位置は中央Anchorを想定（必要なら調整）
+        if (anchorPositions.TryGetValue(AnchorType.CENTER, out Vector3 pos))
+        {
+            GameObject hme = EnemyPool.Instance.Generate(E_Type.ENEMY_HME, pos);
+
+            if (hme != null)
+            {
+                Enemy_BaseSc hmeScript = hme.GetComponent<Enemy_BaseSc>();
+                if (hmeScript != null)
+                {
+                    activeEnemyCount = 1;
+                    hmeScript.OnDeath = () =>
+                    {
+                        activeEnemyCount--;
+                    };
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("裏ボス生成位置（Anchor）が見つかりませんでした！");
+        }
+
+        // 裏ボス撃破待ち
+        yield return new WaitUntil(() => activeEnemyCount <= 0);
+
+        Debug.Log("裏ボスHME撃破！");
+        ScoreManagerSc.Instance.GetPlayerBonus();
+        yield return new WaitForSeconds(Scenes.BOSS_DESTROY_TIME);
+        SoundManagerSc.Instance.StopBGM();
+        SceneLoader.ChangeScene(Scenes.RESULT);
     }
 }

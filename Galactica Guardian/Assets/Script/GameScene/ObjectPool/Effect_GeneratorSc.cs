@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Common;
 using Effect_Type = Common.Effects.Effect_Type;
-using UnityEditor.Rendering;
-
 namespace ObjectPool
 {
     public class EffectPool

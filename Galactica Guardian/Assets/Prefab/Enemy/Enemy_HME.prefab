@@ -196,6 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy_bullet: {fileID: 7598447169299358354, guid: 67267259b285e5946920ab8ef20d1063, type: 3}
+  enemy_bullet_lock: {fileID: 1709813785069211758, guid: 4166498c2f844d54daea0a12b36a40e7, type: 3}
   enemy_missile: {fileID: 3447509753596546938, guid: e49ec04f9c4d5ee41a6e12f554f53cce, type: 3}
   fire_point_center: {fileID: 3909395571068185744}
   fire_point_left: {fileID: 1664200320142686357}

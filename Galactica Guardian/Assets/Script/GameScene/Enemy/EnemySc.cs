@@ -181,6 +181,7 @@ public class EnemySc : Enemy_BaseSc
         {
             EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
             ScoreManagerSc.Instance.UpdateScore(Score.SCORE_ENEMY);
+            ScoreManagerSc.Instance.UpdateKillScore();
             EnemyDestroy();
         }
     }

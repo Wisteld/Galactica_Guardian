@@ -271,6 +271,7 @@ public class Enemy_BossSc : Enemy_BaseSc
         if (enemyHp <= 0 && isBossAlive)
         {
             ScoreManagerSc.Instance.UpdateScore(Score.SCORE_ENEMY_BOSS);
+            ScoreManagerSc.Instance.UpdateKillScore();
             EnemyDestroy();
         }
     }

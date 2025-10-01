@@ -11,7 +11,7 @@ namespace Common
         /// <summary>
         /// システム系デバッグモード.
         /// </summary>
-        public const bool DEBUG_MODE_SYSTEM = true;
+        public const bool DEBUG_MODE_SYSTEM = false;
 
         /// <summary>
         /// エネミー系デバッグモード.
@@ -21,7 +21,7 @@ namespace Common
         /// <summary>
         /// プレイヤー系デバッグモード.
         /// </summary>
-        public const bool DEBUG_MODE_PLAYER = true;
+        public const bool DEBUG_MODE_PLAYER = false;
         #endregion
 
         #region システム.
@@ -35,7 +35,7 @@ namespace Common
         /// <summary>
         /// プレイヤーの初期速度.
         /// </summary>
-        public const float PLAYER_SPEED = 3.0f;
+        public const float PLAYER_SPEED = 5.0f;
 
         /// <summary>
         /// プレイヤーの速度上昇倍率.
@@ -279,7 +279,12 @@ namespace Common
         /// <summary>
         /// エネミーHMEの体力.
         /// </summary>
-        public const int ENEMY_HME_HP = 200;
+        public const int ENEMY_HME_HP = 100;
+
+        /// <summary>
+        /// エネミーHME出現分岐得点.
+        /// </summary>
+        public const int ENEMY_HME_POPBORDER = 10000;
         #endregion
 
         #region ボスエネミー
@@ -543,25 +548,26 @@ namespace Common
     public class Score
     {
         /// <summary>
-        /// ステージ番号.
+        /// ランキング.
         /// </summary>
         public enum Snum
         {
-            STAGE_1 = 0,
+            RANK_1 = 0,
 
-            STAGE_2 = 1,
+            RANK_2 = 1,
 
-            STAGE_3 = 2,
+            RANK_3 = 2,
 
-            STAGE_MAX = 3,
+            RANK_MAX = 3,
         }
 
         public const int DEFAULT_HIGHSCORE = 10000;
 
-        // public const int DEFAULT_MIDDLESCORE = 5000;
+        public const int DEFAULT_MIDDLESCORE = 5000;
 
-        // public const int DEFAULT_LOWSCORE = 2000;
+        public const int DEFAULT_LOWSCORE = 2000;
 
+        // エネミーの撃破スコア.
         public const int SCORE_ENEMY = 100;
 
         public const int SCORE_ENEMY_α = 200;
@@ -571,6 +577,26 @@ namespace Common
         public const int SCORE_ENEMY_HME = 3000;
 
         public const int SCORE_ENEMY_BOSS = 2000;
+
+        /// <summary>
+        /// パワーアップ余剰分のボーナス
+        /// </summary>
+        public const int SCORE_BONUS_A = 1000;
+
+        /// <summary>
+        /// キル率ボーナス.
+        /// </summary>
+        public const int SCORE_BONUS_B = 3000;
+
+        /// <summary>
+        /// キル数×ボーナススコア.
+        /// </summary>
+        public const int SCORE_BONUS_KILL = 50;
+
+        /// <summary>
+        /// 出現した敵の撃破率でボーナスを出すかの閾値.
+        /// </summary>
+        public const float SCORE_BONUS_KILL_PERCENT = 0.95f;
     }
 
     public class Scenes

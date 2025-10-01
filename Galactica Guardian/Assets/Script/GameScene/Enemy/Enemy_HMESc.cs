@@ -186,6 +186,7 @@ public class Enemy_HMESc : Enemy_BaseSc
         if (enemyHp <= 0)
         {
             ScoreManagerSc.Instance.UpdateScore(Score.SCORE_ENEMY_HME);
+            ScoreManagerSc.Instance.UpdateKillScore();
             EnemyDeath();
             EnemyDestroy();
         }

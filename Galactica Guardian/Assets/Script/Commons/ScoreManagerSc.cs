@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using Common;
 using Snum = Common.Score.Snum;
 
@@ -7,29 +6,39 @@ public class ScoreManagerSc : MonoBehaviour
 {
     public static ScoreManagerSc Instance { get; private set; }
 
+    public event System.Action<int> OnScoreChanged;
+
     int nowScore;
     int nowKillScore;
-    int[] highScore = new int[(int)Snum.STAGE_MAX];
-    int[] highKillScore = new int[(int)Snum.STAGE_MAX];
+    int[] highScore = new int[(int)Snum.RANK_MAX];
 
-    /// <summary>
-    /// 指定したステージ番号のハイスコアを取得する.
-    /// </summary>
-    /// <param name="num">ステージ番号.</param>
-    /// <returns></returns>
-    public int GetHighScore(Snum num)
+    int playerHp = 0;
+    bool noDamageFlag = false;
+
+    public int GetNowScore()
     {
-        return highScore[(int)num];
+        return nowScore;
     }
 
-    /// <summary>
-    /// 指定したステージ番号のハイキルスコアを取得する.
-    /// </summary>
-    /// <param name="num"></param>
-    /// <returns></returns>
-    public int GetHigeKillScore(Snum num)
+    public int GetHighScore(int num = 0)
     {
-        return highKillScore[(int)num];
+        Debug.Log($"ハイスコアが返されます。{num}番目を参照します。ハイスコア{highScore[num]}");
+        return highScore[num];
+    }
+
+    public int GetNowKillScore()
+    {
+        return nowKillScore;
+    }
+
+    public int GetPlayerHp()
+    {
+        return playerHp;
+    }
+
+    public bool GetNoDamageFlag()
+    {
+        return noDamageFlag;
     }
 
     /// <summary>
@@ -42,6 +51,7 @@ public class ScoreManagerSc : MonoBehaviour
             Instance = this; // インスタンスをセット.
             DontDestroyOnLoad(gameObject); // シーンを跨いでも消えないようにする.
             InitScore();
+            Debug.Log("Instance生成完了、HIScoreを初期化");
         }
         else if (Instance != this)
         {
@@ -54,36 +64,41 @@ public class ScoreManagerSc : MonoBehaviour
     /// </summary>
     void InitScore()
     {
-        for (int i = 0; i < (int)Snum.STAGE_MAX; i++)
-        {
-            if (!PlayerPrefs.HasKey("HighScore_" + i))
-            {
-                Debug.Log($"HigeScore_{i} Not Found Set Default HighScore");
-                highScore[i] = Score.DEFAULT_HIGHSCORE;
-            }
-            else
-            {
-                Debug.Log($"HigeScore_{i} Found");
-            }
-            if (!PlayerPrefs.HasKey("HighKillScore_" + i))
-            {
-                Debug.Log($"HigeScore_{i} Not Found Set Default HighScore");
-                highScore[i] = Score.DEFAULT_HIGHSCORE;
-            }
-            else
-            {
-                Debug.Log($"HigeKillScore_{i} Found");
-            }
-        }
         LoadScore();
     }
 
     void LoadScore()
     {
-        // ハイスコアを読みこむ.
-        for(int i = 0; i < (int)Snum.STAGE_MAX; i++)
+        // 上位3件のデモスコアを初期セット
+        int[] defaultScores = new int[]
         {
-            highScore[i] = PlayerPrefs.GetInt("HighScore_" + i);
+        Score.DEFAULT_HIGHSCORE,   // RANK_1
+        Score.DEFAULT_MIDDLESCORE, // RANK_2
+        Score.DEFAULT_LOWSCORE     // RANK_3
+        };
+
+        bool wroteDefaults = false;
+
+        // ハイスコアを読みこむ.
+        for (int i = 0; i < (int)Snum.RANK_MAX; i++)
+        {
+            if (!PlayerPrefs.HasKey("HighScore_" + i) || 0 == PlayerPrefs.GetInt("HighScore_" + i))
+            {
+                Debug.Log($"HighScore_{i} Not Found. Set Default {defaultScores[i]}");
+                highScore[i] = defaultScores[i];
+                PlayerPrefs.SetInt("HighScore_" + i, defaultScores[i]);
+                wroteDefaults = true;
+            }
+            else
+            {
+                highScore[i] = PlayerPrefs.GetInt("HighScore_" + i);
+                Debug.Log($"HighScore_{i} Check HIScore {highScore[i]}");
+            }
+        }
+
+        if (wroteDefaults)
+        {
+            SaveScore();
         }
     }
 
@@ -104,6 +119,7 @@ public class ScoreManagerSc : MonoBehaviour
     public void UpdateScore(int score)
     {
         nowScore += score;
+        OnScoreChanged?.Invoke(nowScore);
     }
 
     /// <summary>
@@ -116,31 +132,46 @@ public class ScoreManagerSc : MonoBehaviour
     }
 
     /// <summary>
+    /// ボーナススコア判定用のプレイヤー情報を取得
+    /// </summary>
+    public void GetPlayerBonus()
+    {
+        playerHp = PlayerSc.Instance.GetPlayerHp();
+        noDamageFlag = PlayerSc.Instance.GetNoDamageFlag();
+    }
+
+    /// <summary>
     /// スコアをリセットする.
     /// </summary>
     public void ResetScore()
     {
         nowScore = 0;
         nowKillScore = 0;
+        OnScoreChanged?.Invoke(nowScore);
+        playerHp = 0;
+        noDamageFlag = false;
     }
 
     /// <summary>
     /// ハイスコアが更新されたか調べる.
     /// </summary>
-    /// <param name="num"></param>
-    public void HiScoreCheck(Snum num)
+    public void HiScoreCheck()
     {
+        int ToScore = nowScore + (nowKillScore * Score.SCORE_BONUS_KILL);
+
         // ハイスコア更新.
-        if(nowScore > highScore[(int)num])
+        // スコア配列に現在スコアを追加して、降順にソート
+        var scores = new System.Collections.Generic.List<int>(highScore)
+        {ToScore};
+        scores.Sort((a, b) => b.CompareTo(a)); // 降順ソート
+
+        // 上位3件だけ残す
+        for (int i = 0; i < (int)Snum.RANK_MAX; i++)
         {
-            highScore[(int)num] = nowScore;
-            SaveScore();
+            highScore[i] = scores[i];
         }
-        if(nowKillScore > highKillScore[(int)num])
-        {
-            highKillScore[(int)num] = nowKillScore;
-            SaveKillScore();
-        }
+
+        SaveScore();
     }
 
     /// <summary>
@@ -148,18 +179,9 @@ public class ScoreManagerSc : MonoBehaviour
     /// </summary>
     void SaveScore()
     {
-        for(int i = 0; i < (int)(Snum.STAGE_MAX); i++)
+        for(int i = 0; i < (int)(Snum.RANK_MAX); i++)
         {
             PlayerPrefs.SetInt("HighScore_" + i, highScore[i]);
-        }
-        PlayerPrefs.Save();
-    }
-
-    void SaveKillScore()
-    {
-        for (int i = 0; i < (int)(Snum.STAGE_MAX); i++)
-        {
-            PlayerPrefs.SetInt("HighKillScore_" + i, highKillScore[i]);
         }
         PlayerPrefs.Save();
     }

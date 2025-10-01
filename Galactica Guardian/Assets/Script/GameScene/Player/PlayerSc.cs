@@ -15,17 +15,17 @@ public class PlayerSc : MonoBehaviour
     #region 変数宣言.
     #region SerializeField(インスペクターにセットする)
     [SerializeField] private GalacticaGuardian inputActions; // inputSystem利用の準備.
-    [Header ("生成するPrefab")]
+    [Header("生成するPrefab")]
     [SerializeField] GameObject barrier_prefab;     // バリア.
-    [Header ("攻撃発射位置")]
+    [Header("攻撃発射位置")]
     [SerializeField] Transform fire_point_center;   // 発射位置(中央)
     [SerializeField] Transform fire_point_left;     // 発射位置(左)
     [SerializeField] Transform fire_point_right;    // 発射位置(右)
-    [Header ("プレイヤー情報")]
+    [Header("プレイヤー情報")]
     [SerializeField] BoxCollider2D player_collider; // 当たり判定.
     SpriteRenderer playerRender;   // プレイヤーの描画情報.
     SpriteRenderer barrierRender;  // バリアの描画情報.
-    [Header ("効果音")]
+    [Header("効果音")]
     [SerializeField] AudioClip clip_power_up;
     [SerializeField] AudioClip clip_power_up_b;
     [SerializeField] AudioClip clip_bullet;
@@ -37,20 +37,21 @@ public class PlayerSc : MonoBehaviour
     #region 変数.
     Vector3 playerPos;    // プレイヤーの座標.
     Vector3 _move;        // 移動入力.
-    [Header ("スピード(初期値は変更不可)")]
+    [Header("スピード(初期値は変更不可)")]
     [SerializeField] float speed;          // 移動速度.
     [SerializeField] float speedBase;      // 基礎移動速度.
     [SerializeField] float speedUpRate;    // 移動速度上昇倍率.
     [SerializeField] int speedLevel;       // 移動速度上昇レベル.
 
-    [Header ("体力(初期値は変更不可)")]
-    [SerializeField] int playerHp;         // プレイヤーの体力.
+    [Header("体力(初期値は変更不可)")]
+    [SerializeField] public int playerHp;         // プレイヤーの体力.
+    public event System.Action<int> PlayerHPChange;
 
-    [Header ("ミサイルの発射レート(初期値は変更不可)")]
+    [Header("ミサイルの発射レート(初期値は変更不可)")]
     [SerializeField] float mFireRate;      // ミサイルの発射間隔.
     float missileTimer;   // ミサイルが発射されてからの時間.
 
-    [Header ("被弾時の無敵処理(初期値は変更不可)")]
+    [Header("被弾時の無敵処理(初期値は変更不可)")]
     [SerializeField] float blink;          // 点滅間隔(数値が大きい程短い).
     [SerializeField] float invincibleTime; // 無敵時間の長さ.
     Color blinkColor;
@@ -60,6 +61,9 @@ public class PlayerSc : MonoBehaviour
     Vector2 max;
     float playerSize;     // プレイヤーサイズ.
     Animator animator;
+    Vector2 axis; // 入力情報の保持.
+
+    public static PlayerSc Instance { get; private set; }
     #endregion
     #region フラグ.
     // パワーアップフラグ.
@@ -73,66 +77,55 @@ public class PlayerSc : MonoBehaviour
     bool isHitFlag = false;
     bool gameoverFlag = false;
 
+    bool isNoDamageFlag = true;
+
     bool debugFlag = Com.DEBUG_MODE_PLAYER; // デバッグモード.
+
+    public int GetPlayerHp()
+    {
+        return playerHp;
+    }
+    public bool GetNoDamageFlag()
+    {
+        return isNoDamageFlag;
+    }
     #endregion
     #endregion
 
     #region InputSystem
-    /// <summary>
-    /// 移動入力を受け取る.
-    /// </summary>
-    /// <param name="value"></param>
-    private void OnMove(InputValue value)
+
+    private void OnMovePerformed(InputAction.CallbackContext context)
     {
         if (!gameoverFlag)
         {
-            var axis = value.Get<Vector2>(); // PlayerInputの入力を受け取る.
-            #region 入力の均一化処理.
-            if (axis.x >= 0.01)
-            {
-                axis.x = 1;
-            }
-            if (axis.x <= -0.01)
-            {
-                axis.x = -1;
-            }
-            if (axis.y >= 0.01)
-            {
-                axis.y = 1;
-            }
-            if (axis.y <= -0.01)
-            {
-                axis.y = -1;
-            }
-            if (debugFlag)
-            {
-                Debug.Log("axis" + axis);
-            }
-            #endregion
-            _move = new Vector3(axis.x * speed, axis.y * speed); // 移動速度を計算.
+            // 入力値を`axis`に保持
+            axis = context.ReadValue<Vector2>();
         }
+    }
+
+    private void OnMoveCanceled(InputAction.CallbackContext context)
+    {
+        // 入力がなくなった瞬間に`axis`を0に設定
+        axis = Vector2.zero;
     }
 
     /// <summary>
     /// Fire入力を受け取る
     /// </summary>
-    /// /// <param name="value"></param>
-    private void OnFire(InputValue value)
+    /// /// <param name="context"></param>
+    private void OnFire(InputAction.CallbackContext context)
     {
         if (!gameoverFlag)
         {
-            if (value.isPressed)
+            PlayerFire();
+            if (missileTimer >= mFireRate && missileFlag)
             {
-                PlayerFire();
-                if (missileTimer >= mFireRate && missileFlag)
-                {
-                    PlayerMissileFire();
-                    missileTimer = 0f;
-                }
-                if (debugFlag)
-                {
-                    Debug.Log("Fire!!");
-                }
+                PlayerMissileFire();
+                missileTimer = 0f;
+            }
+            if (debugFlag)
+            {
+                Debug.Log("Fire!!");
             }
         }
     }
@@ -161,6 +154,13 @@ public class PlayerSc : MonoBehaviour
     {
         inputActions = new GalacticaGuardian(); // inputSystemを指定.
         inputActions.Enable(); // InputSystemを有効化する.
+
+        // イベントバインドの登録
+        inputActions.Player.Move.performed += OnMovePerformed;
+        inputActions.Player.Move.canceled += OnMoveCanceled;
+
+        // Fireイベントも同様にバインド
+        inputActions.Player.Fire.performed += OnFire;
     }
 
     /// <summary>
@@ -183,6 +183,7 @@ public class PlayerSc : MonoBehaviour
         invincibleTime = Com.PLAYER_INVINCIBLE_TIME;
         playerRender = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        if (Instance == null) Instance = this; // Instanceが無ければInstanceを設定.
     }
 
     /// <summary>
@@ -264,6 +265,14 @@ public class PlayerSc : MonoBehaviour
             #endregion
         }
     }
+
+    private void OnDisable()
+    {
+        inputActions.Player.Move.performed -= OnMovePerformed;
+        inputActions.Player.Move.canceled -= OnMoveCanceled;
+        inputActions.Player.Fire.performed -= OnFire;
+        inputActions.Disable();
+    }
     #endregion
 
     #region Update内関数.
@@ -272,6 +281,35 @@ public class PlayerSc : MonoBehaviour
     /// </summary>
     void PlayerMove()
     {
+        _move = Vector2.zero;
+        #region 入力の均一化処理.
+        if (debugFlag)
+        {
+            Debug.Log("均一化前axis" + axis);
+        }
+        if (axis.magnitude > 0f)
+        {
+            // 入力角度を計算
+            float angle = Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg;
+
+            // 45°単位で丸める
+            int dir = Mathf.RoundToInt(angle / 45f);
+            float rad = dir * 45f * Mathf.Deg2Rad;
+
+            // 八方向ベクトルに変換
+            axis = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+
+            _move = axis.normalized * speed; // 移動速度を計算.                
+        }
+        else
+        {
+            //_move = Vector2.zero;
+        }
+        if (debugFlag)
+        {
+            Debug.Log("axis" + axis);
+        }
+        #endregion
         // 移動処理.
         transform.position += _move * Time.deltaTime;
         
@@ -410,17 +448,22 @@ public class PlayerSc : MonoBehaviour
                 break;
 
             default:
-                if (barrierFlag)
+                if (barrierFlag && playerHp < 3)
                 {
                     playerHp++; // 体力回復.
+                    PlayerHPChange?.Invoke(playerHp);
                     if(playerHp > 1)
                     {
                         animator.SetBool("Pinch", false);
                     }
                 }
-                else
+                else if (!barrierFlag)
                 {
                     GetBarrier();
+                }
+                else
+                {
+                    ScoreManagerSc.Instance.UpdateScore(Score.SCORE_BONUS_A);
                 }
                 break;
         }
@@ -507,11 +550,13 @@ public class PlayerSc : MonoBehaviour
         else
         {
             isHitFlag = true;
+            isNoDamageFlag = false;
             StartCoroutine(HitDamage());
         }
 
         playerHp--; // PlayerのHPを減らす.
-        if(isbullet)
+        PlayerHPChange?.Invoke(playerHp);
+        if (isbullet)
         {
             SoundManagerSc.Instance.PlaySE(clip_hit_b);
         }
