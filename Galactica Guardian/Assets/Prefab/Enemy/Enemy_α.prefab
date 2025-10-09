@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy_bullet: {fileID: 1709813785069211758, guid: 4166498c2f844d54daea0a12b36a40e7, type: 3}
-  powerUpSpeedPrefab: {fileID: 7887256671342257357, guid: 7cde100f8817c3d40a03207d963e9ec9, type: 3}
+  power_up_speed_prefab: {fileID: 7887256671342257357, guid: 7cde100f8817c3d40a03207d963e9ec9, type: 3}
 --- !u!50 &2810629597969054825
 Rigidbody2D:
   serializedVersion: 4

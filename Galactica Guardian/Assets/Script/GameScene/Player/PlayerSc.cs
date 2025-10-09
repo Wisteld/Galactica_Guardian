@@ -1,14 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Common;
 using UnityEngine.InputSystem;
-using Newtonsoft.Json.Linq;
 using ObjectPool;
 using Effect_Type = Common.Effects.Effect_Type;
 using POWER_UP_TYPE = Common.Com.POWER_UP_TYPE;
 using B_Type = Common.Bullets.B_Type;
-using Unity.VisualScripting;
 
 public class PlayerSc : MonoBehaviour
 {

@@ -1,6 +1,4 @@
 using Common;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ObjectPool;
 using static Common.Effects;
@@ -10,7 +8,7 @@ public class Enemy_β_Sc : Enemy_BaseSc
     [Header("誘導ミサイルのPrefab")]
     [SerializeField] GameObject missile_prefab;
     [Header("パワーアップ：ウェポン")]
-    [SerializeField] GameObject powerUpWeaponPrefab;
+    [SerializeField] GameObject power_up_weapon_prefab;
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
@@ -193,7 +191,7 @@ public class Enemy_β_Sc : Enemy_BaseSc
         float rand = Random.value; // 0.0〜1.0 の乱数
         if (rand < dropChance)
         {
-            Instantiate(powerUpWeaponPrefab, transform.position, Quaternion.identity); // ウェポン強化アイテム生成.
+            Instantiate(power_up_weapon_prefab, transform.position, Quaternion.identity); // ウェポン強化アイテム生成.
         }
     }
     #endregion

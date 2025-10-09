@@ -2,7 +2,6 @@ using Common;
 using ObjectPool;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using static Common.Effects;
 using UpDownState = Common.Com.UpDownState;
@@ -18,7 +17,7 @@ public class Enemy_BossSc : Enemy_BaseSc
     [SerializeField] Transform fire_point_left;
     [SerializeField] Transform fire_point_right;
     [Header("取り巻き用ウェーブ")]
-    [SerializeField] List<WaveData> bossSummonWaves;
+    [SerializeField] List<WaveData> boss_summon_waves;
     List<GameObject> summonedEnemies = new List<GameObject>();
     #region 変数.
     int summonWaveIndex = 0;
@@ -307,10 +306,10 @@ public class Enemy_BossSc : Enemy_BaseSc
     private IEnumerator BossSummonRoutine()
     {
         int waveIndex = 0;
-        while (isBossAlive && waveIndex < bossSummonWaves.Count)
+        while (isBossAlive && waveIndex < boss_summon_waves.Count)
         {
             yield return new WaitForSeconds(5f); // 呼び出し間隔
-            StartCoroutine(SummonWave(bossSummonWaves[waveIndex]));
+            StartCoroutine(SummonWave(boss_summon_waves[waveIndex]));
             waveIndex++;
         }
     }

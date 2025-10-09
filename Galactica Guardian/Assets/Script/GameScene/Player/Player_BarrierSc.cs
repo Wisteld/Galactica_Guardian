@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Common;
-using System.Threading;
 using System;
 
 public class Player_BarrierSc : MonoBehaviour

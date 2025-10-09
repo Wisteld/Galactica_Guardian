@@ -1,8 +1,3 @@
-using System.Runtime.InteropServices;
-using UnityEditor;
-using UnityEngine.EventSystems;
-using UnityEngine.Experimental.Rendering;
-
 namespace Common
 {
     static class Com
@@ -592,6 +587,16 @@ namespace Common
         /// キル数×ボーナススコア.
         /// </summary>
         public const int SCORE_BONUS_KILL = 50;
+
+        /// <summary>
+        /// 残りHP×ボーナススコア.
+        /// </summary>
+        public const int SCORE_BONUS_HP = 1500;
+
+        /// <summary>
+        /// ノーダメージボーナス.
+        /// </summary>
+        public const int SCORE_BONUS_SECRET = 10000;
 
         /// <summary>
         /// 出現した敵の撃破率でボーナスを出すかの閾値.

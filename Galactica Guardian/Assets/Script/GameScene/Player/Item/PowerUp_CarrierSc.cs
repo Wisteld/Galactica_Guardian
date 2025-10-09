@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Common;
 using ObjectPool;
@@ -8,8 +6,8 @@ using E_Type = Common.ENum.E_Type;
 public class PowerUp_CarrierSc : Enemy_BaseSc
 {
     [Header ("生成するPrefab")]
-    [SerializeField] GameObject PowerUp_Weapon; // パワーアップ：ウェポン.
-    [SerializeField] GameObject PowerUp_Speed;  // パワーアップ：スピード.
+    [SerializeField] GameObject power_up_weapon; // パワーアップ：ウェポン.
+    [SerializeField] GameObject power_up_speed;  // パワーアップ：スピード.
 
     float carrierSpeed; // 移動速度.
     Vector3 carrierPos;       // エネミーの現在座標.
@@ -100,17 +98,17 @@ public class PowerUp_CarrierSc : Enemy_BaseSc
         if (isDestroyed) return;
         if (collision.CompareTag(Tags.PLAYER)) // プレイヤーに衝突したら.
         {
-            Instantiate(PowerUp_Speed, transform.position, transform.rotation); // パワーアップ：スピードアップ生成.
+            Instantiate(power_up_speed, transform.position, transform.rotation); // パワーアップ：スピードアップ生成.
             Destroy();
         }
         if (collision.CompareTag(Tags.PLAYER_BULLET)) // プレイヤーの通常弾に当たったら.
         {
-            Instantiate(PowerUp_Weapon, transform.position, transform.rotation); // パワーアップ：ウェポン生成.
+            Instantiate(power_up_weapon, transform.position, transform.rotation); // パワーアップ：ウェポン生成.
             Destroy();
         }
         if (collision.CompareTag(Tags.PLAYER_BULLET_LASER)) // プレイヤーのレーザー弾に当たったら.
         {
-            Instantiate(PowerUp_Weapon, transform.position, transform.rotation); // パワーアップ：ウェポン生成.
+            Instantiate(power_up_weapon, transform.position, transform.rotation); // パワーアップ：ウェポン生成.
             Destroy();
         } 
     }

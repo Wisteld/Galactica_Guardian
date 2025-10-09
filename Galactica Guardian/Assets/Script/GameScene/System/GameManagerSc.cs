@@ -1,5 +1,3 @@
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEngine;
 using ObjectPool;
 using Common;

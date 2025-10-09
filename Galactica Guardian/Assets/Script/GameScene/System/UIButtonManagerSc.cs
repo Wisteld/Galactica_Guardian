@@ -1,7 +1,6 @@
 using UnityEngine;
 using Common;
 using UnityEngine.InputSystem.EnhancedTouch;
-using UnityEngine.InputSystem.OnScreen;
 
 public class UIButtonManagerSc : MonoBehaviour
 {

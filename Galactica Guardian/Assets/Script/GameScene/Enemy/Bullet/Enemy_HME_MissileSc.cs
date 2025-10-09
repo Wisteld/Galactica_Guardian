@@ -1,7 +1,5 @@
 using Common;
 using ObjectPool;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy_HME_MissileSc : MonoBehaviour

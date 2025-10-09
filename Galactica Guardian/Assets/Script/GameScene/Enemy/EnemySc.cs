@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Common;
 using ObjectPool;
 using Effect_Type = Common.Effects.Effect_Type;
-using System.Drawing;
 
 public class EnemySc : Enemy_BaseSc
 {

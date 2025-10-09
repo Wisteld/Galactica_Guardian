@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 731389565e48d8d4c885245991be9ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PowerUp_Weapon: {fileID: 90808591106602978, guid: c2d4e5f956ec7cc4f891ad5510cf9a40, type: 3}
-  PowerUp_Speed: {fileID: 7887256671342257357, guid: 7cde100f8817c3d40a03207d963e9ec9, type: 3}
+  power_up_weapon: {fileID: 90808591106602978, guid: c2d4e5f956ec7cc4f891ad5510cf9a40, type: 3}
+  power_up_speed: {fileID: 7887256671342257357, guid: 7cde100f8817c3d40a03207d963e9ec9, type: 3}
 --- !u!61 &1029888837563426817
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Common;
 using ObjectPool;
@@ -10,7 +8,7 @@ public class Enemy_α_Sc : Enemy_BaseSc
     [Header("弾のPrefab")]
     [SerializeField] GameObject enemy_bullet;
     [Header("パワーアップ：スピード")]
-    [SerializeField] GameObject powerUpSpeedPrefab;
+    [SerializeField] GameObject power_up_speed_prefab;
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
@@ -209,7 +207,7 @@ public class Enemy_α_Sc : Enemy_BaseSc
         float rand = Random.value; // 0.0〜1.0 の乱数
         if (rand < dropChance)
         {
-            Instantiate(powerUpSpeedPrefab, transform.position, Quaternion.identity); // スピードアップアイテム生成.
+            Instantiate(power_up_speed_prefab, transform.position, Quaternion.identity); // スピードアップアイテム生成.
         }
     }
 

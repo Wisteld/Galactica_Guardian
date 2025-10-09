@@ -1923,15 +1923,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3a3dbee147d3274b9d31862c474b003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpSegments:
+  hp_segments:
   - {fileID: 2004993772}
   - {fileID: 1389332541}
   - {fileID: 1997452095}
-  fullSprites:
+  full_sprites:
   - {fileID: 21300000, guid: 6fbef7972f797af498e5d5eb3a3c3856, type: 3}
   - {fileID: 21300000, guid: 51391dfbad934f3488f542441ea3ee6d, type: 3}
   - {fileID: 21300000, guid: 2b7a9a9f84ea8b247b57cc8ed3c7260e, type: 3}
-  emptySprites:
+  empty_sprites:
   - {fileID: 21300000, guid: efb3c12ab19d8954cb2a131b13e9d886, type: 3}
   - {fileID: 21300000, guid: a7ed7571e228879438e8158841a590e2, type: 3}
   - {fileID: 21300000, guid: 0c9eb059511125a4d887bb2424a6afcb, type: 3}
