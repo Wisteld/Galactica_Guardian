@@ -14,6 +14,7 @@ public class ResultSceneManagerSc : MonoBehaviour
     [SerializeField] Text kill_bonus_text;
     [SerializeField] Text hp_bonus_text;
     [SerializeField] Text no_damage_bonus_text;
+    [SerializeField] GameObject thank_you_text;
     [SerializeField] AudioClip result_clip;
     [SerializeField] Image[] hp_segments;   // 並べたHPアイコン
     [SerializeField] Sprite[] full_sprites;    // [0]=左, [1]=中, [2]=右
@@ -38,6 +39,7 @@ public class ResultSceneManagerSc : MonoBehaviour
         SoundManagerSc.Instance.ChangeBGM(result_clip, true);
         ScoreManagerSc.Instance.HiScoreCheck();
 
+        thank_you_text.SetActive(false);
         score = ScoreManagerSc.Instance.GetNowScore();
         hiscore = ScoreManagerSc.Instance.GetHighScore();
         killScore = ScoreManagerSc.Instance.GetNowKillScore();
@@ -142,6 +144,9 @@ public class ResultSceneManagerSc : MonoBehaviour
         {
             Debug.LogError("NoDamageBonusText None");
         }
+        ScoreManagerSc.Instance.UpdateScore(score);
+        ScoreManagerSc.Instance.HiScoreCheck();
+        thank_you_text.SetActive(true);
 
         resultFlag = true;
     }
