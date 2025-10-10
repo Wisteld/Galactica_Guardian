@@ -51,7 +51,22 @@ public class UIButtonManagerSc : MonoBehaviour
             show = true;
         }
 #endif
+        if (Com.DEBUG_MODE_SYSTEM)
+        {
+            show = true;
+        }
+
         if (touchUI != null) touchUI.SetActive(show);
         if (onScreenStick != null) onScreenStick.SetActive(show);
+
+        if (Com.DEBUG_MODE_SYSTEM)
+        {
+            Debug.Log($"Debug_Mode_System:MobileUI_{show}");
+        }
+    }
+
+    public void OnFirePressed()
+    {
+        if (Com.DEBUG_MODE_SYSTEM) { Debug.Log("Fire Button Push"); }
     }
 }

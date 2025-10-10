@@ -1,0 +1,24 @@
+diff a/Galactica Guardian/Assets/Script/GameScene/System/UIButtonManagerSc.cs b/Galactica Guardian/Assets/Script/GameScene/System/UIButtonManagerSc.cs	(rejected hunks)
+@@ -51,22 +51,7 @@
+             show = true;
+         }
+ #endif
+-        if (Com.DEBUG_MODE_SYSTEM)
+-        {
+-            show = true;
+-        }
+-
+         if (touchUI != null) touchUI.SetActive(show);
+         if (onScreenStick != null) onScreenStick.SetActive(show);
+-
+-        if (Com.DEBUG_MODE_SYSTEM)
+-        {
+-            Debug.Log($"TouchUI �\��: {show}");
+-        }
+-    }
+-
+-    public void OnFirePressed()
+-    {
+-        if (Com.DEBUG_MODE_SYSTEM) { Debug.Log("�{�^�������ꂽ�I"); }
+     }
+ }
