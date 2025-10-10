@@ -1,5 +1,6 @@
 using UnityEngine;
 using Common;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 
 public class UIButtonManagerSc : MonoBehaviour
@@ -50,22 +51,7 @@ public class UIButtonManagerSc : MonoBehaviour
             show = true;
         }
 #endif
-        if (Com.DEBUG_MODE_SYSTEM)
-        {
-            show = true;
-        }
-
         if (touchUI != null) touchUI.SetActive(show);
         if (onScreenStick != null) onScreenStick.SetActive(show);
-
-        if (Com.DEBUG_MODE_SYSTEM)
-        {
-            Debug.Log($"TouchUI 表示: {show}");
-        }
-    }
-
-    public void OnFirePressed()
-    {
-        if (Com.DEBUG_MODE_SYSTEM) { Debug.Log("ボタン押された！"); }
     }
 }

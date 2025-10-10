@@ -64,6 +64,7 @@ public class ResultSceneManagerSc : MonoBehaviour
 
     void SetScoreText()
     {
+        if (score > hiscore) { hiscore = score; }
         if (score_text != null)
         {
             score_text.text = $"SCORE:{score}";
@@ -74,7 +75,7 @@ public class ResultSceneManagerSc : MonoBehaviour
         }
         if (hi_score_text != null)
         {
-            hi_score_text.text = $"SCORE:{hiscore}";
+            hi_score_text.text = $"HISCORE:{hiscore}";
         }
         else
         {
