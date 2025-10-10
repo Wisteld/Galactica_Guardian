@@ -201,52 +201,44 @@ MonoBehaviour:
   fire_point_center: {fileID: 9082179414578225185}
   fire_point_left: {fileID: 6154080660675694756}
   fire_point_right: {fileID: 6581468129933922714}
-  bossSummonWaves:
-  - waveName: Boss_Wave_1
+  boss_summon_waves:
+  - waveName: 
     spawns:
     - appearTime: 0
-      spawnPosition: 1
-      enemyType: 2
+      spawnPosition: 2
+      enemyType: 0
     - appearTime: 0
-      spawnPosition: 9
-      enemyType: 2
-    - appearTime: 1
-      spawnPosition: 3
-      enemyType: 1
-    - appearTime: 2
-      spawnPosition: 7
-      enemyType: 1
-    - appearTime: 3
+      spawnPosition: 8
+      enemyType: 0
+    - appearTime: 4
       spawnPosition: 0
       enemyType: 2
-    - appearTime: 3
-      spawnPosition: 10
-      enemyType: 2
-    - appearTime: 4
-      spawnPosition: 4
-      enemyType: 2
-    - appearTime: 4
-      spawnPosition: 6
-      enemyType: 2
-    - appearTime: 5
-      spawnPosition: 2
-      enemyType: 1
-    - appearTime: 6
+    - appearTime: 7
       spawnPosition: 8
       enemyType: 1
-    - appearTime: 7
-      spawnPosition: 5
-      enemyType: 1
-    - appearTime: 8
-      spawnPosition: 0
-      enemyType: 1
     - appearTime: 9
-      spawnPosition: 10
+      spawnPosition: 8
+      enemyType: 2
+    - appearTime: 9
+      spawnPosition: 3
+      enemyType: 0
+    - appearTime: 11
+      spawnPosition: 1
+      enemyType: 1
+    - appearTime: 13
+      spawnPosition: 1
+      enemyType: 2
+    - appearTime: 13
+      spawnPosition: 8
+      enemyType: 0
+    - appearTime: 15
+      spawnPosition: 5
       enemyType: 1
     waveBGM: {fileID: 0}
     isLoopBGM: 0
     isBossWave: 0
     isHMEWave: 0
+  explosion_big: {fileID: 32292347923459064, guid: 1b243209c199a7344a91cab7de90786a, type: 3}
 --- !u!50 &3191776957884976777
 Rigidbody2D:
   serializedVersion: 4

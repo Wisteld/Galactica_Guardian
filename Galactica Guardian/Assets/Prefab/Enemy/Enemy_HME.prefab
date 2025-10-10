@@ -201,6 +201,7 @@ MonoBehaviour:
   fire_point_center: {fileID: 3909395571068185744}
   fire_point_left: {fileID: 1664200320142686357}
   fire_point_right: {fileID: 3395875412885697181}
+  explosion_big: {fileID: 32292347923459064, guid: 1b243209c199a7344a91cab7de90786a, type: 3}
 --- !u!50 &1532931724721681983
 Rigidbody2D:
   serializedVersion: 4

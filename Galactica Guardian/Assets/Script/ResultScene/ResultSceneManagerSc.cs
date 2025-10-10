@@ -2,6 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Common;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using System.Linq;
 
 public class ResultSceneManagerSc : MonoBehaviour
 {
@@ -28,7 +31,7 @@ public class ResultSceneManagerSc : MonoBehaviour
     
     bool noDamageFlag = false;
 
-    bool ResultFlag = false;
+    bool resultFlag = false;
 
     void Start()
     {
@@ -47,7 +50,16 @@ public class ResultSceneManagerSc : MonoBehaviour
 
     void Update()
     {
-        
+        if (resultFlag &&
+        #region ŠÈˆÕ”ÅInputSystem
+            (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) ||
+            (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame) ||
+            (Gamepad.all.Any(pad => pad.allControls.Any(c => c is ButtonControl b && b.wasPressedThisFrame)) ||
+            (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)))
+        #endregion)
+        {
+            SceneLoader.ChangeScene(Scenes.TITLE);
+        }
     }
 
     void SetScoreText()
@@ -70,50 +82,6 @@ public class ResultSceneManagerSc : MonoBehaviour
         }
     }
 
-    //void CheckBonus()
-    //{
-    //    if (kill_score_text != null && kill_bonus_text != null)
-    //    {
-    //        kill_score_text.text = $"KILL BONUS {killScore}";
-    //        kill_bonus_text.text = $"{Score.SCORE_BONUS_KILL}";
-    //        score += killScore * Score.SCORE_BONUS_KILL;
-    //        SetScoreText();
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("KillScoreText None");
-    //    }
-        
-    //    if(hp_bonus_text != null)
-    //    {
-    //        hp_bonus_text.text = $"{Score.SCORE_BONUS_HP}";
-    //        score += playerHp * Score.SCORE_BONUS_HP;
-    //        SetScoreText();
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("HPBonusText None");
-    //    }
-
-    //    if (no_damage_bonus_text != null)
-    //    {
-    //        if (noDamageFlag)
-    //        {
-    //            no_damage_bonus_text.text = $"{Score.SCORE_BONUS_SECRET}";
-    //            score += Score.SCORE_BONUS_SECRET;
-    //            SetScoreText();
-    //        }
-    //        else
-    //        {
-    //            no_damage_bonus_text.text = "0";
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("NoDamageBonusText None");
-    //    }
-    //}
-
     void UpdateHPUI(int currentHP)
     {
         for (int i = 0; i < hp_segments.Length; i++)
@@ -124,11 +92,11 @@ public class ResultSceneManagerSc : MonoBehaviour
 
     IEnumerator CheckBonus()
     {
-        yield return wait_bonus_time;
         if (kill_score_text != null && kill_bonus_text != null)
         {
             kill_score_text.text = $"KILL BONUS {killScore}";
-            kill_bonus_text.text = $"{Score.SCORE_BONUS_KILL}";
+            yield return new WaitForSeconds(wait_bonus_time);
+            kill_bonus_text.text = $"~ {Score.SCORE_BONUS_KILL}";
             score += killScore * Score.SCORE_BONUS_KILL;
             SetScoreText();
             SoundManagerSc.Instance.PlaySE(clip_bonus);
@@ -138,11 +106,11 @@ public class ResultSceneManagerSc : MonoBehaviour
             Debug.LogError("KillScoreText None");
         }
 
-        yield return wait_bonus_time;
+        yield return new WaitForSeconds(wait_bonus_time);
 
         if (hp_bonus_text != null)
         {
-            hp_bonus_text.text = $"{Score.SCORE_BONUS_HP}";
+            hp_bonus_text.text = $"~ {Score.SCORE_BONUS_HP}";
             score += playerHp * Score.SCORE_BONUS_HP;
             SetScoreText();
             SoundManagerSc.Instance.PlaySE(clip_bonus);
@@ -152,25 +120,28 @@ public class ResultSceneManagerSc : MonoBehaviour
             Debug.LogError("HPBonusText None");
         }
 
-        yield return wait_bonus_time;
+        yield return new WaitForSeconds(wait_bonus_time);
 
         if (no_damage_bonus_text != null)
         {
             if (noDamageFlag)
             {
-                no_damage_bonus_text.text = $"{Score.SCORE_BONUS_SECRET}";
+                no_damage_bonus_text.text = $"~ {Score.SCORE_BONUS_SECRET}";
                 score += Score.SCORE_BONUS_SECRET;
                 SetScoreText();
                 SoundManagerSc.Instance.PlaySE(clip_bonus_last);
             }
             else
             {
-                no_damage_bonus_text.text = "0";
+                no_damage_bonus_text.text = "~ 0";
+                SoundManagerSc.Instance.PlaySE(clip_bonus_last);
             }
         }
         else
         {
             Debug.LogError("NoDamageBonusText None");
         }
+
+        resultFlag = true;
     }
 }

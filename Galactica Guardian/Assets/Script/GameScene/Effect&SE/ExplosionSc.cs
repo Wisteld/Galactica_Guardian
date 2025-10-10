@@ -39,5 +39,9 @@ public class ExplosionSc : MonoBehaviour
         {
             EffectPool.Instance.Collect(Effect_Type.EFFECT_EXPLOSION_MIN, gameObject);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

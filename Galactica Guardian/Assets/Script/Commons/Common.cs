@@ -252,6 +252,11 @@ namespace Common
         public const float ENEMY_SIDE_SPEED_HME = 4.5f;
 
         /// <summary>
+        /// 横方向への移動抽選間隔.
+        /// </summary>
+        public const float ENEMY_SIDE_TIME_HME = 2.0f;
+
+        /// <summary>
         /// エネミーHMEの攻撃間隔.
         /// </summary>
         public const float ENEMY_FIRE_RATE_HME = 1.5f;
@@ -344,6 +349,16 @@ namespace Common
         /// パワーアップ：スピードの移動速度.
         /// </summary>
         public const float POWERUP_SPEED_SPEED = 1.6f;
+
+        /// <summary>
+        /// UI用点滅間隔.
+        /// </summary>
+        public const float FADE_SPEED = 1f;
+
+        /// <summary>
+        /// UI用高速点滅間隔.
+        /// </summary>
+        public const float FADE_SPEED_FAST = 3f;
         #endregion
     }
 

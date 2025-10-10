@@ -19,6 +19,8 @@ public class Enemy_BossSc : Enemy_BaseSc
     [Header("取り巻き用ウェーブ")]
     [SerializeField] List<WaveData> boss_summon_waves;
     List<GameObject> summonedEnemies = new List<GameObject>();
+    [Header("爆発エフェクト")]
+    [SerializeField] GameObject explosion_big;
     #region 変数.
     int summonWaveIndex = 0;
     bool isSummoning = false;
@@ -379,7 +381,7 @@ public class Enemy_BossSc : Enemy_BaseSc
         RandEffect();
         yield return new WaitForSeconds(Scenes.BOSS_DESTROY_WAIT);
         #endregion
-        EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
+        Instantiate(explosion_big, transform.position, transform.rotation);
         EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_BOSS, gameObject);
     }
 

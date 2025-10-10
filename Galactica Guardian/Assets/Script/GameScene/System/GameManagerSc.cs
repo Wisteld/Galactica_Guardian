@@ -21,7 +21,7 @@ public class GameManagerSc : MonoBehaviour
     [SerializeField] List<WaveData> wave_data;
     [Tooltip("裏ボスBGM")]
     [SerializeField] AudioClip secretBossBGM;
-    // [SerializeField] private string waveSetPath = "WaveData_S1";
+    [SerializeField] AudioClip secretBossSE;
     [Header("生成するエフェクト")]
     [SerializeField] GameObject explosion_prefab;
     [SerializeField] GameObject explosion_min_prefab;
@@ -194,43 +194,39 @@ public class GameManagerSc : MonoBehaviour
 
     IEnumerator WaveRoutine()
     {
-        //for (int setIndex = 0; setIndex < wave_data.Count; setIndex++)
-        //{
-        //    WaveSetData currentWaveSet = wave_data[setIndex];
-
-            for (int waveIndex = 0; waveIndex < wave_data.Count; waveIndex++)
+        for (int waveIndex = 0; waveIndex < wave_data.Count; waveIndex++)
+        {
+            WaveData currentWaveData = wave_data[waveIndex];
+            if (debugFlag)
             {
-                WaveData currentWaveData = wave_data[waveIndex];
-                if (debugFlag)
-                {
-                    Debug.Log($"開始: Wave {currentWaveIndex + 1} / {wave_data.Count}");
-                }
+                Debug.Log($"開始: Wave {currentWaveIndex + 1} / {wave_data.Count}");
+            }
 
-                if (currentWaveData.isBossWave)
-                { if (CheckKillRate()) { isKillBonus = true; } }
+            if (currentWaveData.isBossWave)
+            { if (CheckKillRate()) { isKillBonus = true; } }
 
-                if (currentWaveData.waveBGM != null)
-                {
-                    SoundManagerSc.Instance.PlayBGM(currentWaveData.waveBGM, currentWaveData.isLoopBGM);
-                }
+            if (currentWaveData.waveBGM != null)
+            {
+                SoundManagerSc.Instance.PlayBGM(currentWaveData.waveBGM, currentWaveData.isLoopBGM);
+            }
 
-                isWaveRunning = true;
-                activeEnemyCount = currentWaveData.spawns.Count;
+            isWaveRunning = true;
+            activeEnemyCount = currentWaveData.spawns.Count;
 
-                foreach (var spawn in currentWaveData.spawns)
-                {
-                    StartCoroutine(SpawnEnemyWithDelay(spawn));
-                }
+            foreach (var spawn in currentWaveData.spawns)
+            {
+                StartCoroutine(SpawnEnemyWithDelay(spawn));
+            }
 
-                yield return new WaitUntil(() => activeEnemyCount <= 0); // 全てのエネミーが居なくなったら.
+            yield return new WaitUntil(() => activeEnemyCount <= 0); // 全てのエネミーが居なくなったら.
 
-                if (debugFlag)
-                {
-                    Debug.Log($"Wave{currentWaveIndex + 1}End");
-                }
+            if (debugFlag)
+            {
+                Debug.Log($"Wave{currentWaveIndex + 1}End");
+            }
 
             yield return new WaitForSeconds(4f); // 次のWaveまでの待機
-                currentWaveIndex++;
+            currentWaveIndex++;
 
             if (currentWaveData.isBossWave)
             {
@@ -292,11 +288,12 @@ public class GameManagerSc : MonoBehaviour
 
     IEnumerator SpawnSecretBoss()
     {
+        SoundManagerSc.Instance.StopBGM();
+        SoundManagerSc.Instance.PlaySE(secretBossSE);
+        // ちょっと演出
+        yield return new WaitForSeconds(secretBossSE.length);
         // BGM切替（裏ボス専用曲があれば）
         SoundManagerSc.Instance.PlayBGM(secretBossBGM, true);
-
-        // ちょっと演出
-        yield return new WaitForSeconds(2f);
 
         // 出現位置は中央Anchorを想定（必要なら調整）
         if (anchorPositions.TryGetValue(AnchorType.CENTER, out Vector3 pos))

@@ -33,6 +33,6 @@ public class UIScoreManagerSc : MonoBehaviour
 
     void UpdateUI(int score)
     {
-        score_text.text = $"SCORE: {score}";
+        score_text.text = $"SCORE:{score}";
     }
 }

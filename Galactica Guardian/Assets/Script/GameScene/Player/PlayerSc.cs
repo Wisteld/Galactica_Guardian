@@ -127,19 +127,6 @@ public class PlayerSc : MonoBehaviour
         }
     }
 
-    /*
-    /// <summary>
-    /// Bom(ƒ~ƒTƒCƒ‹)“ü—Í‚ğó‚¯æ‚é.
-    /// </summary>
-    private void OnBom()
-    {
-        if (missileTimer >= mFireRate && missileFlag)
-            {
-                PlayerMissileFire();
-                missileTimer = 0f;
-            }
-    }*/
-
     #endregion
 
     #region ‰Šú‰»ŠÖ”.
@@ -197,7 +184,7 @@ public class PlayerSc : MonoBehaviour
     #endregion
 
     #region UnityEvent
-    void Start()
+    void Awake()
     {
         InitActions();
 

@@ -12,6 +12,8 @@ public class Enemy_HMESc : Enemy_BaseSc
     [SerializeField] Transform fire_point_center;
     [SerializeField] Transform fire_point_left;
     [SerializeField] Transform fire_point_right;
+    [Header("爆発エフェクト")]
+    [SerializeField] GameObject explosion_big;
     #region 変数.
     float attackTime;       // エネミーの攻撃間隔.
     float enemySpeed;       // エネミーの移動速度.
@@ -42,7 +44,7 @@ public class Enemy_HMESc : Enemy_BaseSc
         enemySideSpeed = Com.ENEMY_SIDE_SPEED_HME;
         attackTime = Com.ENEMY_FIRE_RATE_HME;
         debugFlag = Com.DEBUG_MODE_ENEMY;
-        sideTime = Com.ENEMY_SIDE_TIME;
+        sideTime = Com.ENEMY_SIDE_TIME_HME;
         enemySide = 0;
         enemyHp = Com.ENEMY_HME_HP;
         sideFlag = false;
@@ -196,6 +198,7 @@ public class Enemy_HMESc : Enemy_BaseSc
     void EnemyDestroy()
     {
         InitEnemy();
+        Instantiate(explosion_big, transform.position, transform.rotation);
         EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_HME, gameObject);
     }
 
