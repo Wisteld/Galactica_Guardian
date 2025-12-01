@@ -189,7 +189,10 @@ public class PlayerSc : MonoBehaviour
         InitActions();
 
         InitPlayers();
+    }
 
+    void Start()
+    {
         InitCamPosition();
     }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using Common;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
+using System.Collections;
 
 public class UIButtonManagerSc : MonoBehaviour
 {
@@ -28,45 +29,42 @@ public class UIButtonManagerSc : MonoBehaviour
             Debug.LogWarning("TouchUI or OnScreenStick がセットされていません！");
             return;
         }
-        UpdateUIVisibility();
+        StartCoroutine(StartDelay());
     }
 
-    /// <summary>
-    /// 実行環境に応じてタッチUIを表示/非表示.
-    /// </summary>
     void UpdateUIVisibility()
     {
         bool show = false;
 
-#if UNITY_WEBGL
-        // WebGLならタッチスクリーンがある場合のみ表示(タッチスクリーン付きPCの場合非表示).
-        bool isTouchDevice = Touchscreen.current != null && 
-                     SystemInfo.deviceType != DeviceType.Desktop;
-        show = isTouchDevice;
+#if UNITY_WEBGL && !UNITY_EDITOR
+        // JavaScript連携でWebGLタッチデバイスを検出
+        show = WebGLTouchDetector.IsTouchDevice();
 #else
-        // モバイルなら表示、PC/その他は非表示.
         if (Application.platform == RuntimePlatform.Android ||
             Application.platform == RuntimePlatform.IPhonePlayer)
-        {
             show = true;
-        }
+        else
+            show = Input.touchSupported && SystemInfo.deviceType != DeviceType.Desktop;
 #endif
+
         if (Com.DEBUG_MODE_SYSTEM)
-        {
             show = true;
-        }
 
-        if (touchUI != null) touchUI.SetActive(show);
-        if (onScreenStick != null) onScreenStick.SetActive(show);
+        touchUI?.SetActive(show);
+        onScreenStick?.SetActive(show);
 
         if (Com.DEBUG_MODE_SYSTEM)
-        {
-            Debug.Log($"Debug_Mode_System:MobileUI_{show}");
-        }
+            Debug.Log($"[UIButtonManagerSc] Platform:{Application.platform}, TouchSupported:{Input.touchSupported}, Show:{show}");
     }
 
     public void OnFirePressed()
     {
         if (Com.DEBUG_MODE_SYSTEM) { Debug.Log("Fire Button Push"); }
+    }
+
+    IEnumerator StartDelay()
+    {
+        yield return null; // InputSystem初期化待ち
+        UpdateUIVisibility();
     }
 }
