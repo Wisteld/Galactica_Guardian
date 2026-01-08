@@ -1,0 +1,217 @@
+using Common;
+using UnityEngine;
+using ObjectPool;
+using static Common.Effects;
+
+public class Enemy_β_Sc : Enemy_BaseSc
+{
+    [Header("誘導ミサイルのPrefab")]
+    [SerializeField] GameObject missile_prefab;
+    [Header("パワーアップ：ウェポン")]
+    [SerializeField] GameObject power_up_weapon_prefab;
+    #region 変数.
+    float attackTime;       // エネミーの攻撃間隔.
+    float enemySpeed;       // エネミーの移動速度.
+    int enemyHp;            // エネミーの体力.
+    int enemyAttackCount;   // 攻撃した回数.
+
+    Vector3 enemyPos;       // エネミーの現在座標.
+    float eSize;            // エネミーサイズ.
+    Vector2 min;
+    Vector2 max;
+    float dropChance;
+
+    bool debugFlag = Com.DEBUG_MODE_ENEMY;         // デバッグモード.
+    #endregion
+
+    #region 初期化関数.
+    /// <summary>
+    /// 変数の初期化.
+    /// </summary>
+    void InitEnemy()
+    {
+        attackTime = Com.ENEMY_FIRE_RATE_β;
+        enemySpeed = Com.ENEMY_SPEED_β;
+        enemyHp = Com.ENEMY_HP_β;
+        enemyAttackCount = 0;
+        EnemyType = ENum.E_Type.ENEMY_β;
+        dropChance = Com.DROP_ITEM_β;
+    }
+
+    void InitEnemySize()
+    {
+        eSize = GetComponent<BoxCollider2D>().size.x;
+        min = GameManagerSc.Instance.screenMin;
+        max = GameManagerSc.Instance.screenMax;
+    }
+    #endregion
+
+    void Start()
+    {
+        InitEnemy();
+        InitEnemySize();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        enemyPos = transform.position; // 現在位置を取得.
+
+        if(enemyAttackCount < 3)
+        {
+            attackTime -= Time.deltaTime;
+        }
+        else
+        {
+            EnemyReturn();
+            return;
+        }
+
+        EnemyMove();
+        
+        EnemyFire();
+    }
+
+    #region Update内関数.
+
+    /// <summary>
+    /// 移動処理.
+    /// </summary>
+    void EnemyMove()
+    {
+        if (enemyPos.y > max.y / 2)
+        {
+            transform.position -= new Vector3(0, enemySpeed * Time.deltaTime);
+
+            if (debugFlag)
+            {
+                Debug.Log(enemyPos.y + "β");
+            }
+            EnemyRange();
+        }
+    }
+
+    /// <summary>
+    /// ミサイル発射処理.
+    /// </summary>
+    void EnemyFire()
+    {
+        if (attackTime < 0)
+        {
+            attackTime = Com.ENEMY_FIRE_RATE_β;
+            BulletPool.Instance.Generate(Bullets.B_Type.ENEMY_MISSILE, transform.position);
+            enemyAttackCount++;
+        }
+    }
+
+    /// <summary>
+    /// 斜め後方に離脱する(左右のより近い方向に離脱)
+    /// </summary>
+    void EnemyReturn()
+    {
+        if (transform.position.x < 0)
+        {
+            transform.position += new Vector3(-enemySpeed * Time.deltaTime, enemySpeed * Time.deltaTime);
+        }
+        else
+        {
+            transform.position += new Vector3(enemySpeed * Time.deltaTime, enemySpeed * Time.deltaTime);
+        }
+        EnemyRange();
+    }
+
+    #endregion
+
+    #region Update外関数.
+
+    void EnemyRange()
+    {
+        #region 画面端処理.
+        if (enemyPos.x >= max.x + eSize) // 右端の判定.
+        {
+            EnemyDestroy();
+            if (debugFlag)
+            {
+                Debug.Log("Enemy_Right");
+            }
+        }
+        if (enemyPos.x <= min.x - eSize) // 左端の判定.
+        {
+            EnemyDestroy();
+            if (debugFlag)
+            {
+                Debug.Log("Enemy_Left");
+            }
+        }
+        // 画面外判定.
+        if (enemyPos.y <= min.y - eSize) // 下端の判定.
+        {
+            EnemyDestroy();
+            if (debugFlag)
+            {
+                Debug.Log("Enemy_Lost");
+            }
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// ダメージ処理.
+    /// </summary>
+    /// <param name="damage">ダメージ数値</param>
+    void EnemyDamage(int damage)
+    {
+        enemyHp -= damage;
+
+        if (enemyHp <= 0)
+        {
+            EffectPool.Instance.Generate(Effect_Type.EFFECT_EXPLOSION, transform.position);
+            ScoreManagerSc.Instance.UpdateScore(Score.SCORE_ENEMY_β);
+            ScoreManagerSc.Instance.UpdateKillScore();
+            TryDropItem();
+            EnemyDestroy();
+        }
+    }
+
+    /// <summary>
+    /// 被撃墜・撤退処理.
+    /// </summary>
+    void EnemyDestroy()
+    {
+        EnemyDeath();
+        InitEnemy();
+        EnemyPool.Instance.Collect(ENum.E_Type.ENEMY_β, gameObject);
+    }
+
+    /// <summary>
+    /// アイテムドロップ処理（ランダム.）
+    /// </summary>
+    void TryDropItem()
+    {
+        float rand = Random.value; // 0.0〜1.0 の乱数
+        if (rand < dropChance)
+        {
+            Instantiate(power_up_weapon_prefab, transform.position, Quaternion.identity); // ウェポン強化アイテム生成.
+        }
+    }
+    #endregion
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag(Tags.PLAYER_BULLET))
+        {
+            BulletPool.Instance.Collect(collision.gameObject, Bullets.B_Type.PLAYER_BULLET);
+            EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
+        }
+
+        if (collision.CompareTag(Tags.PLAYER_BULLET_LASER))
+        {
+            EnemyDamage(Com.ENEMY_DAMAGE_BULLET);
+        }
+
+        if (collision.CompareTag(Tags.PLAYER_MISSILE))
+        {
+            EnemyDamage(Com.ENEMY_DAMAGE_MISSILE);
+        }
+    }
+}
