@@ -39,6 +39,7 @@ public class ResultSceneManagerSc : MonoBehaviour
         SoundManagerSc.Instance.ChangeBGM(result_clip, true);
         ScoreManagerSc.Instance.HiScoreCheck();
 
+        resultFlag = false;
         thank_you_text.SetActive(false);
         score = ScoreManagerSc.Instance.GetNowScore();
         hiscore = ScoreManagerSc.Instance.GetHighScore();
@@ -52,13 +53,16 @@ public class ResultSceneManagerSc : MonoBehaviour
 
     void Update()
     {
-        if (resultFlag &&
+        if(resultFlag == false) { return; }
+
+        if (
         #region ŠÈˆÕ”ÅInputSystem
             (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) ||
             (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame) ||
             (Gamepad.all.Any(pad => pad.allControls.Any(c => c is ButtonControl b && b.wasPressedThisFrame)) ||
             (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)))
         #endregion)
+
         {
             SceneLoader.ChangeScene(Scenes.TITLE);
         }

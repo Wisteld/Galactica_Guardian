@@ -326,7 +326,7 @@ namespace Common
         /// <summary>
         /// ボスエネミーの体力.
         /// </summary>
-        public const int ENEMY_BOSS_HP = 400;
+        public const int ENEMY_BOSS_HP = 320;
 
         public enum UpDownState
         {
